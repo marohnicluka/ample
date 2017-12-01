@@ -157,17 +157,18 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_New"/>
-    <addaction name="action_Open"/>
+    <addaction name="actionNewDocument"/>
+    <addaction name="actionOpenDocument"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
-    <addaction name="action_Quit"/>
+    <addaction name="actionExport"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="action_About"/>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menu_Window">
     <property name="title">
@@ -205,19 +206,18 @@ p, li { white-space: pre-wrap; }
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_New"/>
+   <addaction name="actionNewDocument"/>
    <addaction name="actionOpenRecent"/>
-   <addaction name="action_Open"/>
+   <addaction name="actionOpenDocument"/>
    <addaction name="actionSave"/>
+   <addaction name="actionRevert"/>
    <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
    <addaction name="actionCut"/>
    <addaction name="actionCopy"/>
    <addaction name="actionPaste"/>
    <addaction name="actionFind"/>
-   <addaction name="separator"/>
-   <addaction name="actionUndo"/>
-   <addaction name="actionRedo"/>
-   <addaction name="actionRevert"/>
    <addaction name="separator"/>
    <addaction name="actionSettings"/>
    <addaction name="actionRecompute"/>
@@ -236,25 +236,25 @@ p, li { white-space: pre-wrap; }
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
-   <addaction name="actionBold"/>
-   <addaction name="actionItalic"/>
-   <addaction name="actionUnderline"/>
+   <addaction name="actionTextBold"/>
+   <addaction name="actionTextItalic"/>
+   <addaction name="actionTextUnderline"/>
    <addaction name="actionClearFormatting"/>
    <addaction name="separator"/>
-   <addaction name="actionLeftAlign"/>
-   <addaction name="actionCenterAlign"/>
+   <addaction name="actionAlignLeft"/>
+   <addaction name="actionAlignCenter"/>
    <addaction name="actionAlignRight"/>
-   <addaction name="actionJustify"/>
+   <addaction name="actionAlignJustify"/>
    <addaction name="separator"/>
-   <addaction name="actionMath"/>
-   <addaction name="actionList"/>
-   <addaction name="actionTable"/>
-   <addaction name="actionImage"/>
+   <addaction name="actionInsertMath"/>
+   <addaction name="actionInsertList"/>
+   <addaction name="actionInsertTable"/>
+   <addaction name="actionInsertImage"/>
    <addaction name="actionReference"/>
    <addaction name="separator"/>
    <addaction name="actionSpellCheck"/>
   </widget>
-  <action name="action_New">
+  <action name="actionNewDocument">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/document-new.svg</normaloff>:/icons/icons/colored/document-new.svg</iconset>
@@ -263,13 +263,13 @@ p, li { white-space: pre-wrap; }
     <string>&amp;New</string>
    </property>
    <property name="toolTip">
-    <string>New Document or Worksheet</string>
+    <string>New Document</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="action_Open">
+  <action name="actionOpenDocument">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/document-open.svg</normaloff>:/icons/icons/colored/document-open.svg</iconset>
@@ -278,13 +278,13 @@ p, li { white-space: pre-wrap; }
     <string>&amp;Open</string>
    </property>
    <property name="toolTip">
-    <string>Open Document or Worksheet</string>
+    <string>Open Document</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="action_Quit">
+  <action name="actionQuit">
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -292,7 +292,7 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_About">
+  <action name="actionAbout">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/help-about.svg</normaloff>:/icons/icons/colored/help-about.svg</iconset>
@@ -301,7 +301,7 @@ p, li { white-space: pre-wrap; }
     <string>&amp;About</string>
    </property>
   </action>
-  <action name="actionBold">
+  <action name="actionTextBold">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -319,7 +319,7 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="actionItalic">
+  <action name="actionTextItalic">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -337,7 +337,7 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+I</string>
    </property>
   </action>
-  <action name="actionUnderline">
+  <action name="actionTextUnderline">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -355,7 +355,7 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+U</string>
    </property>
   </action>
-  <action name="actionLeftAlign">
+  <action name="actionAlignLeft">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -364,10 +364,10 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/format-justify-left.svg</normaloff>:/icons/icons/colored/format-justify-left.svg</iconset>
    </property>
    <property name="text">
-    <string>LeftAlign</string>
+    <string>Left align</string>
    </property>
    <property name="toolTip">
-    <string>Left-aligned text</string>
+    <string>Left aligned text</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
@@ -382,16 +382,16 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/format-justify-right.svg</normaloff>:/icons/icons/colored/format-justify-right.svg</iconset>
    </property>
    <property name="text">
-    <string>AlignRight</string>
+    <string>Right align</string>
    </property>
    <property name="toolTip">
-    <string>Right-aligned text</string>
+    <string>Right aligned text</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="actionCenterAlign">
+  <action name="actionAlignCenter">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -400,7 +400,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/format-justify-center.svg</normaloff>:/icons/icons/colored/format-justify-center.svg</iconset>
    </property>
    <property name="text">
-    <string>CenterAlign</string>
+    <string>Center align</string>
    </property>
    <property name="toolTip">
     <string>Centered text</string>
@@ -409,7 +409,7 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="actionJustify">
+  <action name="actionAlignJustify">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -427,13 +427,13 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+J</string>
    </property>
   </action>
-  <action name="actionTable">
+  <action name="actionInsertTable">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/insert-table.svg</normaloff>:/icons/icons/colored/insert-table.svg</iconset>
    </property>
    <property name="text">
-    <string>Table</string>
+    <string>Insert table</string>
    </property>
    <property name="toolTip">
     <string>Insert table</string>
@@ -442,13 +442,13 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+Shift+T</string>
    </property>
   </action>
-  <action name="actionImage">
+  <action name="actionInsertImage">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/insert-image.svg</normaloff>:/icons/icons/colored/insert-image.svg</iconset>
    </property>
    <property name="text">
-    <string>Image</string>
+    <string>Insert image</string>
    </property>
    <property name="toolTip">
     <string>Insert image</string>
@@ -463,7 +463,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/format-text-none.svg</normaloff>:/icons/icons/colored/format-text-none.svg</iconset>
    </property>
    <property name="text">
-    <string>ClearFormatting</string>
+    <string>Clear formatting</string>
    </property>
    <property name="toolTip">
     <string>Clear formatting</string>
@@ -535,7 +535,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/document-open-recent.svg</normaloff>:/icons/icons/colored/document-open-recent.svg</iconset>
    </property>
    <property name="text">
-    <string>OpenRecent</string>
+    <string>Open recent</string>
    </property>
    <property name="toolTip">
     <string>Open recent</string>
@@ -577,7 +577,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/document-save-as.svg</normaloff>:/icons/icons/colored/document-save-as.svg</iconset>
    </property>
    <property name="text">
-    <string>SaveAs</string>
+    <string>Save as</string>
    </property>
    <property name="toolTip">
     <string>Save as</string>
@@ -592,7 +592,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/view-refresh.svg</normaloff>:/icons/icons/colored/view-refresh.svg</iconset>
    </property>
    <property name="text">
-    <string>Recompute</string>
+    <string>Recompute all</string>
    </property>
    <property name="toolTip">
     <string>Recompute all</string>
@@ -628,10 +628,10 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/open-menu.svg</normaloff>:/icons/icons/colored/open-menu.svg</iconset>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>Document settings</string>
    </property>
    <property name="toolTip">
-    <string>Settings</string>
+    <string>Document settings</string>
    </property>
   </action>
   <action name="actionReference">
@@ -640,7 +640,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/insert-link.svg</normaloff>:/icons/icons/colored/insert-link.svg</iconset>
    </property>
    <property name="text">
-    <string>Reference</string>
+    <string>Insert reference</string>
    </property>
    <property name="toolTip">
     <string>Insert reference</string>
@@ -658,19 +658,19 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/icons/icons/colored/check-spelling.svg</normaloff>:/icons/icons/colored/check-spelling.svg</iconset>
    </property>
    <property name="text">
-    <string>SpellCheck</string>
+    <string>Check spelling</string>
    </property>
    <property name="toolTip">
     <string>Check spelling</string>
    </property>
   </action>
-  <action name="actionList">
+  <action name="actionInsertList">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/insert-list.svg</normaloff>:/icons/icons/colored/insert-list.svg</iconset>
    </property>
    <property name="text">
-    <string>List</string>
+    <string>Insert list</string>
    </property>
    <property name="toolTip">
     <string>Insert list</string>
@@ -679,13 +679,13 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+Shift+L</string>
    </property>
   </action>
-  <action name="actionMath">
+  <action name="actionInsertMath">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/icons/colored/insert-math.svg</normaloff>:/icons/icons/colored/insert-math.svg</iconset>
    </property>
    <property name="text">
-    <string>Math</string>
+    <string>Insert math</string>
    </property>
    <property name="toolTip">
     <string>Insert math</string>

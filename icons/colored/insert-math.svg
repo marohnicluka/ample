@@ -28,7 +28,7 @@
      id="namedview59"
      showgrid="true"
      inkscape:zoom="19.666667"
-     inkscape:cx="24.559322"
+     inkscape:cx="14.542373"
      inkscape:cy="11.896009"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -257,6 +257,35 @@
          style="stop-color:#ffffff;stop-opacity:0.39215687"
          offset="1" />
     </linearGradient>
+    <meshgradient
+       inkscape:collect="always"
+       id="meshgradient909"
+       gradientUnits="userSpaceOnUse"
+       x="3.4046688"
+       y="2.6839159">
+      <meshrow
+         id="meshrow911">
+        <meshpatch
+           id="meshpatch913">
+          <stop
+             path="c 4.76484,0  9.52968,0  14.2945,0"
+             style="stop-color:#ffffff;stop-opacity:1"
+             id="stop915" />
+          <stop
+             path="c 0,6.70491  0,13.4098  0,20.1147"
+             style="stop-color:#4d4d4d;stop-opacity:1"
+             id="stop917" />
+          <stop
+             path="c -4.76484,0  -9.52968,0  -14.2945,0"
+             style="stop-color:#ffffff;stop-opacity:1"
+             id="stop919" />
+          <stop
+             path="c 0,-6.70491  0,-13.4098  0,-20.1147"
+             style="stop-color:#4d4d4d;stop-opacity:1"
+             id="stop921" />
+        </meshpatch>
+      </meshrow>
+    </meshgradient>
   </defs>
   <metadata
      id="metadata3833">
@@ -272,16 +301,26 @@
   </metadata>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:41.38809204px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#cccccc;fill-opacity:1;stroke:#666666;stroke-width:1.03508997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;"
-     x="0.87180394"
-     y="22.798635"
+     style="font-style:normal;font-weight:normal;font-size:40.32616425px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#666666;fill-opacity:1;stroke:#1a1a1a;stroke-width:1.30900003;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="0.83148873"
+     y="23.454424"
      id="text868"
-     transform="scale(1.0624978,0.9411784)"><tspan
+     transform="scale(1.0923838,0.91542913)"><tspan
        sodipodi:role="line"
        id="tspan866"
-       x="0.87180394"
-       y="22.798635"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:27.59206009px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#cccccc;stroke:#666666;stroke-width:1.03508997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;">Σ</tspan></text>
+       x="0.83148873"
+       y="23.454424"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:26.8841095px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;fill-opacity:1;stroke:#1a1a1a;stroke-width:1.30900003;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none">Σ</tspan></text>
+  <path
+     style="fill:none;stroke:#b3b3b3;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 16.593224,4.42373 H 4.59322 v 0 2 0"
+     id="path927"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:none;stroke:#999999;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 16.542381,20.600295 H 4.5423725 v 0 -2 0"
+     id="path927-9"
+     inkscape:connector-curvature="0" />
   <g
      id="g4474">
     <path
