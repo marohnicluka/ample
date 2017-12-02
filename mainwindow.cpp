@@ -13,6 +13,22 @@ MainWindow::MainWindow(QWidget *parent) :
     alignGroup->addAction(ui->actionAlignJustify);
     alignGroup->setExclusive(true);
     connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlign(QAction*)));
+    QtSpell::TextEditChecker checker;
+    checker.setLanguage("en_US");
+    checker.setTextEdit(ui->textEdit);
+    QTextDocument *doc=ui->textEdit->document();
+    QTextCursor cursor(doc);
+    QTextFrameFormat bodyFrameFormat;
+    bodyFrameFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+    bodyFrameFormat.setPadding(10);
+    bodyFrameFormat.setBorder(0.0);
+    cursor.insertFrame(bodyFrameFormat);
+    QTextCharFormat fmt;
+    fmt.setFontPointSize(11.0);
+    fmt.setFontFamily("FreeMono");
+    fmt.setFontWeight(QFont::Weight::Bold);
+    cursor.mergeCharFormat(fmt);
+    ui->textEdit->mergeCurrentCharFormat(fmt);
 }
 
 void MainWindow::textAlign(QAction *a) {

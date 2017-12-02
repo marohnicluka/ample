@@ -3,8 +3,13 @@
 
 #include <QMainWindow>
 #include <QComboBox>
+#include <QTextDocument>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <qtspell/QtSpell.hpp>
 
 namespace Ui {
+
 class MainWindow;
 }
 
