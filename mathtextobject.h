@@ -15,14 +15,23 @@
  * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include <QApplication>
+#ifndef MATHTEXTOBJECT_H
+#define MATHTEXTOBJECT_H
 
-int main(int argc, char *argv[])
+#include <QObject>
+#include <QTextObjectInterface>
+
+class MathTextObject : public QObject, public QTextObjectInterface
 {
-    QApplication a(argc, argv);
-    QCoreApplication::setApplicationName("Giac Qt");
-    MainWindow w;
-    w.show();
-    return a.exec();
-}
+    Q_OBJECT
+    Q_INTERFACES(QTextObjectInterface)
+
+public:
+    enum { Id = QTextFormat::UserObject + 1 };
+    enum { Data = 1 };
+    QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format);
+    void drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc,
+                    int posInDocument, const QTextFormat &format);
+};
+
+#endif // MATHTEXTOBJECT_H

@@ -15,14 +15,18 @@
  * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include <QApplication>
+#include "document.h"
 
-int main(int argc, char *argv[])
+using namespace giac;
+
+Document::Document(GIAC_CONTEXT, QObject *parent) :
+    QTextDocument(parent)
 {
-    QApplication a(argc, argv);
-    QCoreApplication::setApplicationName("Giac Qt");
-    MainWindow w;
-    w.show();
-    return a.exec();
+    gcontext = contextptr;
+    ghighlighter = new GiacHighlighter(this);
+    style.textBodyFontFamily = "FreeSerif";
+    style.headingsFontFamily = "FreeSans";
+    style.casInputFontFamily = "FreeMono";
+    style.fontPointSize = 11.5;
+    worksheetMode = false;
 }

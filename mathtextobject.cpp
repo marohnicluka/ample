@@ -15,14 +15,13 @@
  * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include <QApplication>
+#include "mathtextobject.h"
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    QCoreApplication::setApplicationName("Giac Qt");
-    MainWindow w;
-    w.show();
-    return a.exec();
+QSizeF MathTextObject::intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) {
+    return QSizeF(1,1);
+}
+
+void MathTextObject::drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc,
+                                int posInDocument, const QTextFormat &format) {
+
 }

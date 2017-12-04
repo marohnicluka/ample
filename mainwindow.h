@@ -1,12 +1,27 @@
+/*
+ * This file is part of Giac Qt.
+ *
+ * Giac Qt is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Giac Qt is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QComboBox>
-#include <QTextDocument>
-#include <QTextBlock>
-#include <QTextLayout>
-#include <qtspell/QtSpell.hpp>
+#include <QToolButton>
+#include "document.h"
+#include <giac/giac.h>
 
 namespace Ui {
 
@@ -23,10 +38,18 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    Document *currentDocument;
+    QToolButton *paragraphStyleToolButton;
+    void addNewDocument();
 
 private slots:
-    void textAlign(QAction *a);
+    void textAlign_changed(QAction *a);
+    void paragraphStyle_changed(QAction *a);
 
+    void on_sidebarTabs_currentChanged(int index);
+    void on_editorTabs_currentChanged(int index);
+    void on_editorTabs_tabCloseRequested(int index);
+    void on_actionNewDocument_triggered();
 };
 
 #endif // MAINWINDOW_H

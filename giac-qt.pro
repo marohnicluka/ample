@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+LIBS     += -lgiac -lgmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,9 +27,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+    giachighlighter.cpp \
+    document.cpp \
+    mathtextobject.cpp
 
 HEADERS += \
         mainwindow.h \
+    giachighlighter.h \
+    document.h \
+    mathtextobject.h
 
 FORMS += \
         mainwindow.ui

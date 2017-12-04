@@ -1,5 +1,25 @@
+/*
+ * This file is part of Giac Qt.
+ *
+ * Giac Qt is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Giac Qt is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMenu>
+
+using namespace giac;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,11 +32,33 @@ MainWindow::MainWindow(QWidget *parent) :
     alignGroup->addAction(ui->actionAlignRight);
     alignGroup->addAction(ui->actionAlignJustify);
     alignGroup->setExclusive(true);
-    connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlign(QAction*)));
-    QtSpell::TextEditChecker checker;
-    checker.setLanguage("en_US");
-    checker.setTextEdit(ui->textEdit);
-    QTextDocument *doc=ui->textEdit->document();
+    connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlign_changed(QAction*)));
+    QActionGroup *paragraphGroup = new QActionGroup(this);
+    paragraphGroup->addAction(ui->actionTextStyleParagraph);
+    paragraphGroup->addAction(ui->actionTextStyleTitle);
+    paragraphGroup->addAction(ui->actionTextStyleSection);
+    paragraphGroup->addAction(ui->actionTextStyleSubsection);
+    paragraphGroup->addAction(ui->actionTextStyleSubsubsection);
+    paragraphGroup->addAction(ui->actionTextStyleListBullets);
+    paragraphGroup->addAction(ui->actionTextStyleListSquares);
+    paragraphGroup->addAction(ui->actionTextStyleNumberedList);
+    paragraphGroup->addAction(ui->actionTextStyleOrderedListLetters);
+    paragraphGroup->addAction(ui->actionTextStyleOrderedListCapitals);
+    paragraphGroup->addAction(ui->actionTextStyleOrderedListRoman);
+    paragraphGroup->addAction(ui->actionTextStyleOrderedListRomanSmall);
+    paragraphGroup->setExclusive(true);
+    connect(paragraphGroup, SIGNAL(triggered(QAction*)), this, SLOT(paragraphStyle_changed(QAction*)));
+    paragraphStyleToolButton = new QToolButton(this);
+    paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
+    QMenu *paragraphStyleMenu = new QMenu(this);
+    paragraphStyleMenu->addActions(paragraphGroup->actions());
+    paragraphStyleToolButton->setMenu(paragraphStyleMenu);
+    paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
+    ui->textToolBar->insertWidget(ui->actionTextBold,paragraphStyleToolButton);
+    QList<int> outlineSplitterSizes;
+    outlineSplitterSizes << 100 << 450;
+    ui->outlineSplitter->setSizes(outlineSplitterSizes);
+    /*
     QTextCursor cursor(doc);
     QTextFrameFormat bodyFrameFormat;
     bodyFrameFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
@@ -29,9 +71,10 @@ MainWindow::MainWindow(QWidget *parent) :
     fmt.setFontWeight(QFont::Weight::Bold);
     cursor.mergeCharFormat(fmt);
     ui->textEdit->mergeCurrentCharFormat(fmt);
+    */
 }
 
-void MainWindow::textAlign(QAction *a) {
+void MainWindow::textAlign_changed(QAction *a) {
     if (a == ui->actionAlignLeft)
         qDebug("Left");
     //textEdit->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
@@ -46,7 +89,42 @@ void MainWindow::textAlign(QAction *a) {
     //textEdit->setAlignment(Qt::AlignJustify);
 }
 
+void MainWindow::paragraphStyle_changed(QAction *a) {
+
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::addNewDocument() {
+    context ct;
+    Document *doc = new Document(&ct, this);
+    QTextEdit *editor = new QTextEdit(this);
+    editor->setDocument(doc);
+    editor->setFrameStyle(QFrame::NoFrame);
+    int index = ui->editorTabs->addTab(editor,QString("Unnamed"));
+    ui->editorTabs->setCurrentIndex(index);
+}
+
+void MainWindow::on_sidebarTabs_currentChanged(int index)
+{
+    ui->sidebarTabs->setDocumentMode(index == 0);
+}
+
+void MainWindow::on_editorTabs_currentChanged(int index)
+{
+    QTextEdit *editor = qobject_cast<QTextEdit*>(ui->editorTabs->widget(index));
+    currentDocument = qobject_cast<Document*>(editor->document());
+}
+
+void MainWindow::on_editorTabs_tabCloseRequested(int index)
+{
+
+}
+
+void MainWindow::on_actionNewDocument_triggered()
+{
+    addNewDocument();
 }

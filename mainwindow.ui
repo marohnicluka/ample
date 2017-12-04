@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>359</height>
+    <width>717</width>
+    <height>360</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,113 +27,140 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="sidebarSplitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTextEdit" name="textEdit">
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
-      </widget>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="outlineSplitter">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
-       <widget class="QToolBox" name="toolBox">
-        <property name="currentIndex">
-         <number>1</number>
+       <widget class="QTreeWidget" name="outlineView">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="tabSpacing">
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
+       </widget>
+       <widget class="QTabWidget" name="editorTabs">
+        <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="page_5">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>325</width>
-           <height>68</height>
-          </rect>
-         </property>
-         <attribute name="label">
-          <string>Page 1</string>
-         </attribute>
-        </widget>
-        <widget class="QWidget" name="page_6">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>325</width>
-           <height>68</height>
-          </rect>
-         </property>
-         <attribute name="label">
-          <string>Page 2</string>
+        <property name="tabsClosable">
+         <bool>true</bool>
+        </property>
+        <property name="movable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Tab 1</string>
          </attribute>
         </widget>
        </widget>
-       <widget class="QWidget" name="verticalLayoutWidget">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="spacing">
+      </widget>
+      <widget class="QTabWidget" name="sidebarTabs">
+       <property name="tabPosition">
+        <enum>QTabWidget::South</enum>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <property name="documentMode">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="toolsTab">
+        <attribute name="title">
+         <string>Tools</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="leftMargin">
           <number>0</number>
          </property>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <property name="spacing">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QToolBox" name="toolBox">
+           <property name="autoFillBackground">
+            <bool>true</bool>
+           </property>
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <property name="tabSpacing">
             <number>0</number>
            </property>
-           <item>
-            <widget class="QComboBox" name="helpTopicComboBox">
-             <property name="toolTip">
-              <string>Help topic</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="helpChapterComboBox">
-             <property name="toolTip">
-              <string>Section</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="helpSearchEntry">
-             <property name="toolTip">
-              <string>Search help</string>
-             </property>
-             <property name="placeholderText">
-              <string>Search…</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+           <widget class="QWidget" name="page">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>312</width>
+              <height>183</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>Page 1</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="page_2">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>312</width>
+              <height>183</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>Page 2</string>
+            </attribute>
+           </widget>
+          </widget>
          </item>
-         <item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="helpTab">
+        <attribute name="title">
+         <string>Documentation</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
           <widget class="QTextBrowser" name="helpBrowser">
            <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
+            <enum>QFrame::NoFrame</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Plain</enum>
-           </property>
-           <property name="html">
-            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ovo je &lt;span style=&quot; font-weight:600;&quot;&gt;tekst&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-style:italic;&quot;&gt;Naslov&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-style:italic;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;opet tekst&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <enum>QFrame::Sunken</enum>
            </property>
           </widget>
          </item>
@@ -149,8 +176,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>619</width>
-     <height>20</height>
+     <width>717</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -170,11 +197,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menu_Window">
-    <property name="title">
-     <string>&amp;Window</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
      <string>&amp;Edit</string>
@@ -190,7 +212,6 @@ p, li { white-space: pre-wrap; }
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
-   <addaction name="menu_Window"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -240,14 +261,15 @@ p, li { white-space: pre-wrap; }
    <addaction name="actionTextItalic"/>
    <addaction name="actionTextUnderline"/>
    <addaction name="actionClearFormatting"/>
+   <addaction name="actionTextMath"/>
    <addaction name="separator"/>
    <addaction name="actionAlignLeft"/>
    <addaction name="actionAlignCenter"/>
    <addaction name="actionAlignRight"/>
    <addaction name="actionAlignJustify"/>
    <addaction name="separator"/>
-   <addaction name="actionInsertMath"/>
-   <addaction name="actionInsertList"/>
+   <addaction name="actionInsertCAS"/>
+   <addaction name="actionInsertGraph"/>
    <addaction name="actionInsertTable"/>
    <addaction name="actionInsertImage"/>
    <addaction name="actionReference"/>
@@ -257,7 +279,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionNewDocument">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-new.svg</normaloff>:/icons/icons/colored/document-new.svg</iconset>
+     <normaloff>:/icons/document-new.svg</normaloff>:/icons/document-new.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -272,7 +294,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionOpenDocument">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-open.svg</normaloff>:/icons/icons/colored/document-open.svg</iconset>
+     <normaloff>:/icons/document-open.svg</normaloff>:/icons/document-open.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Open</string>
@@ -295,7 +317,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/help-about.svg</normaloff>:/icons/icons/colored/help-about.svg</iconset>
+     <normaloff>:/icons/help-about.svg</normaloff>:/icons/help-about.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -307,7 +329,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-text-bold.svg</normaloff>:/icons/icons/colored/format-text-bold.svg</iconset>
+     <normaloff>:/icons/format-text-bold.svg</normaloff>:/icons/format-text-bold.svg</iconset>
    </property>
    <property name="text">
     <string>Bold</string>
@@ -325,7 +347,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-text-italic.svg</normaloff>:/icons/icons/colored/format-text-italic.svg</iconset>
+     <normaloff>:/icons/format-text-italic.svg</normaloff>:/icons/format-text-italic.svg</iconset>
    </property>
    <property name="text">
     <string>Italic</string>
@@ -343,7 +365,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-text-underline.svg</normaloff>:/icons/icons/colored/format-text-underline.svg</iconset>
+     <normaloff>:/icons/format-text-underline.svg</normaloff>:/icons/format-text-underline.svg</iconset>
    </property>
    <property name="text">
     <string>Underline</string>
@@ -361,7 +383,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-justify-left.svg</normaloff>:/icons/icons/colored/format-justify-left.svg</iconset>
+     <normaloff>:/icons/format-justify-left.svg</normaloff>:/icons/format-justify-left.svg</iconset>
    </property>
    <property name="text">
     <string>Left align</string>
@@ -379,7 +401,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-justify-right.svg</normaloff>:/icons/icons/colored/format-justify-right.svg</iconset>
+     <normaloff>:/icons/format-justify-right.svg</normaloff>:/icons/format-justify-right.svg</iconset>
    </property>
    <property name="text">
     <string>Right align</string>
@@ -397,7 +419,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-justify-center.svg</normaloff>:/icons/icons/colored/format-justify-center.svg</iconset>
+     <normaloff>:/icons/format-justify-center.svg</normaloff>:/icons/format-justify-center.svg</iconset>
    </property>
    <property name="text">
     <string>Center align</string>
@@ -415,7 +437,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-justify-fill.svg</normaloff>:/icons/icons/colored/format-justify-fill.svg</iconset>
+     <normaloff>:/icons/format-justify-fill.svg</normaloff>:/icons/format-justify-fill.svg</iconset>
    </property>
    <property name="text">
     <string>Justify</string>
@@ -430,7 +452,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionInsertTable">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/insert-table.svg</normaloff>:/icons/icons/colored/insert-table.svg</iconset>
+     <normaloff>:/icons/insert-table.svg</normaloff>:/icons/insert-table.svg</iconset>
    </property>
    <property name="text">
     <string>Insert table</string>
@@ -445,7 +467,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionInsertImage">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/insert-image.svg</normaloff>:/icons/icons/colored/insert-image.svg</iconset>
+     <normaloff>:/icons/insert-image.svg</normaloff>:/icons/insert-image.svg</iconset>
    </property>
    <property name="text">
     <string>Insert image</string>
@@ -460,7 +482,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionClearFormatting">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/format-text-none.svg</normaloff>:/icons/icons/colored/format-text-none.svg</iconset>
+     <normaloff>:/icons/format-text-none.svg</normaloff>:/icons/format-text-none.svg</iconset>
    </property>
    <property name="text">
     <string>Clear formatting</string>
@@ -472,7 +494,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionCopy">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/edit-copy.svg</normaloff>:/icons/icons/colored/edit-copy.svg</iconset>
+     <normaloff>:/icons/edit-copy.svg</normaloff>:/icons/edit-copy.svg</iconset>
    </property>
    <property name="text">
     <string>Copy</string>
@@ -484,7 +506,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionCut">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/edit-cut.svg</normaloff>:/icons/icons/colored/edit-cut.svg</iconset>
+     <normaloff>:/icons/edit-cut.svg</normaloff>:/icons/edit-cut.svg</iconset>
    </property>
    <property name="text">
     <string>Cut</string>
@@ -496,7 +518,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionPaste">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/edit-paste.svg</normaloff>:/icons/icons/colored/edit-paste.svg</iconset>
+     <normaloff>:/icons/edit-paste.svg</normaloff>:/icons/edit-paste.svg</iconset>
    </property>
    <property name="text">
     <string>Paste</string>
@@ -508,7 +530,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionRevert">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-revert.svg</normaloff>:/icons/icons/colored/document-revert.svg</iconset>
+     <normaloff>:/icons/document-revert.svg</normaloff>:/icons/document-revert.svg</iconset>
    </property>
    <property name="text">
     <string>Revert</string>
@@ -520,7 +542,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionExport">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-export.svg</normaloff>:/icons/icons/colored/document-export.svg</iconset>
+     <normaloff>:/icons/document-export.svg</normaloff>:/icons/document-export.svg</iconset>
    </property>
    <property name="text">
     <string>Export</string>
@@ -532,7 +554,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionOpenRecent">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-open-recent.svg</normaloff>:/icons/icons/colored/document-open-recent.svg</iconset>
+     <normaloff>:/icons/open-recent.svg</normaloff>:/icons/open-recent.svg</iconset>
    </property>
    <property name="text">
     <string>Open recent</string>
@@ -544,7 +566,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionFind">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/edit-find.svg</normaloff>:/icons/icons/colored/edit-find.svg</iconset>
+     <normaloff>:/icons/edit-find.svg</normaloff>:/icons/edit-find.svg</iconset>
    </property>
    <property name="text">
     <string>Find</string>
@@ -559,7 +581,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionSave">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-save.svg</normaloff>:/icons/icons/colored/document-save.svg</iconset>
+     <normaloff>:/icons/document-save.svg</normaloff>:/icons/document-save.svg</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -574,7 +596,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionSaveAs">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/document-save-as.svg</normaloff>:/icons/icons/colored/document-save-as.svg</iconset>
+     <normaloff>:/icons/document-save-as.svg</normaloff>:/icons/document-save-as.svg</iconset>
    </property>
    <property name="text">
     <string>Save as</string>
@@ -589,7 +611,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionRecompute">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/view-refresh.svg</normaloff>:/icons/icons/colored/view-refresh.svg</iconset>
+     <normaloff>:/icons/view-refresh.svg</normaloff>:/icons/view-refresh.svg</iconset>
    </property>
    <property name="text">
     <string>Recompute all</string>
@@ -601,7 +623,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionUndo">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/edit-undo.svg</normaloff>:/icons/icons/colored/edit-undo.svg</iconset>
+     <normaloff>:/icons/edit-undo.svg</normaloff>:/icons/edit-undo.svg</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -613,7 +635,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionRedo">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/edit-redo.svg</normaloff>:/icons/icons/colored/edit-redo.svg</iconset>
+     <normaloff>:/icons/edit-redo.svg</normaloff>:/icons/edit-redo.svg</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -625,7 +647,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionSettings">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/open-menu.svg</normaloff>:/icons/icons/colored/open-menu.svg</iconset>
+     <normaloff>:/icons/open-menu.svg</normaloff>:/icons/open-menu.svg</iconset>
    </property>
    <property name="text">
     <string>Document settings</string>
@@ -637,7 +659,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionReference">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/insert-link.svg</normaloff>:/icons/icons/colored/insert-link.svg</iconset>
+     <normaloff>:/icons/insert-link.svg</normaloff>:/icons/insert-link.svg</iconset>
    </property>
    <property name="text">
     <string>Insert reference</string>
@@ -655,7 +677,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/check-spelling.svg</normaloff>:/icons/icons/colored/check-spelling.svg</iconset>
+     <normaloff>:/icons/check-spelling.svg</normaloff>:/icons/check-spelling.svg</iconset>
    </property>
    <property name="text">
     <string>Check spelling</string>
@@ -664,34 +686,175 @@ p, li { white-space: pre-wrap; }
     <string>Check spelling</string>
    </property>
   </action>
-  <action name="actionInsertList">
+  <action name="actionInsertCAS">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/insert-list.svg</normaloff>:/icons/icons/colored/insert-list.svg</iconset>
+     <normaloff>:/icons/insert-cas.svg</normaloff>:/icons/insert-cas.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert list</string>
+    <string>Insert CAS</string>
    </property>
    <property name="toolTip">
-    <string>Insert list</string>
+    <string>Insert CAS entry</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+L</string>
+    <string>Ctrl+Shift+C</string>
    </property>
   </action>
-  <action name="actionInsertMath">
+  <action name="actionInsertGraph">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/icons/colored/insert-math.svg</normaloff>:/icons/icons/colored/insert-math.svg</iconset>
+     <normaloff>:/icons/insert-graph.svg</normaloff>:/icons/insert-graph.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert math</string>
+    <string>Insert graph</string>
    </property>
    <property name="toolTip">
-    <string>Insert math</string>
+    <string>Insert graph</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+M</string>
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+  <action name="actionParagraphStyle">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/paragraph-style.svg</normaloff>:/icons/paragraph-style.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Paragraph style</string>
+   </property>
+   <property name="toolTip">
+    <string>Paragraph style</string>
+   </property>
+  </action>
+  <action name="actionTextMath">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/format-text-math.svg</normaloff>:/icons/format-text-math.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Text math</string>
+   </property>
+   <property name="toolTip">
+    <string>Text math</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionTextStyleParagraph">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Paragraph</string>
+   </property>
+  </action>
+  <action name="actionTextStyleTitle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Title</string>
+   </property>
+  </action>
+  <action name="actionTextStyleSection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Section</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+1</string>
+   </property>
+  </action>
+  <action name="actionTextStyleSubsection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Subsection</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+2</string>
+   </property>
+  </action>
+  <action name="actionTextStyleSubsubsection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Subsubsection</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+3</string>
+   </property>
+  </action>
+  <action name="actionTextStyleListBullets">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>List (bullets)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+I</string>
+   </property>
+  </action>
+  <action name="actionTextStyleListSquares">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>List (squares)</string>
+   </property>
+  </action>
+  <action name="actionTextStyleNumberedList">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Numbered list</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
+   </property>
+  </action>
+  <action name="actionTextStyleOrderedListLetters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ordered list (letters)</string>
+   </property>
+  </action>
+  <action name="actionTextStyleOrderedListCapitals">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ordered list (capitals)</string>
+   </property>
+  </action>
+  <action name="actionTextStyleOrderedListRomanSmall">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ordered list (small roman numerals)</string>
+   </property>
+  </action>
+  <action name="actionTextStyleOrderedListRoman">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ordered list (roman numerals)</string>
    </property>
   </action>
  </widget>

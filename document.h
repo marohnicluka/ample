@@ -15,14 +15,39 @@
  * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include <QApplication>
+#ifndef DOCUMENT_H
+#define DOCUMENT_H
 
-int main(int argc, char *argv[])
+#include <QTextDocument>
+#include <giac/giac.h>
+#include "giachighlighter.h"
+
+using namespace giac;
+
+class GiacHighlighter;
+
+class Document : public QTextDocument
 {
-    QApplication a(argc, argv);
-    QCoreApplication::setApplicationName("Giac Qt");
-    MainWindow w;
-    w.show();
-    return a.exec();
-}
+    Q_OBJECT
+
+private:
+    const context *gcontext;
+    GiacHighlighter *ghighlighter;
+public:
+    Document(GIAC_CONTEXT, QObject *parent = 0);
+    QString fileName;
+    QString language;
+    bool worksheetMode;
+    struct Style {
+        QString textBodyFontFamily;
+        QString headingsFontFamily;
+        QString casInputFontFamily;
+        qreal fontPointSize;
+    };
+    Style style;
+
+signals:
+    void fileNameChanged(const QString newName);
+};
+
+#endif // DOCUMENT_H
