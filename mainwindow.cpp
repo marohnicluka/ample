@@ -18,6 +18,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMenu>
+#include <qmath.h>
+#include <QClipboard>
+#include <QMimeData>
 
 using namespace giac;
 
@@ -26,33 +29,39 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+#ifndef QT_NO_CLIPBOARD
+    if (const QMimeData *md = QApplication::clipboard()->mimeData())
+        ui->actionPaste->setEnabled(md->hasText());
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
+#endif
+#ifdef QT_NO_CLIPBOARD
+    ui->actionPaste->setEnabled(false);
+#endif
+    ui->actionCopy->setEnabled(false);
+    ui->actionCut->setEnabled(false);
+    ui->actionUndo->setEnabled(false);
+    ui->actionRedo->setEnabled(false);
     QActionGroup *alignGroup = new QActionGroup(this);
     alignGroup->addAction(ui->actionAlignLeft);
     alignGroup->addAction(ui->actionAlignCenter);
     alignGroup->addAction(ui->actionAlignRight);
     alignGroup->addAction(ui->actionAlignJustify);
     alignGroup->setExclusive(true);
-    connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlign_changed(QAction*)));
+    connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlignChanged(QAction*)));
     QActionGroup *paragraphGroup = new QActionGroup(this);
-    paragraphGroup->addAction(ui->actionTextStyleParagraph);
-    paragraphGroup->addAction(ui->actionTextStyleTitle);
-    paragraphGroup->addAction(ui->actionTextStyleSection);
-    paragraphGroup->addAction(ui->actionTextStyleSubsection);
-    paragraphGroup->addAction(ui->actionTextStyleSubsubsection);
-    paragraphGroup->addAction(ui->actionTextStyleListBullets);
-    paragraphGroup->addAction(ui->actionTextStyleListSquares);
-    paragraphGroup->addAction(ui->actionTextStyleNumberedList);
-    paragraphGroup->addAction(ui->actionTextStyleOrderedListLetters);
-    paragraphGroup->addAction(ui->actionTextStyleOrderedListCapitals);
-    paragraphGroup->addAction(ui->actionTextStyleOrderedListRoman);
-    paragraphGroup->addAction(ui->actionTextStyleOrderedListRomanSmall);
+    paragraphGroup->addAction(ui->actionParagraphStyleTitle);
+    paragraphGroup->addAction(ui->actionParagraphStyleSection);
+    paragraphGroup->addAction(ui->actionParagraphStyleSubsection);
+    paragraphGroup->addAction(ui->actionParagraphStyleTextBody);
+    paragraphGroup->addAction(ui->actionParagraphStyleList);
+    paragraphGroup->addAction(ui->actionParagraphStyleNumberedList);
     paragraphGroup->setExclusive(true);
-    connect(paragraphGroup, SIGNAL(triggered(QAction*)), this, SLOT(paragraphStyle_changed(QAction*)));
+    connect(paragraphGroup, SIGNAL(triggered(QAction*)), this, SLOT(paragraphStyleChanged(QAction*)));
     paragraphStyleToolButton = new QToolButton(this);
-    paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
     QMenu *paragraphStyleMenu = new QMenu(this);
     paragraphStyleMenu->addActions(paragraphGroup->actions());
-    paragraphStyleToolButton->setMenu(paragraphStyleMenu);
+    ui->actionParagraphStyle->setMenu(paragraphStyleMenu);
+    paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
     paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
     ui->textToolBar->insertWidget(ui->actionTextBold,paragraphStyleToolButton);
     QList<int> outlineSplitterSizes;
@@ -74,7 +83,140 @@ MainWindow::MainWindow(QWidget *parent) :
     */
 }
 
-void MainWindow::textAlign_changed(QAction *a) {
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+QTextEdit* MainWindow::currentTextEdit() {
+    return qobject_cast<QTextEdit*>(ui->editorTabs->currentWidget());
+}
+
+void MainWindow::addNewDocument()
+{
+    context ct;
+    Document *doc = new Document(&ct, this);
+    QTextEdit *editor = new QTextEdit(this);
+    editor->setAcceptRichText(false);
+    editor->setDocument(doc);
+    editor->setFrameStyle(QFrame::NoFrame);
+    connect(editor, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
+            this, SLOT(currentCharFormatChanged(QTextCharFormat)));
+    connect(editor, SIGNAL(undoAvailable(bool)), ui->actionUndo, SLOT(setEnabled(bool)));
+    connect(editor, SIGNAL(redoAvailable(bool)), ui->actionRedo, SLOT(setEnabled(bool)));
+#ifndef QT_NO_CLIPBOARD
+    connect(editor, SIGNAL(copyAvailable(bool)), this, SLOT(copyAvailableChanged(bool)));
+#endif
+    int index = ui->editorTabs->addTab(editor, QString("Unnamed"));
+    ui->editorTabs->setCurrentIndex(index);
+    connect(doc, SIGNAL(blockCountChanged(int)), this, SLOT(blockCountChanged(int)));
+}
+
+void MainWindow::updateTextStyleActions(const QFont &font)
+{
+    ui->actionTextBold->setChecked(font.bold());
+    ui->actionTextItalic->setChecked(font.italic());
+    ui->actionTextMath->setChecked(font.family() == currentDocument->style.casInputFontFamily);
+}
+
+void MainWindow::paragraphStyleChanged(QAction *a)
+{
+    Document::ParagraphType type;
+    if (a == ui->actionParagraphStyleTextBody)
+        type = Document::TextBody;
+    else if (a == ui->actionParagraphStyleTitle)
+        type = Document::Title;
+    else if (a == ui->actionParagraphStyleSection)
+        type = Document::Section;
+    else if (a == ui->actionParagraphStyleSubsection)
+        type = Document::Subsection;
+    else if (a == ui->actionParagraphStyleList)
+        type = Document::List;
+    else if (a == ui->actionParagraphStyleNumberedList)
+        type = Document::NumberedList;
+    else
+        return;
+    if (currentParagraphType == type)
+        return;
+    bool isList = type == Document::List || type == Document::NumberedList;
+    if (currentTextEdit() == nullptr)
+        return;
+    QTextCursor cursor = currentTextEdit()->textCursor();
+    if (cursor.currentFrame() != currentDocument->rootFrame())
+        return;
+    QTextCursor pCursor(cursor);
+    QTextCharFormat charFormat;
+    Document::Style style = currentDocument->style;
+    pCursor.movePosition(QTextCursor::StartOfBlock);
+    pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+    switch (type)
+    {
+    case Document::TextBody:
+        charFormat.setFontFamily(style.textBodyFontFamily);
+        charFormat.setFontPointSize(style.fontPointSize);
+        charFormat.setFontWeight(QFont::Weight::Normal);
+        break;
+    case Document::Title:
+        charFormat.setFontFamily(style.headingsFontFamily);
+        charFormat.setFontPointSize(style.fontPointSize * qPow(style.groundRatio, 3));
+        charFormat.setFontWeight(QFont::Weight::Normal);
+        break;
+    case Document::Section:
+        charFormat.setFontFamily(style.headingsFontFamily);
+        charFormat.setFontPointSize(style.fontPointSize * qPow(style.groundRatio, 2));
+        charFormat.setFontWeight(QFont::Weight::Bold);
+        break;
+    case Document::Subsection:
+        charFormat.setFontFamily(style.headingsFontFamily);
+        charFormat.setFontPointSize(style.fontPointSize * style.groundRatio);
+        charFormat.setFontWeight(QFont::Weight::Bold);
+        break;
+    default:
+        break;
+    }
+    if (!isList)
+    {
+        cursor.mergeBlockCharFormat(charFormat);
+        pCursor.mergeCharFormat(charFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setProperty(Document::ParagraphStyleId, type);
+        cursor.setBlockFormat(blockFormat);
+    }
+    currentParagraphType = type;
+}
+
+void MainWindow::blockCountChanged(int count) {
+    int lastCount = currentBlockCount;
+    currentBlockCount = count;
+    QTextCursor cursor = currentTextEdit()->textCursor();
+    if (cursor.currentFrame() != currentDocument->rootFrame())
+        return;
+    bool atBlockStart = cursor.positionInBlock() == 0;
+    QTextCursor pCursor(cursor);
+    QTextCharFormat fmt;
+    if (lastCount > count && !atBlockStart && Document::isHeading(cursor.block()))
+    {
+        fmt = cursor.charFormat();
+        pCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        pCursor.mergeCharFormat(fmt);
+    }
+    else if (count == 1 + lastCount && atBlockStart)
+    {
+        if (Document::isHeading(cursor.block().previous()))
+        {
+            fmt.setFontFamily(currentDocument->style.textBodyFontFamily);
+            fmt.setFontPointSize(currentDocument->style.fontPointSize);
+            fmt.setFontWeight(QFont::Weight::Normal);
+            pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+            if (pCursor.hasSelection())
+                pCursor.mergeCharFormat(fmt);
+            cursor.mergeBlockCharFormat(fmt);
+        }
+    }
+}
+
+void MainWindow::textAlignChanged(QAction *a)
+{
     if (a == ui->actionAlignLeft)
         qDebug("Left");
     //textEdit->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
@@ -89,23 +231,36 @@ void MainWindow::textAlign_changed(QAction *a) {
     //textEdit->setAlignment(Qt::AlignJustify);
 }
 
-void MainWindow::paragraphStyle_changed(QAction *a) {
-
-}
-
-MainWindow::~MainWindow()
+void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {
-    delete ui;
+    QTextEdit *textEdit = currentTextEdit();
+    if (textEdit == nullptr)
+        return;
+    QTextCursor cursor = textEdit->textCursor();
+    QTextCursor pCursor(cursor);
+    pCursor.movePosition(QTextCursor::EndOfWord);
+    if (!cursor.hasSelection() && cursor.position() != pCursor.position())
+        cursor.select(QTextCursor::WordUnderCursor);
+    cursor.mergeCharFormat(format);
+    textEdit->mergeCurrentCharFormat(format);
 }
 
-void MainWindow::addNewDocument() {
-    context ct;
-    Document *doc = new Document(&ct, this);
-    QTextEdit *editor = new QTextEdit(this);
-    editor->setDocument(doc);
-    editor->setFrameStyle(QFrame::NoFrame);
-    int index = ui->editorTabs->addTab(editor,QString("Unnamed"));
-    ui->editorTabs->setCurrentIndex(index);
+void MainWindow::clipboardDataChanged()
+{
+#ifndef QT_NO_CLIPBOARD
+    if (const QMimeData *md = QApplication::clipboard()->mimeData())
+        ui->actionPaste->setEnabled(md->hasText());
+#endif
+}
+
+void MainWindow::copyAvailableChanged(bool yes) {
+    ui->actionCopy->setEnabled(yes);
+    ui->actionCut->setEnabled(yes);
+}
+
+void MainWindow::currentCharFormatChanged(const QTextCharFormat &format)
+{
+    updateTextStyleActions(format.font());
 }
 
 void MainWindow::on_sidebarTabs_currentChanged(int index)
@@ -117,6 +272,7 @@ void MainWindow::on_editorTabs_currentChanged(int index)
 {
     QTextEdit *editor = qobject_cast<QTextEdit*>(ui->editorTabs->widget(index));
     currentDocument = qobject_cast<Document*>(editor->document());
+    currentBlockCount = currentDocument->blockCount();
 }
 
 void MainWindow::on_editorTabs_tabCloseRequested(int index)
@@ -127,4 +283,53 @@ void MainWindow::on_editorTabs_tabCloseRequested(int index)
 void MainWindow::on_actionNewDocument_triggered()
 {
     addNewDocument();
+}
+
+void MainWindow::on_actionCopy_triggered()
+{
+    currentTextEdit()->copy();
+}
+
+void MainWindow::on_actionCut_triggered()
+{
+    currentTextEdit()->cut();
+}
+
+void MainWindow::on_actionPaste_triggered()
+{
+    currentTextEdit()->paste();
+}
+
+void MainWindow::on_actionUndo_triggered()
+{
+    currentTextEdit()->undo();
+}
+
+void MainWindow::on_actionRedo_triggered()
+{
+    currentTextEdit()->redo();
+}
+void MainWindow::on_actionTextBold_triggered()
+{
+    QTextCharFormat fmt;
+    fmt.setFontWeight(ui->actionTextBold->isChecked() ? QFont::Bold : QFont::Normal);
+    mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::on_actionTextItalic_triggered()
+{
+    QTextCharFormat fmt;
+    fmt.setFontItalic(ui->actionTextItalic->isChecked());
+    mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::on_actionTextMath_triggered()
+{
+    QTextCharFormat fmt;
+    Document::Style style = currentDocument->style;
+    fmt.setFontFamily(ui->actionTextMath->isChecked() ? style.casInputFontFamily : style.textBodyFontFamily);
+    fmt.setFontPointSize(style.fontPointSize);
+    fmt.setFontItalic(false);
+    fmt.setFontWeight(QFont::Normal);
+    mergeFormatOnWordOrSelection(fmt);
 }

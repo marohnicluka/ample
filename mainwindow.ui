@@ -210,8 +210,15 @@
     <addaction name="separator"/>
     <addaction name="actionFind"/>
    </widget>
+   <widget class="QMenu" name="menu_Format">
+    <property name="title">
+     <string>&amp;Format</string>
+    </property>
+    <addaction name="actionParagraphStyle"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
+   <addaction name="menu_Format"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -259,7 +266,6 @@
    </attribute>
    <addaction name="actionTextBold"/>
    <addaction name="actionTextItalic"/>
-   <addaction name="actionTextUnderline"/>
    <addaction name="actionClearFormatting"/>
    <addaction name="actionTextMath"/>
    <addaction name="separator"/>
@@ -357,24 +363,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
-   </property>
-  </action>
-  <action name="actionTextUnderline">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-text-underline.svg</normaloff>:/icons/format-text-underline.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Underline</string>
-   </property>
-   <property name="toolTip">
-    <string>Underlined text</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionAlignLeft">
@@ -746,23 +734,29 @@
     <string>Ctrl+M</string>
    </property>
   </action>
-  <action name="actionTextStyleParagraph">
+  <action name="actionParagraphStyleTextBody">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
     <string>Paragraph</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+4</string>
+   </property>
   </action>
-  <action name="actionTextStyleTitle">
+  <action name="actionParagraphStyleTitle">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
     <string>Title</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+1</string>
+   </property>
   </action>
-  <action name="actionTextStyleSection">
+  <action name="actionParagraphStyleSection">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -770,10 +764,10 @@
     <string>Section</string>
    </property>
    <property name="shortcut">
-    <string>Alt+1</string>
+    <string>Alt+2</string>
    </property>
   </action>
-  <action name="actionTextStyleSubsection">
+  <action name="actionParagraphStyleSubsection">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -781,40 +775,24 @@
     <string>Subsection</string>
    </property>
    <property name="shortcut">
-    <string>Alt+2</string>
-   </property>
-  </action>
-  <action name="actionTextStyleSubsubsection">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Subsubsection</string>
-   </property>
-   <property name="shortcut">
     <string>Alt+3</string>
    </property>
   </action>
-  <action name="actionTextStyleListBullets">
+  <action name="actionParagraphStyleList">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>List (bullets)</string>
+    <string>List</string>
+   </property>
+   <property name="toolTip">
+    <string>Itemized list</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+I</string>
    </property>
   </action>
-  <action name="actionTextStyleListSquares">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>List (squares)</string>
-   </property>
-  </action>
-  <action name="actionTextStyleNumberedList">
+  <action name="actionParagraphStyleNumberedList">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -823,38 +801,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+N</string>
-   </property>
-  </action>
-  <action name="actionTextStyleOrderedListLetters">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ordered list (letters)</string>
-   </property>
-  </action>
-  <action name="actionTextStyleOrderedListCapitals">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ordered list (capitals)</string>
-   </property>
-  </action>
-  <action name="actionTextStyleOrderedListRomanSmall">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ordered list (small roman numerals)</string>
-   </property>
-  </action>
-  <action name="actionTextStyleOrderedListRoman">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ordered list (roman numerals)</string>
    </property>
   </action>
  </widget>

@@ -27,6 +27,12 @@ Document::Document(GIAC_CONTEXT, QObject *parent) :
     style.textBodyFontFamily = "FreeSerif";
     style.headingsFontFamily = "FreeSans";
     style.casInputFontFamily = "FreeMono";
-    style.fontPointSize = 11.5;
+    style.fontPointSize = 12.0;
+    style.groundRatio = 1.324718;
     worksheetMode = false;
+}
+
+bool Document::isHeading(const QTextBlock &block) {
+    int type = block.blockFormat().intProperty(ParagraphStyleId);
+    return type == Document::Title || type == Document::Section || type == Document::Subsection;
 }

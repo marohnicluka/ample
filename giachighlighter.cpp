@@ -17,15 +17,20 @@
 
 #include "giachighlighter.h"
 
-QStringList GiacHighlighter::readWords(QXmlStreamReader *reader, bool boundaries) {
+QStringList GiacHighlighter::readWords(QXmlStreamReader *reader, bool boundaries)
+{
     QStringList words;
     QString word;
     reader->readNext();
-    while (reader->tokenType() != QXmlStreamReader::EndElement || reader->name() != "context") {
-        if (reader->name() == "keyword") {
+    while (reader->tokenType() != QXmlStreamReader::EndElement || reader->name() != "context")
+    {
+        if (reader->name() == "keyword")
+        {
             word = reader->readElementText();
-            if (boundaries) {
-                if (word.contains("|")) {
+            if (boundaries)
+            {
+                if (word.contains("|"))
+                {
                     word.append(")");
                     word.prepend("(");
                 }
@@ -39,33 +44,40 @@ QStringList GiacHighlighter::readWords(QXmlStreamReader *reader, bool boundaries
     return words;
 }
 
-void GiacHighlighter::createRulesFrom(QStringList &words, QTextCharFormat &fmt) {
+void GiacHighlighter::createRulesFrom(QStringList &words, QTextCharFormat &fmt)
+{
     HighlightingRule rule;
-    foreach (const QString word, words) {
+    foreach (const QString word, words)
+    {
         rule.pattern = QRegExp(word);
         rule.format = fmt;
         rules.append(rule);
     }
 }
 
-GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent) {
+GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent)
+{
     doc = parent;
     QStringList keywords,variables,options,commands,constants,units;
     QFile file(":/giac-keywords.xml");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         qWarning("Loading error: couldn't open giac-keywords.xml");
         return;
     }
     QXmlStreamReader xmlReader;
     xmlReader.setDevice(&file);
-    while (!xmlReader.atEnd() && !xmlReader.hasError()) {
+    while (!xmlReader.atEnd() && !xmlReader.hasError())
+    {
         QXmlStreamReader::TokenType token=xmlReader.readNext();
         if (token == QXmlStreamReader::StartDocument)
             continue;
-        if (token == QXmlStreamReader::StartElement) {
+        if (token == QXmlStreamReader::StartElement)
+        {
             if (xmlReader.name() == "language")
                 continue;
-            if (xmlReader.name() == "context") {
+            if (xmlReader.name() == "context")
+            {
                 QXmlStreamAttributes attributes=xmlReader.attributes();
                 if (attributes.hasAttribute("id")) {
                     QString type = attributes.value("id").toString();
@@ -85,29 +97,32 @@ GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent) 
             }
         }
     }
-    if (xmlReader.hasError()) {
+    if (xmlReader.hasError())
+    {
         qWarning() << "Parsing error: " << xmlReader.errorString() << "\n";
         return;
     }
     xmlReader.clear();
     keywordFormat.setForeground(Qt::darkBlue);
-    keywordFormat.setFontWeight(QFont::Weight::Bold);
+    keywordFormat.setFontWeight(QFont::Bold);
     variableFormat.setForeground(Qt::darkRed);
-    variableFormat.setFontWeight(QFont::Weight::Bold);
+    variableFormat.setFontWeight(QFont::Bold);
     optionFormat.setForeground(Qt::darkRed);
-    optionFormat.setFontWeight(QFont::Weight::Bold);
+    optionFormat.setFontWeight(QFont::Bold);
     commandFormat.setForeground(Qt::darkRed);
-    commandFormat.setFontWeight(QFont::Weight::Bold);
+    commandFormat.setFontWeight(QFont::Bold);
     constantFormat.setForeground(Qt::darkCyan);
-    constantFormat.setFontWeight(QFont::Weight::Bold);
+    constantFormat.setFontWeight(QFont::Bold);
     unitFormat.setForeground(Qt::darkMagenta);
-    unitFormat.setFontWeight(QFont::Weight::Bold);
+    unitFormat.setFontWeight(QFont::Bold);
     //numberFormat.setForeground(Qt::darkCyan);
     stringFormat.setForeground(Qt::darkGreen);
+    stringFormat.setFontWeight(QFont::Normal);
     commentFormat.setForeground(Qt::darkGray);
     commentFormat.setFontItalic(true);
+    commentFormat.setFontWeight(QFont::Normal);
     operatorFormat.setForeground(Qt::darkBlue);
-    operatorFormat.setFontWeight(QFont::Weight::Bold);
+    operatorFormat.setFontWeight(QFont::Bold);
     createRulesFrom(keywords,keywordFormat);
     createRulesFrom(variables,variableFormat);
     createRulesFrom(options,optionFormat);
@@ -131,15 +146,27 @@ GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent) 
     rules.append(rule);
 }
 
-void GiacHighlighter::highlightBlock(const QString &text) {
-    int pos, len;
-    foreach (const HighlightingRule &rule, rules) {
-        pos = 0;
-        while ((pos = rule.pattern.indexIn(text,pos)) != -1) {
-            len = rule.pattern.matchedLength();
-            if (format(pos).fontFamily() == doc->style.casInputFontFamily)
-                setFormat(pos, len, rule.format);
-            pos += len;
+void GiacHighlighter::highlightBlock(const QString &text)
+{
+    QTextBlock block = currentBlock();
+    if (Document::isHeading(block))
+        return;
+    int pos, len, fragmentStart;
+    foreach (const HighlightingRule &rule, rules)
+    {
+        for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it)
+        {
+            QTextFragment fragment = it.fragment();
+            if (fragment.charFormat().fontFamily() != doc->style.casInputFontFamily)
+                continue;
+            fragmentStart = fragment.position() - block.position();
+            pos = 0;
+            while ((pos = rule.pattern.indexIn(fragment.text(),pos)) != -1)
+            {
+                len = rule.pattern.matchedLength();
+                setFormat(fragmentStart + pos, len, rule.format);
+                pos += len;
+            }
         }
     }
 }

@@ -33,18 +33,24 @@ class Document : public QTextDocument
 private:
     const context *gcontext;
     GiacHighlighter *ghighlighter;
+
 public:
+    enum ParagraphType { TextBody, Title, Section, Subsection, List, NumberedList };
+    enum { ParagraphStyleId = 1 };
     Document(GIAC_CONTEXT, QObject *parent = 0);
     QString fileName;
     QString language;
     bool worksheetMode;
-    struct Style {
+    struct Style
+    {
         QString textBodyFontFamily;
         QString headingsFontFamily;
         QString casInputFontFamily;
         qreal fontPointSize;
+        qreal groundRatio;
     };
     Style style;
+    static bool isHeading(const QTextBlock &block);
 
 signals:
     void fileNameChanged(const QString newName);

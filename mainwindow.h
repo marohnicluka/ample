@@ -41,15 +41,32 @@ private:
     Document *currentDocument;
     QToolButton *paragraphStyleToolButton;
     void addNewDocument();
+    QTextEdit *currentTextEdit();
+    Document::ParagraphType currentParagraphType;
+    int currentBlockCount;
+    void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
+    void updateTextStyleActions(const QFont &font);
 
 private slots:
-    void textAlign_changed(QAction *a);
-    void paragraphStyle_changed(QAction *a);
+    void textAlignChanged(QAction *a);
+    void paragraphStyleChanged(QAction *a);
+    void blockCountChanged(int count);
+    void clipboardDataChanged();
+    void copyAvailableChanged(bool yes);
+    void currentCharFormatChanged(const QTextCharFormat &format);
 
     void on_sidebarTabs_currentChanged(int index);
     void on_editorTabs_currentChanged(int index);
     void on_editorTabs_tabCloseRequested(int index);
     void on_actionNewDocument_triggered();
+    void on_actionTextBold_triggered();
+    void on_actionTextItalic_triggered();
+    void on_actionCopy_triggered();
+    void on_actionCut_triggered();
+    void on_actionPaste_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    void on_actionTextMath_triggered();
 };
 
 #endif // MAINWINDOW_H

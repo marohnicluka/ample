@@ -17,11 +17,13 @@
 
 #include "mathtextobject.h"
 
-QSizeF MathTextObject::intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) {
+QSizeF MathTextObject::intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format)
+{
     return QSizeF(1,1);
 }
 
 void MathTextObject::drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc,
-                                int posInDocument, const QTextFormat &format) {
+                                int posInDocument, const QTextFormat &format)
+{
 
 }

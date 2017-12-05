@@ -29,10 +29,12 @@
 
 class Document;
 
-class GiacHighlighter : public QSyntaxHighlighter {
+class GiacHighlighter : public QSyntaxHighlighter
+{
 private:
     Document *doc;
-    struct HighlightingRule {
+    struct HighlightingRule
+    {
         QRegExp pattern;
         QTextCharFormat format;
     };
@@ -49,9 +51,11 @@ private:
     QTextCharFormat operatorFormat;
     QStringList readWords(QXmlStreamReader *reader, bool boundaries = true);
     void createRulesFrom(QStringList &words, QTextCharFormat &fmt);
+
 public:
     GiacHighlighter(Document *parent);
     inline Document *document() { return doc; }
+
 protected:
     void highlightBlock(const QString &text) override;
 };
