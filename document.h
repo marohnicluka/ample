@@ -19,12 +19,16 @@
 #define DOCUMENT_H
 
 #include <QTextDocument>
+#include <QTextCursor>
+#include <qmath.h>
 #include <giac/giac.h>
 #include "giachighlighter.h"
+#include "documentcounter.h"
 
 using namespace giac;
 
 class GiacHighlighter;
+class DocumentCounter;
 
 class Document : public QTextDocument
 {
@@ -33,14 +37,17 @@ class Document : public QTextDocument
 private:
     const context *gcontext;
     GiacHighlighter *ghighlighter;
+    DocumentCounter *sectionCounter;
+    DocumentCounter *subsectionCounter;
+    DocumentCounter *equationCounter;
+    DocumentCounter *figureCounter;
+    DocumentCounter *tableCounter;
 
 public:
-    enum ParagraphType { TextBody, Title, Section, Subsection, List, NumberedList };
-    enum { ParagraphStyleId = 1 };
-    Document(GIAC_CONTEXT, QObject *parent = 0);
-    QString fileName;
-    QString language;
-    bool worksheetMode;
+    enum PropertyId { ParagraphStyleId = 1, TextStyleId = 2 };
+    enum ParagraphType { TextBody = 1, Title = 2, Section = 3, Subsection = 4, List = 5, NumberedList = 6 };
+    enum TextType { NormalTextStyle = 0, MathTextStyle = 1 };
+
     struct Style
     {
         QString textBodyFontFamily;
@@ -50,10 +57,18 @@ public:
         qreal groundRatio;
     };
     Style style;
+
+    Document(GIAC_CONTEXT, QObject *parent = 0);
+    QString fileName;
+    QString language;
+    bool worksheetMode;
+
+    inline qreal headingSize(int level) { return style.fontPointSize * qPow(style.groundRatio, level); }
     static bool isHeading(const QTextBlock &block);
 
 signals:
     void fileNameChanged(const QString newName);
+
 };
 
 #endif // DOCUMENT_H

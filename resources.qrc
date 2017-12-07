@@ -38,5 +38,17 @@
         <file>icons/insert-graph.svg</file>
         <file>icons/paragraph-style.svg</file>
         <file>icons/format-text-math.svg</file>
+        <file>fonts/FreeMono.ttf</file>
+        <file>fonts/FreeMonoBold.ttf</file>
+        <file>fonts/FreeMonoBoldOblique.ttf</file>
+        <file>fonts/FreeMonoOblique.ttf</file>
+        <file>fonts/FreeSans.ttf</file>
+        <file>fonts/FreeSansBold.ttf</file>
+        <file>fonts/FreeSansBoldOblique.ttf</file>
+        <file>fonts/FreeSansOblique.ttf</file>
+        <file>fonts/FreeSerif.ttf</file>
+        <file>fonts/FreeSerifBold.ttf</file>
+        <file>fonts/FreeSerifBoldItalic.ttf</file>
+        <file>fonts/FreeSerifItalic.ttf</file>
     </qresource>
 </RCC>

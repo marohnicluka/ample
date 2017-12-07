@@ -42,10 +42,11 @@ private:
     QToolButton *paragraphStyleToolButton;
     void addNewDocument();
     QTextEdit *currentTextEdit();
-    Document::ParagraphType currentParagraphType;
     int currentBlockCount;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     void updateTextStyleActions(const QFont &font);
+    bool cursorAt(QTextCursor::MoveOperation op);
+    void loadFonts();
 
 private slots:
     void textAlignChanged(QAction *a);

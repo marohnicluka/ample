@@ -30,9 +30,13 @@ Document::Document(GIAC_CONTEXT, QObject *parent) :
     style.fontPointSize = 12.0;
     style.groundRatio = 1.324718;
     worksheetMode = false;
+
+    sectionCounter = new DocumentCounter(this, DocumentCounter::Section);
+    sectionCounter->setFont(style.headingsFontFamily, headingSize(2), QFont::Bold, false);
 }
 
-bool Document::isHeading(const QTextBlock &block) {
+bool Document::isHeading(const QTextBlock &block)
+{
     int type = block.blockFormat().intProperty(ParagraphStyleId);
     return type == Document::Title || type == Document::Section || type == Document::Subsection;
 }

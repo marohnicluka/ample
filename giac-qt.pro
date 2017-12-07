@@ -29,13 +29,23 @@ SOURCES += \
         mainwindow.cpp \
     giachighlighter.cpp \
     document.cpp \
-    mathtextobject.cpp
+    mathtextobject.cpp \
+    mathexpression.cpp \
+    documenteditor.cpp \
+    documentcounter.cpp \
+    blockproperties.cpp \
+    glyphs.cpp
 
 HEADERS += \
         mainwindow.h \
     giachighlighter.h \
     document.h \
-    mathtextobject.h
+    mathtextobject.h \
+    mathexpression.h \
+    documenteditor.h \
+    documentcounter.h \
+    blockproperties.h \
+    glyphs.h
 
 FORMS += \
         mainwindow.ui

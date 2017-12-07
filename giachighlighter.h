@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QDebug>
+#include <QVector>
 
 class Document;
 
@@ -39,6 +40,7 @@ private:
         QTextCharFormat format;
     };
     QVector<HighlightingRule> rules;
+    QTextCharFormat defaultFormat;
     QTextCharFormat keywordFormat;
     QTextCharFormat numberFormat;
     QTextCharFormat stringFormat;
@@ -51,6 +53,7 @@ private:
     QTextCharFormat operatorFormat;
     QStringList readWords(QXmlStreamReader *reader, bool boundaries = true);
     void createRulesFrom(QStringList &words, QTextCharFormat &fmt);
+    static void setFormatProperties(QTextCharFormat *format, const QBrush &color, bool bold, bool italic);
 
 public:
     GiacHighlighter(Document *parent);
@@ -58,6 +61,18 @@ public:
 
 protected:
     void highlightBlock(const QString &text) override;
+};
+
+class UnionOfRanges
+{
+private:
+    QVector< QPair<int, int> > ranges;
+
+public:
+    UnionOfRanges(int start, int length) { ranges.push_back(QPair<int, int>(start, start + length)); }
+    inline int nRanges() { return ranges.size(); }
+    void cutOut(int start, int length);
+    bool nthRange(int n, int &start, int &length);
 };
 
 #endif // GIACHIGHLIGHTER_H

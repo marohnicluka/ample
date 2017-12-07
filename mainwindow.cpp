@@ -15,12 +15,16 @@
  * along with Giac Qt.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QMenu>
-#include <qmath.h>
 #include <QClipboard>
 #include <QMimeData>
+#include <QFontDatabase>
+#include <QString>
+#include <QStringList>
+#include <QMessageBox>
+#include <qmath.h>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 using namespace giac;
 
@@ -67,20 +71,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QList<int> outlineSplitterSizes;
     outlineSplitterSizes << 100 << 450;
     ui->outlineSplitter->setSizes(outlineSplitterSizes);
-    /*
-    QTextCursor cursor(doc);
-    QTextFrameFormat bodyFrameFormat;
-    bodyFrameFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
-    bodyFrameFormat.setPadding(10);
-    bodyFrameFormat.setBorder(0.0);
-    cursor.insertFrame(bodyFrameFormat);
-    QTextCharFormat fmt;
-    fmt.setFontPointSize(11.0);
-    fmt.setFontFamily("FreeMono");
-    fmt.setFontWeight(QFont::Weight::Bold);
-    cursor.mergeCharFormat(fmt);
-    ui->textEdit->mergeCurrentCharFormat(fmt);
-    */
+
+    loadFonts();
 }
 
 MainWindow::~MainWindow()
@@ -92,10 +84,33 @@ QTextEdit* MainWindow::currentTextEdit() {
     return qobject_cast<QTextEdit*>(ui->editorTabs->currentWidget());
 }
 
+void MainWindow::loadFonts()
+{
+    QStringList fonts, failed;
+    fonts << "FreeMono.ttf" << "FreeMonoBold.ttf" << "FreeMonoBoldOblique.ttf" << "FreeMonoOblique.ttf"
+          << "FreeSans.ttf" << "FreeSansBold.ttf" << "FreeSansBoldOblique.ttf" << "FreeSansOblique.ttf"
+          << "FreeSerif.ttf" << "FreeSerifBold.ttf" << "FreeSerifBoldItalic.ttf" << "FreeSerifItalic.ttf";
+    foreach (const QString fontName, fonts)
+    {
+        QFile res(":/fonts/" + fontName);
+        if (!res.open(QIODevice::ReadOnly) || QFontDatabase::addApplicationFontFromData(res.readAll()) == -1)
+            failed.append(fontName);
+    }
+    if (!failed.empty())
+    {
+        QString message = tr("Failed to load font(s): ") + failed.join(", ");
+        QMessageBox::warning(this, tr("Font Loading Error"), message);
+    }
+}
+
 void MainWindow::addNewDocument()
 {
     context ct;
     Document *doc = new Document(&ct, this);
+    QTextFrameFormat rootFrameFormat = doc->rootFrame()->frameFormat();
+    rootFrameFormat.setLeftMargin(9);
+    rootFrameFormat.setRightMargin(9);
+    doc->rootFrame()->setFrameFormat(rootFrameFormat);
     QTextEdit *editor = new QTextEdit(this);
     editor->setAcceptRichText(false);
     editor->setDocument(doc);
@@ -136,13 +151,13 @@ void MainWindow::paragraphStyleChanged(QAction *a)
         type = Document::NumberedList;
     else
         return;
-    if (currentParagraphType == type)
-        return;
     bool isList = type == Document::List || type == Document::NumberedList;
     if (currentTextEdit() == nullptr)
         return;
     QTextCursor cursor = currentTextEdit()->textCursor();
-    if (cursor.currentFrame() != currentDocument->rootFrame())
+    QTextBlockFormat blockFormat = cursor.blockFormat();
+    if (cursor.currentFrame() != currentDocument->rootFrame() ||
+            blockFormat.intProperty(Document::ParagraphStyleId) == type)
         return;
     QTextCursor pCursor(cursor);
     QTextCharFormat charFormat;
@@ -182,7 +197,6 @@ void MainWindow::paragraphStyleChanged(QAction *a)
         blockFormat.setProperty(Document::ParagraphStyleId, type);
         cursor.setBlockFormat(blockFormat);
     }
-    currentParagraphType = type;
 }
 
 void MainWindow::blockCountChanged(int count) {
@@ -211,6 +225,9 @@ void MainWindow::blockCountChanged(int count) {
             if (pCursor.hasSelection())
                 pCursor.mergeCharFormat(fmt);
             cursor.mergeBlockCharFormat(fmt);
+            QTextBlockFormat bfmt = cursor.blockFormat();
+            bfmt.setProperty(Document::ParagraphStyleId, Document::TextBody);
+            cursor.mergeBlockFormat(bfmt);
         }
     }
 }
@@ -218,17 +235,21 @@ void MainWindow::blockCountChanged(int count) {
 void MainWindow::textAlignChanged(QAction *a)
 {
     if (a == ui->actionAlignLeft)
-        qDebug("Left");
-    //textEdit->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
+        currentTextEdit()->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
     else if (a == ui->actionAlignCenter)
-        qDebug("Center");
-    //textEdit->setAlignment(Qt::AlignHCenter);
+        currentTextEdit()->setAlignment(Qt::AlignHCenter);
     else if (a == ui->actionAlignRight)
-        qDebug("Right");
-    //textEdit->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
+        currentTextEdit()->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
     else if (a == ui->actionAlignJustify)
-        qDebug("Justified");
-    //textEdit->setAlignment(Qt::AlignJustify);
+        currentTextEdit()->setAlignment(Qt::AlignJustify);
+}
+
+bool MainWindow::cursorAt(QTextCursor::MoveOperation op)
+{
+    QTextCursor cursor = currentTextEdit()->textCursor();
+    QTextCursor pCursor(cursor);
+    pCursor.movePosition(op);
+    return cursor.position() == pCursor.position();
 }
 
 void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
@@ -237,9 +258,7 @@ void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
     if (textEdit == nullptr)
         return;
     QTextCursor cursor = textEdit->textCursor();
-    QTextCursor pCursor(cursor);
-    pCursor.movePosition(QTextCursor::EndOfWord);
-    if (!cursor.hasSelection() && cursor.position() != pCursor.position())
+    if (!cursor.hasSelection() && !cursorAt(QTextCursor::EndOfWord))
         cursor.select(QTextCursor::WordUnderCursor);
     cursor.mergeCharFormat(format);
     textEdit->mergeCurrentCharFormat(format);
@@ -327,9 +346,11 @@ void MainWindow::on_actionTextMath_triggered()
 {
     QTextCharFormat fmt;
     Document::Style style = currentDocument->style;
-    fmt.setFontFamily(ui->actionTextMath->isChecked() ? style.casInputFontFamily : style.textBodyFontFamily);
+    bool isMath = ui->actionTextMath->isChecked();
+    fmt.setFontFamily(isMath ? style.casInputFontFamily : style.textBodyFontFamily);
     fmt.setFontPointSize(style.fontPointSize);
     fmt.setFontItalic(false);
     fmt.setFontWeight(QFont::Normal);
+    fmt.setProperty(Document::TextStyleId, isMath ? Document::MathTextStyle : Document::NormalTextStyle);
     mergeFormatOnWordOrSelection(fmt);
 }

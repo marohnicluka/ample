@@ -55,6 +55,14 @@ void GiacHighlighter::createRulesFrom(QStringList &words, QTextCharFormat &fmt)
     }
 }
 
+void GiacHighlighter::setFormatProperties(QTextCharFormat *format, const QBrush &color, bool bold, bool italic)
+{
+    if (color != Qt::black)
+        format->setForeground(color);
+    format->setFontWeight(bold ? QFont::Bold : QFont::Normal);
+    format->setFontItalic(italic);
+}
+
 GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent)
 {
     doc = parent;
@@ -103,26 +111,17 @@ GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent)
         return;
     }
     xmlReader.clear();
-    keywordFormat.setForeground(Qt::darkBlue);
-    keywordFormat.setFontWeight(QFont::Bold);
-    variableFormat.setForeground(Qt::darkRed);
-    variableFormat.setFontWeight(QFont::Bold);
-    optionFormat.setForeground(Qt::darkRed);
-    optionFormat.setFontWeight(QFont::Bold);
-    commandFormat.setForeground(Qt::darkRed);
-    commandFormat.setFontWeight(QFont::Bold);
-    constantFormat.setForeground(Qt::darkCyan);
-    constantFormat.setFontWeight(QFont::Bold);
-    unitFormat.setForeground(Qt::darkMagenta);
-    unitFormat.setFontWeight(QFont::Bold);
-    //numberFormat.setForeground(Qt::darkCyan);
-    stringFormat.setForeground(Qt::darkGreen);
-    stringFormat.setFontWeight(QFont::Normal);
-    commentFormat.setForeground(Qt::darkGray);
-    commentFormat.setFontItalic(true);
-    commentFormat.setFontWeight(QFont::Normal);
-    operatorFormat.setForeground(Qt::darkBlue);
-    operatorFormat.setFontWeight(QFont::Bold);
+    setFormatProperties(&defaultFormat, Qt::black, false, false);
+    setFormatProperties(&keywordFormat, Qt::darkBlue, true, false);
+    setFormatProperties(&variableFormat, Qt::darkRed, true, false);
+    setFormatProperties(&optionFormat, Qt::darkRed, true, false);
+    setFormatProperties(&commandFormat, Qt::darkRed, true, false);
+    setFormatProperties(&constantFormat, Qt::darkCyan, true, false);
+    setFormatProperties(&unitFormat, Qt::darkMagenta, true, false);
+    setFormatProperties(&stringFormat,Qt::darkGreen,false,false);
+    setFormatProperties(&commentFormat, Qt::darkGray, false, true);
+    setFormatProperties(&operatorFormat, Qt::darkBlue, true, false);
+    setFormatProperties(&numberFormat, Qt::black, false, false);
     createRulesFrom(keywords,keywordFormat);
     createRulesFrom(variables,variableFormat);
     createRulesFrom(options,optionFormat);
@@ -151,22 +150,62 @@ void GiacHighlighter::highlightBlock(const QString &text)
     QTextBlock block = currentBlock();
     if (Document::isHeading(block))
         return;
-    int pos, len, fragmentStart;
+    UnionOfRanges unhighlightedRanges(0, text.length());
+    int pos, len;
     foreach (const HighlightingRule &rule, rules)
     {
-        for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it)
+        for (QTextBlock::iterator it = block.begin(); !it.atEnd(); ++it)
         {
             QTextFragment fragment = it.fragment();
-            if (fragment.charFormat().fontFamily() != doc->style.casInputFontFamily)
+            QTextCharFormat format = fragment.charFormat();
+            int fragmentStart = fragment.position() - block.position();
+            if (format.intProperty(Document::TextStyleId) != Document::MathTextStyle)
+            {
+                unhighlightedRanges.cutOut(fragmentStart, fragment.length());
                 continue;
-            fragmentStart = fragment.position() - block.position();
+            }
             pos = 0;
             while ((pos = rule.pattern.indexIn(fragment.text(),pos)) != -1)
             {
                 len = rule.pattern.matchedLength();
+                unhighlightedRanges.cutOut(fragmentStart + pos,len);
                 setFormat(fragmentStart + pos, len, rule.format);
                 pos += len;
             }
         }
     }
+    int n = 0;
+    while (unhighlightedRanges.nthRange(n++, pos, len))
+        setFormat(pos, len, defaultFormat);
+}
+
+void UnionOfRanges::cutOut(int start, int length)
+{
+    int end = start + length;
+    for (int i = ranges.size() - 1; i >= 0; --i)
+    {
+        int a = ranges.at(i).first, b = ranges.at(i).second;
+        if (start > b || end < a)
+            continue;
+        if (start <= a && end >= b)
+            ranges.remove(i);
+        else if (start <= a && end < b)
+            ranges[i].first = end;
+        else if (start > a && end >= b)
+            ranges[i].second = start;
+        else
+        {
+            ranges.push_back(QPair<int, int>(end, ranges.at(i).second));
+            ranges[i].second = start;
+        }
+    }
+}
+
+bool UnionOfRanges::nthRange(int n, int &start, int &length)
+{
+    if (n >= nRanges())
+        return false;
+    start = ranges.at(n).first;
+    length = ranges.at(n).second - start;
+    return true;
 }

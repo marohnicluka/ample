@@ -656,7 +656,7 @@
     <string>Insert reference</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string>Ctrl+Shift+R</string>
    </property>
   </action>
   <action name="actionSpellCheck">
