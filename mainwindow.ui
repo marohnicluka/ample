@@ -235,10 +235,10 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNewDocument"/>
-   <addaction name="actionOpenRecent"/>
    <addaction name="actionOpenDocument"/>
    <addaction name="actionSave"/>
    <addaction name="actionRevert"/>
+   <addaction name="actionDocumentClose"/>
    <addaction name="separator"/>
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
@@ -247,7 +247,7 @@
    <addaction name="actionPaste"/>
    <addaction name="actionFind"/>
    <addaction name="separator"/>
-   <addaction name="actionSettings"/>
+   <addaction name="actionDocumentProperties"/>
    <addaction name="actionRecompute"/>
    <addaction name="actionExport"/>
   </widget>
@@ -292,7 +292,7 @@
     <string>&amp;New</string>
    </property>
    <property name="toolTip">
-    <string>New Document</string>
+    <string>New</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -307,7 +307,7 @@
     <string>&amp;Open</string>
    </property>
    <property name="toolTip">
-    <string>Open Document</string>
+    <string>Open</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -342,7 +342,7 @@
     <string>Bold</string>
    </property>
    <property name="toolTip">
-    <string>Bold text</string>
+    <string>Bold</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
@@ -360,7 +360,7 @@
     <string>Italic</string>
    </property>
    <property name="toolTip">
-    <string>Italic text</string>
+    <string>Italic</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -378,7 +378,7 @@
     <string>Left align</string>
    </property>
    <property name="toolTip">
-    <string>Left aligned text</string>
+    <string>Left align</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
@@ -396,7 +396,7 @@
     <string>Right align</string>
    </property>
    <property name="toolTip">
-    <string>Right aligned text</string>
+    <string>Right align</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -411,10 +411,10 @@
      <normaloff>:/icons/format-justify-center.svg</normaloff>:/icons/format-justify-center.svg</iconset>
    </property>
    <property name="text">
-    <string>Center align</string>
+    <string>Center</string>
    </property>
    <property name="toolTip">
-    <string>Centered text</string>
+    <string>Center</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
@@ -432,7 +432,7 @@
     <string>Justify</string>
    </property>
    <property name="toolTip">
-    <string>Justified text</string>
+    <string>Justify</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+J</string>
@@ -444,10 +444,10 @@
      <normaloff>:/icons/insert-table.svg</normaloff>:/icons/insert-table.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert table</string>
+    <string>Table</string>
    </property>
    <property name="toolTip">
-    <string>Insert table</string>
+    <string>Table</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
@@ -459,10 +459,10 @@
      <normaloff>:/icons/insert-image.svg</normaloff>:/icons/insert-image.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert image</string>
+    <string>Image</string>
    </property>
    <property name="toolTip">
-    <string>Insert image</string>
+    <string>Image</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -603,10 +603,10 @@
      <normaloff>:/icons/view-refresh.svg</normaloff>:/icons/view-refresh.svg</iconset>
    </property>
    <property name="text">
-    <string>Recompute all</string>
+    <string>Recompute</string>
    </property>
    <property name="toolTip">
-    <string>Recompute all</string>
+    <string>Recompute</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -633,16 +633,16 @@
     <string>Redo</string>
    </property>
   </action>
-  <action name="actionSettings">
+  <action name="actionDocumentProperties">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/open-menu.svg</normaloff>:/icons/open-menu.svg</iconset>
    </property>
    <property name="text">
-    <string>Document settings</string>
+    <string>Properties</string>
    </property>
    <property name="toolTip">
-    <string>Document settings</string>
+    <string>Properties</string>
    </property>
   </action>
   <action name="actionReference">
@@ -651,10 +651,10 @@
      <normaloff>:/icons/insert-link.svg</normaloff>:/icons/insert-link.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert reference</string>
+    <string>Reference</string>
    </property>
    <property name="toolTip">
-    <string>Insert reference</string>
+    <string>Reference</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+R</string>
@@ -681,10 +681,10 @@
      <normaloff>:/icons/insert-cas.svg</normaloff>:/icons/insert-cas.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert CAS</string>
+    <string>CAS input</string>
    </property>
    <property name="toolTip">
-    <string>Insert CAS entry</string>
+    <string>CAS input</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -696,10 +696,10 @@
      <normaloff>:/icons/insert-graph.svg</normaloff>:/icons/insert-graph.svg</iconset>
    </property>
    <property name="text">
-    <string>Insert graph</string>
+    <string>Graph</string>
    </property>
    <property name="toolTip">
-    <string>Insert graph</string>
+    <string>Graph</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
@@ -711,10 +711,10 @@
      <normaloff>:/icons/paragraph-style.svg</normaloff>:/icons/paragraph-style.svg</iconset>
    </property>
    <property name="text">
-    <string>Paragraph style</string>
+    <string>Paragraph</string>
    </property>
    <property name="toolTip">
-    <string>Paragraph style</string>
+    <string>Paragraph</string>
    </property>
   </action>
   <action name="actionTextMath">
@@ -726,10 +726,10 @@
      <normaloff>:/icons/format-text-math.svg</normaloff>:/icons/format-text-math.svg</iconset>
    </property>
    <property name="text">
-    <string>Text math</string>
+    <string>Math</string>
    </property>
    <property name="toolTip">
-    <string>Text math</string>
+    <string>Math</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
@@ -810,13 +810,40 @@
      <normaloff>:/icons/label-new.svg</normaloff>:/icons/label-new.svg</iconset>
    </property>
    <property name="text">
-    <string>New label</string>
+    <string>Label</string>
    </property>
    <property name="toolTip">
-    <string>New label</string>
+    <string>Label</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+L</string>
+   </property>
+  </action>
+  <action name="actionSwitchDocuments">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/documents.svg</normaloff>:/icons/documents.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Switch documents</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch documents</string>
+   </property>
+  </action>
+  <action name="actionDocumentClose">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/document-close.svg</normaloff>:/icons/document-close.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>

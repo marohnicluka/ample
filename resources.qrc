@@ -51,5 +51,8 @@
         <file>fonts/FreeSerifBoldItalic.ttf</file>
         <file>fonts/FreeSerifItalic.ttf</file>
         <file>icons/label-new.svg</file>
+        <file>icons/documents.svg</file>
+        <file>icons/format-text-highlight.svg</file>
+        <file>icons/document-close.svg</file>
     </qresource>
 </RCC>

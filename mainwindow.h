@@ -20,7 +20,7 @@
 
 #include <QMainWindow>
 #include <QToolButton>
-#include "document.h"
+#include "texteditor.h"
 #include <giac/giac.h>
 
 namespace Ui {
@@ -40,9 +40,12 @@ private:
     Ui::MainWindow *ui;
     Document *currentDocument;
     QToolButton *paragraphStyleToolButton;
+    QToolButton *switchDocumentsToolButton;
+    QToolButton *recentDocumentsToolButton;
+    QMenu *switchDocumentsMenu;
+    QMenu *recentDocumentsMenu;
     void addNewDocument();
-    QTextEdit *currentTextEdit();
-    int currentBlockCount;
+    TextEditor *currentTextEditor();
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     void updateTextStyleActions(const QFont &font);
     bool cursorAt(QTextCursor::MoveOperation op);

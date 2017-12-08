@@ -31,8 +31,8 @@ SOURCES += \
     document.cpp \
     mathtextobject.cpp \
     mathexpression.cpp \
-    documenteditor.cpp \
-    glyphs.cpp
+    glyphs.cpp \
+    texteditor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,8 +40,8 @@ HEADERS += \
     document.h \
     mathtextobject.h \
     mathexpression.h \
-    documenteditor.h \
-    glyphs.h
+    glyphs.h \
+    texteditor.h
 
 FORMS += \
         mainwindow.ui

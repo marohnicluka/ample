@@ -81,6 +81,7 @@ public:
     QFont textFont;
     QFont codeFont;
     qreal baseFontSize;
+    static qreal paragraphMargin;
 
     inline qreal fontSize(int level) { return baseFontSize * qPow(GROUND_RATIO, level); }
     void newCounter(int type, int baseType, const QString &name,
@@ -89,7 +90,10 @@ public:
     void setCounterFont(int type, const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic);
     void setCounterBase(int type, int baseType);
     void setCounterPrefixAndSuffix(int type, const QString &newPrefix, const QString &newSuffix);
+    const QFont counterFont(int type);
     void updateEnumeration();
+    void blockToParagraph(QTextCursor &cursor);
+    static void applyFormatToEndOfBlock(const QTextCursor &cursor);
     static bool isHeading(const QTextBlock &block);
 
 signals:

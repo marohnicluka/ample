@@ -23,6 +23,7 @@ using namespace giac;
 QString Document::defaultSerifFontFamily = QString("FreeSerif");
 QString Document::defaultSansFontFamily = QString("FreeSans");
 QString Document::defaultMonoFontFamily = QString("FreeMono");
+qreal Document::paragraphMargin = 6.0;
 
 Document::Document(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
 {
@@ -30,11 +31,16 @@ Document::Document(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
     ghighlighter = new GiacHighlighter(this);
     worksheetMode = false;
     baseFontSize = 12.0;
-    titleFont = QFont(defaultSerifFontFamily, fontSize(3), QFont::Normal, false);
+    titleFont = QFont(defaultSansFontFamily, fontSize(3), QFont::Normal, false);
     sectionFont = QFont(defaultSansFontFamily, fontSize(2), QFont::Bold, false);
     subsectionFont = QFont(defaultSansFontFamily, fontSize(1), QFont::Bold, false);
     textFont = QFont(defaultSerifFontFamily, fontSize(0), QFont::Normal, false);
     codeFont = QFont(defaultMonoFontFamily, fontSize(0), QFont::Normal, false);
+    QTextFrameFormat rootFrameFormat = rootFrame()->frameFormat();
+    rootFrameFormat.setLeftMargin(paragraphMargin);
+    rootFrameFormat.setRightMargin(paragraphMargin);
+    rootFrame()->setFrameFormat(rootFrameFormat);
+    createDefaultCounters();
 }
 
 bool Document::isHeading(const QTextBlock &block)
@@ -47,7 +53,7 @@ void Document::newCounter(int type, int baseType, const QString &name,
                           const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic,
                           const QString &prefix, const QString &suffix)
 {
-    if (!registeredCounterTypes.contains(baseType))
+    if (baseType != None && !registeredCounterTypes.contains(baseType))
     {
         qWarning("Error: base counter type not registered");
         return;
@@ -135,6 +141,11 @@ QString Document::counterCurrentNumber(int type)
     return list.join(".");
 }
 
+const QFont Document::counterFont(int type)
+{
+    return counters[type].font;
+}
+
 void Document::updateEnumeration()
 {
     QTextCursor cursor(this);
@@ -143,10 +154,11 @@ void Document::updateEnumeration()
         it->count = 0;
     do
     {
+        int type;
         QTextBlockFormat blockFormat = cursor.blockFormat();
-        if (blockFormat.hasProperty(CounterTypeId))
+        if (blockFormat.hasProperty(CounterTypeId) &&
+                (type = blockFormat.intProperty(CounterTypeId)) != None)
         {
-            int type = blockFormat.intProperty(CounterTypeId);
             Counter &counter = counters[type];
             ++counter.count;
             QString counterTag = counterCurrentNumber(type);
@@ -160,4 +172,29 @@ void Document::updateEnumeration()
         }
     }
     while (cursor.movePosition(QTextCursor::NextBlock));
+}
+
+void Document::blockToParagraph(QTextCursor &cursor)
+{
+    QTextCharFormat format;
+    QTextBlockFormat blockFormat = cursor.blockFormat();
+    QTextCursor pCursor(cursor);
+    format.setFont(textFont);
+    pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+    if (pCursor.hasSelection())
+        pCursor.mergeCharFormat(format);
+    cursor.mergeBlockCharFormat(format);
+    blockFormat.setProperty(Document::ParagraphStyleId, Document::TextBody);
+    blockFormat.setTextIndent(0.0);
+    if (blockFormat.hasProperty(Document::CounterTypeId))
+        blockFormat.setProperty(Document::CounterTypeId, Document::None);
+    cursor.mergeBlockFormat(blockFormat);
+}
+
+void Document::applyFormatToEndOfBlock(const QTextCursor &cursor)
+{
+    QTextCursor pCursor(cursor);
+    QTextCharFormat format = cursor.charFormat();
+    pCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    pCursor.mergeCharFormat(format);
 }

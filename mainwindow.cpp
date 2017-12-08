@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     paragraphGroup->addAction(ui->actionParagraphStyleNumberedList);
     paragraphGroup->setExclusive(true);
     connect(paragraphGroup, SIGNAL(triggered(QAction*)), this, SLOT(paragraphStyleChanged(QAction*)));
+
     paragraphStyleToolButton = new QToolButton(this);
     QMenu *paragraphStyleMenu = new QMenu(this);
     paragraphStyleMenu->addActions(paragraphGroup->actions());
@@ -68,6 +69,21 @@ MainWindow::MainWindow(QWidget *parent) :
     paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
     paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
     ui->textToolBar->insertWidget(ui->actionTextBold,paragraphStyleToolButton);
+
+    switchDocumentsToolButton = new QToolButton(this);
+    switchDocumentsMenu = new QMenu(this);
+    ui->actionSwitchDocuments->setMenu(switchDocumentsMenu);
+    switchDocumentsToolButton->setDefaultAction(ui->actionSwitchDocuments);
+    switchDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
+    ui->mainToolBar->insertWidget(ui->actionDocumentProperties,switchDocumentsToolButton);
+
+    recentDocumentsToolButton = new QToolButton(this);
+    recentDocumentsMenu = new QMenu(this);
+    ui->actionOpenRecent->setMenu(recentDocumentsMenu);
+    recentDocumentsToolButton->setDefaultAction(ui->actionOpenRecent);
+    recentDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
+    ui->mainToolBar->insertWidget(ui->actionNewDocument,recentDocumentsToolButton);
+
     QList<int> outlineSplitterSizes;
     outlineSplitterSizes << 100 << 450;
     ui->outlineSplitter->setSizes(outlineSplitterSizes);
@@ -80,8 +96,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QTextEdit* MainWindow::currentTextEdit() {
-    return qobject_cast<QTextEdit*>(ui->editorTabs->currentWidget());
+TextEditor *MainWindow::currentTextEditor()
+{
+    TextEditor *editor = (TextEditor*)ui->editorTabs->currentWidget();
+    assert(editor != nullptr);
+    return editor;
 }
 
 void MainWindow::loadFonts()
@@ -107,14 +126,7 @@ void MainWindow::addNewDocument()
 {
     context ct;
     Document *doc = new Document(&ct, this);
-    QTextFrameFormat rootFrameFormat = doc->rootFrame()->frameFormat();
-    rootFrameFormat.setLeftMargin(9);
-    rootFrameFormat.setRightMargin(9);
-    doc->rootFrame()->setFrameFormat(rootFrameFormat);
-    QTextEdit *editor = new QTextEdit(this);
-    editor->setAcceptRichText(false);
-    editor->setDocument(doc);
-    editor->setFrameStyle(QFrame::NoFrame);
+    TextEditor *editor = new TextEditor(doc, this);
     connect(editor, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(currentCharFormatChanged(QTextCharFormat)));
     connect(editor, SIGNAL(undoAvailable(bool)), ui->actionUndo, SLOT(setEnabled(bool)));
@@ -152,106 +164,28 @@ void MainWindow::paragraphStyleChanged(QAction *a)
         type = Document::NumberedList;
     else
         return;
-    bool isList = type == Document::List || type == Document::NumberedList;
-    if (currentTextEdit() == nullptr)
-        return;
-    QTextCursor cursor = currentTextEdit()->textCursor();
-    QTextBlockFormat blockFormat = cursor.blockFormat();
-    if (cursor.currentFrame() != currentDocument->rootFrame() ||
-            blockFormat.intProperty(Document::ParagraphStyleId) == type)
-        return;
-    QTextCursor pCursor(cursor);
-    QTextCharFormat charFormat;
-    pCursor.movePosition(QTextCursor::StartOfBlock);
-    pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
-    switch (type)
-    {
-    case Document::TextBody:
-        charFormat.setFont(currentDocument->textFont);
-        break;
-    case Document::Title:
-        charFormat.setFont(currentDocument->titleFont);
-        break;
-    case Document::Section:
-        charFormat.setFont(currentDocument->sectionFont);
-        break;
-    case Document::Subsection:
-        charFormat.setFont(currentDocument->subsectionFont);
-        break;
-    default:
-        break;
-    }
-    if (!isList)
-    {
-        cursor.mergeBlockCharFormat(charFormat);
-        pCursor.mergeCharFormat(charFormat);
-        QTextBlockFormat blockFormat = cursor.blockFormat();
-        blockFormat.setProperty(Document::ParagraphStyleId, type);
-        cursor.setBlockFormat(blockFormat);
-    }
+    currentTextEditor()->paragraphStyleChanged(type);
 }
 
 void MainWindow::blockCountChanged(int count) {
-    int lastCount = currentBlockCount;
-    currentBlockCount = count;
-    QTextCursor cursor = currentTextEdit()->textCursor();
-    if (cursor.currentFrame() != currentDocument->rootFrame())
-        return;
-    bool atBlockStart = cursor.positionInBlock() == 0;
-    QTextCursor pCursor(cursor);
-    QTextCharFormat fmt;
-    if (lastCount > count && !atBlockStart && Document::isHeading(cursor.block()))
-    {
-        fmt = cursor.charFormat();
-        pCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        pCursor.mergeCharFormat(fmt);
-    }
-    else if (count == 1 + lastCount && atBlockStart)
-    {
-        if (Document::isHeading(cursor.block().previous()))
-        {
-            fmt.setFont(currentDocument->textFont);
-            pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
-            if (pCursor.hasSelection())
-                pCursor.mergeCharFormat(fmt);
-            cursor.mergeBlockCharFormat(fmt);
-            QTextBlockFormat bfmt = cursor.blockFormat();
-            bfmt.setProperty(Document::ParagraphStyleId, Document::TextBody);
-            cursor.mergeBlockFormat(bfmt);
-        }
-    }
+    currentTextEditor()->blockCountChanged(count);
 }
 
 void MainWindow::textAlignChanged(QAction *a)
 {
     if (a == ui->actionAlignLeft)
-        currentTextEdit()->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
+        currentTextEditor()->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
     else if (a == ui->actionAlignCenter)
-        currentTextEdit()->setAlignment(Qt::AlignHCenter);
+        currentTextEditor()->setAlignment(Qt::AlignHCenter);
     else if (a == ui->actionAlignRight)
-        currentTextEdit()->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
+        currentTextEditor()->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
     else if (a == ui->actionAlignJustify)
-        currentTextEdit()->setAlignment(Qt::AlignJustify);
-}
-
-bool MainWindow::cursorAt(QTextCursor::MoveOperation op)
-{
-    QTextCursor cursor = currentTextEdit()->textCursor();
-    QTextCursor pCursor(cursor);
-    pCursor.movePosition(op);
-    return cursor.position() == pCursor.position();
+        currentTextEditor()->setAlignment(Qt::AlignJustify);
 }
 
 void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {
-    QTextEdit *textEdit = currentTextEdit();
-    if (textEdit == nullptr)
-        return;
-    QTextCursor cursor = textEdit->textCursor();
-    if (!cursor.hasSelection() && !cursorAt(QTextCursor::EndOfWord))
-        cursor.select(QTextCursor::WordUnderCursor);
-    cursor.mergeCharFormat(format);
-    textEdit->mergeCurrentCharFormat(format);
+    currentTextEditor()->mergeFormatOnWordOrSelection(format);
 }
 
 void MainWindow::clipboardDataChanged()
@@ -279,9 +213,7 @@ void MainWindow::on_sidebarTabs_currentChanged(int index)
 
 void MainWindow::on_editorTabs_currentChanged(int index)
 {
-    QTextEdit *editor = qobject_cast<QTextEdit*>(ui->editorTabs->widget(index));
-    currentDocument = qobject_cast<Document*>(editor->document());
-    currentBlockCount = currentDocument->blockCount();
+    currentDocument = qobject_cast<Document*>(currentTextEditor()->document());
 }
 
 void MainWindow::on_editorTabs_tabCloseRequested(int index)
@@ -296,27 +228,27 @@ void MainWindow::on_actionNewDocument_triggered()
 
 void MainWindow::on_actionCopy_triggered()
 {
-    currentTextEdit()->copy();
+    currentTextEditor()->copy();
 }
 
 void MainWindow::on_actionCut_triggered()
 {
-    currentTextEdit()->cut();
+    currentTextEditor()->cut();
 }
 
 void MainWindow::on_actionPaste_triggered()
 {
-    currentTextEdit()->paste();
+    currentTextEditor()->paste();
 }
 
 void MainWindow::on_actionUndo_triggered()
 {
-    currentTextEdit()->undo();
+    currentTextEditor()->undo();
 }
 
 void MainWindow::on_actionRedo_triggered()
 {
-    currentTextEdit()->redo();
+    currentTextEditor()->redo();
 }
 void MainWindow::on_actionTextBold_triggered()
 {
