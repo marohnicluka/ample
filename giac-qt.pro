@@ -32,8 +32,6 @@ SOURCES += \
     mathtextobject.cpp \
     mathexpression.cpp \
     documenteditor.cpp \
-    documentcounter.cpp \
-    blockproperties.cpp \
     glyphs.cpp
 
 HEADERS += \
@@ -43,8 +41,6 @@ HEADERS += \
     mathtextobject.h \
     mathexpression.h \
     documenteditor.h \
-    documentcounter.h \
-    blockproperties.h \
     glyphs.h
 
 FORMS += \

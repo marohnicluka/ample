@@ -129,9 +129,10 @@ void MainWindow::addNewDocument()
 
 void MainWindow::updateTextStyleActions(const QFont &font)
 {
-    ui->actionTextBold->setChecked(font.bold());
-    ui->actionTextItalic->setChecked(font.italic());
-    ui->actionTextMath->setChecked(font.family() == currentDocument->style.casInputFontFamily);
+    bool isCode = font.family() == currentDocument->codeFont.family();
+    ui->actionTextBold->setChecked(!isCode && font.bold());
+    ui->actionTextItalic->setChecked(!isCode && font.italic());
+    ui->actionTextMath->setChecked(isCode);
 }
 
 void MainWindow::paragraphStyleChanged(QAction *a)
@@ -161,30 +162,21 @@ void MainWindow::paragraphStyleChanged(QAction *a)
         return;
     QTextCursor pCursor(cursor);
     QTextCharFormat charFormat;
-    Document::Style style = currentDocument->style;
     pCursor.movePosition(QTextCursor::StartOfBlock);
     pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
     switch (type)
     {
     case Document::TextBody:
-        charFormat.setFontFamily(style.textBodyFontFamily);
-        charFormat.setFontPointSize(style.fontPointSize);
-        charFormat.setFontWeight(QFont::Weight::Normal);
+        charFormat.setFont(currentDocument->textFont);
         break;
     case Document::Title:
-        charFormat.setFontFamily(style.headingsFontFamily);
-        charFormat.setFontPointSize(style.fontPointSize * qPow(style.groundRatio, 3));
-        charFormat.setFontWeight(QFont::Weight::Normal);
+        charFormat.setFont(currentDocument->titleFont);
         break;
     case Document::Section:
-        charFormat.setFontFamily(style.headingsFontFamily);
-        charFormat.setFontPointSize(style.fontPointSize * qPow(style.groundRatio, 2));
-        charFormat.setFontWeight(QFont::Weight::Bold);
+        charFormat.setFont(currentDocument->sectionFont);
         break;
     case Document::Subsection:
-        charFormat.setFontFamily(style.headingsFontFamily);
-        charFormat.setFontPointSize(style.fontPointSize * style.groundRatio);
-        charFormat.setFontWeight(QFont::Weight::Bold);
+        charFormat.setFont(currentDocument->subsectionFont);
         break;
     default:
         break;
@@ -218,9 +210,7 @@ void MainWindow::blockCountChanged(int count) {
     {
         if (Document::isHeading(cursor.block().previous()))
         {
-            fmt.setFontFamily(currentDocument->style.textBodyFontFamily);
-            fmt.setFontPointSize(currentDocument->style.fontPointSize);
-            fmt.setFontWeight(QFont::Weight::Normal);
+            fmt.setFont(currentDocument->textFont);
             pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
             if (pCursor.hasSelection())
                 pCursor.mergeCharFormat(fmt);
@@ -345,12 +335,8 @@ void MainWindow::on_actionTextItalic_triggered()
 void MainWindow::on_actionTextMath_triggered()
 {
     QTextCharFormat fmt;
-    Document::Style style = currentDocument->style;
     bool isMath = ui->actionTextMath->isChecked();
-    fmt.setFontFamily(isMath ? style.casInputFontFamily : style.textBodyFontFamily);
-    fmt.setFontPointSize(style.fontPointSize);
-    fmt.setFontItalic(false);
-    fmt.setFontWeight(QFont::Normal);
+    fmt.setFont(isMath ? currentDocument->codeFont : currentDocument->textFont);
     fmt.setProperty(Document::TextStyleId, isMath ? Document::MathTextStyle : Document::NormalTextStyle);
     mergeFormatOnWordOrSelection(fmt);
 }

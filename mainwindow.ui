@@ -279,6 +279,7 @@
    <addaction name="actionInsertTable"/>
    <addaction name="actionInsertImage"/>
    <addaction name="actionReference"/>
+   <addaction name="actionNewLabel"/>
    <addaction name="separator"/>
    <addaction name="actionSpellCheck"/>
   </widget>
@@ -801,6 +802,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+N</string>
+   </property>
+  </action>
+  <action name="actionNewLabel">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/label-new.svg</normaloff>:/icons/label-new.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New label</string>
+   </property>
+   <property name="toolTip">
+    <string>New label</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+L</string>
    </property>
   </action>
  </widget>

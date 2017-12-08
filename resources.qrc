@@ -50,5 +50,6 @@
         <file>fonts/FreeSerifBold.ttf</file>
         <file>fonts/FreeSerifBoldItalic.ttf</file>
         <file>fonts/FreeSerifItalic.ttf</file>
+        <file>icons/label-new.svg</file>
     </qresource>
 </RCC>

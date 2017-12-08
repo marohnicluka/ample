@@ -20,10 +20,15 @@
 
 #include <QTextDocument>
 #include <QTextCursor>
+#include <QFont>
+#include <QFontMetrics>
+#include <QMap>
+#include <QList>
 #include <qmath.h>
 #include <giac/giac.h>
 #include "giachighlighter.h"
-#include "documentcounter.h"
+
+#define GROUND_RATIO 1.32471795724
 
 using namespace giac;
 
@@ -37,33 +42,54 @@ class Document : public QTextDocument
 private:
     const context *gcontext;
     GiacHighlighter *ghighlighter;
-    DocumentCounter *sectionCounter;
-    DocumentCounter *subsectionCounter;
-    DocumentCounter *equationCounter;
-    DocumentCounter *figureCounter;
-    DocumentCounter *tableCounter;
+    static QString defaultSerifFontFamily;
+    static QString defaultSansFontFamily;
+    static QString defaultMonoFontFamily;
+
+    struct Counter
+    {
+        QString name;
+        QFont font;
+        QString prefix;
+        QString suffix;
+        int baseType;
+        int count;
+    };
+
+    QMap<int, Counter> counters;
+    QList<int> registeredCounterTypes;
+    void createDefaultCounters();
+    QString counterCurrentNumber(int type);
 
 public:
-    enum PropertyId { ParagraphStyleId = 1, TextStyleId = 2 };
+    enum PropertyId { ParagraphStyleId = 1, TextStyleId = 2, CounterTypeId = 3, CounterTagId = 4 };
     enum ParagraphType { TextBody = 1, Title = 2, Section = 3, Subsection = 4, List = 5, NumberedList = 6 };
-    enum TextType { NormalTextStyle = 0, MathTextStyle = 1 };
-
-    struct Style
-    {
-        QString textBodyFontFamily;
-        QString headingsFontFamily;
-        QString casInputFontFamily;
-        qreal fontPointSize;
-        qreal groundRatio;
+    enum TextType { NormalTextStyle, MathTextStyle };
+    enum CounterType {
+        None, SectionCounterType, SubsectionCounterType, Equation, Figure, Table, Axiom, Definition,
+        Proposition, Lemma, Theorem, Corollary, Algorithm, Remark, Note, Example, Exercise, Problem, User
     };
-    Style style;
 
     Document(GIAC_CONTEXT, QObject *parent = 0);
+
     QString fileName;
     QString language;
     bool worksheetMode;
+    QFont titleFont;
+    QFont sectionFont;
+    QFont subsectionFont;
+    QFont textFont;
+    QFont codeFont;
+    qreal baseFontSize;
 
-    inline qreal headingSize(int level) { return style.fontPointSize * qPow(style.groundRatio, level); }
+    inline qreal fontSize(int level) { return baseFontSize * qPow(GROUND_RATIO, level); }
+    void newCounter(int type, int baseType, const QString &name,
+                    const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic,
+                    const QString &prefix, const QString &suffix);
+    void setCounterFont(int type, const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic);
+    void setCounterBase(int type, int baseType);
+    void setCounterPrefixAndSuffix(int type, const QString &newPrefix, const QString &newSuffix);
+    void updateEnumeration();
     static bool isHeading(const QTextBlock &block);
 
 signals:
