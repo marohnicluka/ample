@@ -9,7 +9,7 @@ TextEditor::TextEditor(Document *document, QWidget *parent) : QTextEdit(parent)
     doc = document;
     setAcceptRichText(false);
     setFrameStyle(QFrame::NoFrame);
-    lastBlockCount = 0;
+    lastBlockCount = doc->blockCount();
 }
 
 void TextEditor::paintEvent(QPaintEvent *e)
@@ -25,15 +25,10 @@ void TextEditor::paintEvent(QPaintEvent *e)
                 format.hasProperty(Document::CounterTagId))
         {
             QFont font = doc->counterFont(format.intProperty(Document::CounterTypeId));
-            qreal x = layout->position().x() - Document::paragraphMargin;
-            qreal y = layout->position().y();
             QFontMetrics fontMetrics(font);
+            qreal x = layout->position().x() - doc->paragraphMargin;
+            qreal y = layout->position().y() + fontMetrics.leading() + layout->lineAt(0).ascent() + 1;
             QString tag = format.stringProperty(Document::CounterTagId);
-            int nLines = layout->lineCount();
-            if (nLines == 0)
-                y += fontMetrics.ascent();
-            else
-                y += layout->lineAt(0).ascent() + fontMetrics.leading();
             QPointF where(x,y);
             QPainter painter(this->viewport());
             painter.translate(-horizontalScrollBar()->value(), -verticalScrollBar()->value());
@@ -54,7 +49,7 @@ void TextEditor::blockCountChanged(int count)
         if (cursor.block().text().length() == 0)
             doc->blockToParagraph(cursor);
         else if (!cursor.atBlockEnd())
-            Document::applyFormatToEndOfBlock(cursor);
+            Document::applyFormatToBlock(cursor, cursor.charFormat(), false);
     }
     else if (count == 1 + lastBlockCount && cursor.atBlockStart())
     {
@@ -110,7 +105,7 @@ void TextEditor::paragraphStyleChanged(int type)
     }
     if (!isList)
     {
-        cursor.mergeBlockCharFormat(charFormat);
+        cursor.setBlockCharFormat(charFormat);
         pCursor.mergeCharFormat(charFormat);
         blockFormat.setProperty(Document::ParagraphStyleId, type);
         cursor.setBlockFormat(blockFormat);

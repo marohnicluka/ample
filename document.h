@@ -42,9 +42,6 @@ class Document : public QTextDocument
 private:
     const context *gcontext;
     GiacHighlighter *ghighlighter;
-    static QString defaultSerifFontFamily;
-    static QString defaultSansFontFamily;
-    static QString defaultMonoFontFamily;
 
     struct Counter
     {
@@ -81,11 +78,10 @@ public:
     QFont textFont;
     QFont codeFont;
     qreal baseFontSize;
-    static qreal paragraphMargin;
+    qreal paragraphMargin;
 
     inline qreal fontSize(int level) { return baseFontSize * qPow(GROUND_RATIO, level); }
-    void newCounter(int type, int baseType, const QString &name,
-                    const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic,
+    void newCounter(int type, int baseType, const QString &name, const QFont &font,
                     const QString &prefix, const QString &suffix);
     void setCounterFont(int type, const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic);
     void setCounterBase(int type, int baseType);
@@ -93,7 +89,7 @@ public:
     const QFont counterFont(int type);
     void updateEnumeration();
     void blockToParagraph(QTextCursor &cursor);
-    static void applyFormatToEndOfBlock(const QTextCursor &cursor);
+    static void applyFormatToBlock(const QTextCursor &cursor, const QTextCharFormat &format, bool fromStart);
     static bool isHeading(const QTextBlock &block);
 
 signals:

@@ -54,5 +54,9 @@
         <file>icons/documents.svg</file>
         <file>icons/format-text-highlight.svg</file>
         <file>icons/document-close.svg</file>
+        <file>fonts/LiberationSans-Bold.ttf</file>
+        <file>fonts/LiberationSans-BoldItalic.ttf</file>
+        <file>fonts/LiberationSans-Italic.ttf</file>
+        <file>fonts/LiberationSans-Regular.ttf</file>
     </qresource>
 </RCC>

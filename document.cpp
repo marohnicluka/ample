@@ -15,15 +15,11 @@
  * along with Ample Editor.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QTextOption>
 #include "document.h"
 #include "glyphs.h"
 
 using namespace giac;
-
-QString Document::defaultSerifFontFamily = QString("FreeSerif");
-QString Document::defaultSansFontFamily = QString("FreeSans");
-QString Document::defaultMonoFontFamily = QString("FreeMono");
-qreal Document::paragraphMargin = 6.0;
 
 Document::Document(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
 {
@@ -31,11 +27,12 @@ Document::Document(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
     ghighlighter = new GiacHighlighter(this);
     worksheetMode = false;
     baseFontSize = 12.0;
-    titleFont = QFont(defaultSansFontFamily, fontSize(3), QFont::Normal, false);
-    sectionFont = QFont(defaultSansFontFamily, fontSize(2), QFont::Bold, false);
-    subsectionFont = QFont(defaultSansFontFamily, fontSize(1), QFont::Bold, false);
-    textFont = QFont(defaultSerifFontFamily, fontSize(0), QFont::Normal, false);
-    codeFont = QFont(defaultMonoFontFamily, fontSize(0), QFont::Normal, false);
+    paragraphMargin = baseFontSize / GROUND_RATIO;
+    titleFont = QFont("FreeSans", fontSize(3), QFont::Normal, false);
+    sectionFont = QFont("LiberationSans", fontSize(2), QFont::Bold, false);
+    subsectionFont = QFont("LiberationSans", fontSize(1), QFont::Bold, false);
+    textFont = QFont("FreeSerif", fontSize(0), QFont::Normal, false);
+    codeFont = QFont("FreeMono", fontSize(0), QFont::Normal, false);
     QTextFrameFormat rootFrameFormat = rootFrame()->frameFormat();
     rootFrameFormat.setLeftMargin(paragraphMargin);
     rootFrameFormat.setRightMargin(paragraphMargin);
@@ -49,8 +46,7 @@ bool Document::isHeading(const QTextBlock &block)
     return type == Document::Title || type == Document::Section || type == Document::Subsection;
 }
 
-void Document::newCounter(int type, int baseType, const QString &name,
-                          const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic,
+void Document::newCounter(int type, int baseType, const QString &name, const QFont &font,
                           const QString &prefix, const QString &suffix)
 {
     if (baseType != None && !registeredCounterTypes.contains(baseType))
@@ -60,7 +56,7 @@ void Document::newCounter(int type, int baseType, const QString &name,
     }
     Counter counter;
     counter.name = name;
-    counter.font = QFont(fontFamily, fontSize, weight, italic);
+    counter.font = font;
     counter.prefix = prefix;
     counter.suffix = suffix;
     counter.baseType = baseType;
@@ -70,40 +66,27 @@ void Document::newCounter(int type, int baseType, const QString &name,
 
 void Document::createDefaultCounters()
 {
-    newCounter(SectionCounterType, None, tr("Section"),
-               defaultSansFontFamily, fontSize(2), QFont::Bold, false, "", "");
-    newCounter(SubsectionCounterType, SectionCounterType, tr("Subsection"),
-               defaultSansFontFamily, fontSize(1), QFont::Bold, false, "", "");
-    newCounter(Equation, SectionCounterType, tr("Equation"),
-               defaultSerifFontFamily, fontSize(0), QFont::Normal, false, "(", ")");
-    newCounter(Figure, SectionCounterType, tr("Figure"),
-               defaultSerifFontFamily, fontSize(-1), QFont::Normal, false, "", "");
-    newCounter(Table, SectionCounterType, tr("Table"),
-               defaultSerifFontFamily, fontSize(-1), QFont::Normal, false, "", "");
-    newCounter(Axiom, SectionCounterType, tr("Axiom"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Axiom"), ".");
-    newCounter(Definition, SectionCounterType, tr("Definition"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Definition"), ".");
-    newCounter(Proposition, SectionCounterType, tr("Proposition"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Proposition"), ".");
-    newCounter(Lemma, SectionCounterType, tr("Lemma"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Lemma"), ".");
-    newCounter(Theorem, SectionCounterType, tr("Theorem"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Theorem"), ".");
-    newCounter(Corollary, SectionCounterType, tr("Corollary"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Corollary"), ".");
-    newCounter(Algorithm, SectionCounterType, tr("Algorithm"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Algorithm"), ".");
-    newCounter(Problem, SectionCounterType, tr("Problem"),
-               defaultSerifFontFamily, fontSize(0), QFont::Bold, false, tr("Problem"), ".");
-    newCounter(Remark, SectionCounterType, tr("Remark"),
-               defaultSerifFontFamily, fontSize(0), QFont::Normal, true, tr("Remark"), ".");
-    newCounter(Note, SectionCounterType, tr("Note"),
-               defaultSerifFontFamily, fontSize(0), QFont::Normal, true, tr("Note"), ".");
-    newCounter(Example, SectionCounterType, tr("Example"),
-               defaultSerifFontFamily, fontSize(0), QFont::Normal, true, tr("Example"), ".");
-    newCounter(Exercise, SectionCounterType, tr("Exercise"),
-               defaultSerifFontFamily, fontSize(0), QFont::Normal, true, tr("Exercise"), ".");
+    QFont textFontBold(textFont);
+    textFontBold.setWeight(QFont::Bold);
+    QFont textFontItalic(textFont);
+    textFontItalic.setItalic(true);
+    newCounter(SectionCounterType, None, tr("Section"), sectionFont, "", "");
+    newCounter(SubsectionCounterType, SectionCounterType, tr("Subsection"), subsectionFont, "", "");
+    newCounter(Equation, SectionCounterType, tr("Equation"), textFont, "(", ")");
+    newCounter(Figure, SectionCounterType, tr("Figure"), textFont, "", "");
+    newCounter(Table, SectionCounterType, tr("Table"), textFont, "", "");
+    newCounter(Axiom, SectionCounterType, tr("Axiom"), textFontBold, tr("Axiom"), ".");
+    newCounter(Definition, SectionCounterType, tr("Definition"), textFontBold, tr("Definition"), ".");
+    newCounter(Proposition, SectionCounterType, tr("Proposition"), textFontBold, tr("Proposition"), ".");
+    newCounter(Lemma, SectionCounterType, tr("Lemma"), textFontBold, tr("Lemma"), ".");
+    newCounter(Theorem, SectionCounterType, tr("Theorem"), textFontBold, tr("Theorem"), ".");
+    newCounter(Corollary, SectionCounterType, tr("Corollary"), textFontBold, tr("Corollary"), ".");
+    newCounter(Algorithm, SectionCounterType, tr("Algorithm"), textFontBold, tr("Algorithm"), ".");
+    newCounter(Problem, SectionCounterType, tr("Problem"), textFontBold, tr("Problem"), ".");
+    newCounter(Remark, SectionCounterType, tr("Remark"), textFontItalic, tr("Remark"), ".");
+    newCounter(Note, SectionCounterType, tr("Note"), textFontItalic, tr("Note"), ".");
+    newCounter(Example, SectionCounterType, tr("Example"), textFontItalic, tr("Example"), ".");
+    newCounter(Exercise, SectionCounterType, tr("Exercise"), textFontItalic, tr("Exercise"), ".");
 }
 
 void Document::setCounterFont(int type, const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic)
@@ -178,12 +161,9 @@ void Document::blockToParagraph(QTextCursor &cursor)
 {
     QTextCharFormat format;
     QTextBlockFormat blockFormat = cursor.blockFormat();
-    QTextCursor pCursor(cursor);
     format.setFont(textFont);
-    pCursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
-    if (pCursor.hasSelection())
-        pCursor.mergeCharFormat(format);
-    cursor.mergeBlockCharFormat(format);
+    applyFormatToBlock(cursor, format, true);
+    cursor.setBlockCharFormat(format);
     blockFormat.setProperty(Document::ParagraphStyleId, Document::TextBody);
     blockFormat.setTextIndent(0.0);
     if (blockFormat.hasProperty(Document::CounterTypeId))
@@ -191,10 +171,12 @@ void Document::blockToParagraph(QTextCursor &cursor)
     cursor.mergeBlockFormat(blockFormat);
 }
 
-void Document::applyFormatToEndOfBlock(const QTextCursor &cursor)
+void Document::applyFormatToBlock(const QTextCursor &cursor, const QTextCharFormat &format, bool fromStart)
 {
     QTextCursor pCursor(cursor);
-    QTextCharFormat format = cursor.charFormat();
+    if (fromStart)
+        pCursor.movePosition(QTextCursor::StartOfBlock);
     pCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    pCursor.mergeCharFormat(format);
+    if (pCursor.hasSelection())
+        pCursor.mergeCharFormat(format);
 }

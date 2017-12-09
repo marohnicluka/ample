@@ -108,7 +108,9 @@ void MainWindow::loadFonts()
     QStringList fonts, failed;
     fonts << "FreeMono.ttf" << "FreeMonoBold.ttf" << "FreeMonoBoldOblique.ttf" << "FreeMonoOblique.ttf"
           << "FreeSans.ttf" << "FreeSansBold.ttf" << "FreeSansBoldOblique.ttf" << "FreeSansOblique.ttf"
-          << "FreeSerif.ttf" << "FreeSerifBold.ttf" << "FreeSerifBoldItalic.ttf" << "FreeSerifItalic.ttf";
+          << "FreeSerif.ttf" << "FreeSerifBold.ttf" << "FreeSerifBoldItalic.ttf" << "FreeSerifItalic.ttf"
+          << "LiberationSans-Bold.ttf" << "LiberationSans-BoldItalic.ttf"
+          << "LiberationSans-Italic.ttf" << "LiberationSans-Regular.ttf";
     foreach (const QString fontName, fonts)
     {
         QFile res(":/fonts/" + fontName);
