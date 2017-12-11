@@ -24,6 +24,12 @@
 #include <QFontMetrics>
 #include <QMap>
 #include <QList>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
+#include <QTextFrame>
+#include <QTextTable>
+#include <QList>
 #include <qmath.h>
 #include <giac/giac.h>
 #include "giachighlighter.h"
@@ -42,6 +48,11 @@ class Document : public QTextDocument
 private:
     const context *gcontext;
     GiacHighlighter *ghighlighter;
+    bool unnamed;
+    QString lastTitle;
+    QTimer *timer;
+    QTextFrame *titleFrame;
+    QTextTable *authorsTable;
 
     struct Counter
     {
@@ -57,14 +68,28 @@ private:
     QList<int> registeredCounterTypes;
     void createDefaultCounters();
     QString counterCurrentNumber(int type);
+    QString getCurrentTitle();
+    QList<QString> getFrameLines(QTextFrame *frame);
+
+private slots:
+    void updateProperties();
+    void on_modificationChanged(bool changed);
 
 public:
-    enum PropertyId { ParagraphStyleId = 1, TextStyleId = 2, CounterTypeId = 3, CounterTagId = 4 };
+    struct Author
+    {
+        QString name;
+        QStringList affiliation;
+        QStringList emails;
+    };
+
+    enum PropertyId { ParagraphTypeId = 1, TextStyleId = 2, CounterTypeId = 3, CounterTagId = 4, FrameTypeId = 5 };
     enum ParagraphType { TextBody = 1, Title = 2, Section = 3, Subsection = 4, List = 5, NumberedList = 6 };
-    enum TextType { NormalTextStyle, MathTextStyle };
+    enum FrameType { AffiliationFrame = 1, EmailFrame = 2 };
+    enum TextStyle { NormalTextStyle, MathTextStyle };
     enum CounterType {
-        None, SectionCounterType, SubsectionCounterType, Equation, Figure, Table, Axiom, Definition,
-        Proposition, Lemma, Theorem, Corollary, Algorithm, Remark, Note, Example, Exercise, Problem, User
+        None, SectionCounter, SubsectionCounter, Equation, Figure, Table, Axiom, Definition, Proposition,
+        Lemma, Theorem, Corollary, Algorithm, Remark, Note, Example, Exercise, Problem, UserCounter
     };
 
     Document(GIAC_CONTEXT, QObject *parent = 0);
@@ -80,7 +105,7 @@ public:
     qreal baseFontSize;
     qreal paragraphMargin;
 
-    inline qreal fontSize(int level) { return baseFontSize * qPow(GROUND_RATIO, level); }
+    qreal fontSize(int level, qreal scale = 1.0);
     void newCounter(int type, int baseType, const QString &name, const QFont &font,
                     const QString &prefix, const QString &suffix);
     void setCounterFont(int type, const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic);
@@ -89,11 +114,26 @@ public:
     const QFont counterFont(int type);
     void updateEnumeration();
     void blockToParagraph(QTextCursor &cursor);
-    static void applyFormatToBlock(const QTextCursor &cursor, const QTextCharFormat &format, bool fromStart);
+    void insertTitleFrame();
+    void addAuthor();
+    void addAffiliation();
+    void addEmail();
+    int numberOfAuthors();
+    Author nthAuthor(int n);
+    inline bool isEditingTitle(const QTextCursor &cursor) { return cursor.currentFrame() == titleFrame; }
+    inline bool isEditingAuthorName(const QTextCursor &cursor) { return cursor.currentFrame() == authorsTable; }
+    inline void setUnnamed(bool yes) { unnamed = yes; }
+    inline bool isUnnamed() { return unnamed; }
+    inline qreal paragraphSkip() { return QFontMetrics(textFont).lineSpacing(); }
+    inline bool hasTitleFrame() { return titleFrame != nullptr; }
+    const QTextCursor firstTitleCursorPosition();
+    static void applyFormatToBlock(const QTextCursor &originalCursor, const QTextCharFormat &format, bool fromStart);
     static bool isHeading(const QTextBlock &block);
+    static qreal groundRatioPower(int exponent);
 
 signals:
-    void fileNameChanged(const QString newName);
+    void fileNameChanged(const QString &newFileName);
+    void titleChanged(const QString &newTitle);
 
 };
 

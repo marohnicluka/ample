@@ -15,9 +15,14 @@
  * along with Ample Editor.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QTextOption>
+#include <QTextTableCell>
+#include <QTextTableFormat>
+#include <QTextLength>
+#include <QVector>
 #include "document.h"
 #include "glyphs.h"
+
+#define UPDATE_ON_MODIFICATION_TIMEOUT 300
 
 using namespace giac;
 
@@ -25,6 +30,10 @@ Document::Document(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
 {
     gcontext = contextptr;
     ghighlighter = new GiacHighlighter(this);
+    titleFrame = nullptr;
+    timer = new QTimer(this);
+    timer->setSingleShot(true);
+    unnamed = true;
     worksheetMode = false;
     baseFontSize = 12.0;
     paragraphMargin = baseFontSize / GROUND_RATIO;
@@ -33,16 +42,26 @@ Document::Document(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
     subsectionFont = QFont("LiberationSans", fontSize(1), QFont::Bold, false);
     textFont = QFont("FreeSerif", fontSize(0), QFont::Normal, false);
     codeFont = QFont("FreeMono", fontSize(0), QFont::Normal, false);
-    QTextFrameFormat rootFrameFormat = rootFrame()->frameFormat();
-    rootFrameFormat.setLeftMargin(paragraphMargin);
-    rootFrameFormat.setRightMargin(paragraphMargin);
-    rootFrame()->setFrameFormat(rootFrameFormat);
+    setDocumentMargin(baseFontSize);
     createDefaultCounters();
+    connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(on_modificationChanged(bool)));
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateProperties()));
+    setModified(false);
+}
+
+qreal Document::groundRatioPower(int exponent)
+{
+    return qPow(GROUND_RATIO, exponent);
+}
+
+qreal Document::fontSize(int level, qreal scale)
+{
+    return baseFontSize * groundRatioPower(level) * scale;
 }
 
 bool Document::isHeading(const QTextBlock &block)
 {
-    int type = block.blockFormat().intProperty(ParagraphStyleId);
+    int type = block.blockFormat().intProperty(ParagraphTypeId);
     return type == Document::Title || type == Document::Section || type == Document::Subsection;
 }
 
@@ -70,23 +89,23 @@ void Document::createDefaultCounters()
     textFontBold.setWeight(QFont::Bold);
     QFont textFontItalic(textFont);
     textFontItalic.setItalic(true);
-    newCounter(SectionCounterType, None, tr("Section"), sectionFont, "", "");
-    newCounter(SubsectionCounterType, SectionCounterType, tr("Subsection"), subsectionFont, "", "");
-    newCounter(Equation, SectionCounterType, tr("Equation"), textFont, "(", ")");
-    newCounter(Figure, SectionCounterType, tr("Figure"), textFont, "", "");
-    newCounter(Table, SectionCounterType, tr("Table"), textFont, "", "");
-    newCounter(Axiom, SectionCounterType, tr("Axiom"), textFontBold, tr("Axiom"), ".");
-    newCounter(Definition, SectionCounterType, tr("Definition"), textFontBold, tr("Definition"), ".");
-    newCounter(Proposition, SectionCounterType, tr("Proposition"), textFontBold, tr("Proposition"), ".");
-    newCounter(Lemma, SectionCounterType, tr("Lemma"), textFontBold, tr("Lemma"), ".");
-    newCounter(Theorem, SectionCounterType, tr("Theorem"), textFontBold, tr("Theorem"), ".");
-    newCounter(Corollary, SectionCounterType, tr("Corollary"), textFontBold, tr("Corollary"), ".");
-    newCounter(Algorithm, SectionCounterType, tr("Algorithm"), textFontBold, tr("Algorithm"), ".");
-    newCounter(Problem, SectionCounterType, tr("Problem"), textFontBold, tr("Problem"), ".");
-    newCounter(Remark, SectionCounterType, tr("Remark"), textFontItalic, tr("Remark"), ".");
-    newCounter(Note, SectionCounterType, tr("Note"), textFontItalic, tr("Note"), ".");
-    newCounter(Example, SectionCounterType, tr("Example"), textFontItalic, tr("Example"), ".");
-    newCounter(Exercise, SectionCounterType, tr("Exercise"), textFontItalic, tr("Exercise"), ".");
+    newCounter(SectionCounter, None, tr("Section"), sectionFont, "", "");
+    newCounter(SubsectionCounter, SectionCounter, tr("Subsection"), subsectionFont, "", "");
+    newCounter(Equation, SectionCounter, tr("Equation"), textFont, "(", ")");
+    newCounter(Figure, SectionCounter, tr("Figure"), textFont, "", ".");
+    newCounter(Table, SectionCounter, tr("Table"), textFont, "", ".");
+    newCounter(Axiom, SectionCounter, tr("Axiom"), textFontBold, tr("Axiom"), ".");
+    newCounter(Definition, SectionCounter, tr("Definition"), textFontBold, tr("Definition"), ".");
+    newCounter(Proposition, SectionCounter, tr("Proposition"), textFontBold, tr("Proposition"), ".");
+    newCounter(Lemma, SectionCounter, tr("Lemma"), textFontBold, tr("Lemma"), ".");
+    newCounter(Theorem, SectionCounter, tr("Theorem"), textFontBold, tr("Theorem"), ".");
+    newCounter(Corollary, SectionCounter, tr("Corollary"), textFontBold, tr("Corollary"), ".");
+    newCounter(Algorithm, SectionCounter, tr("Algorithm"), textFontBold, tr("Algorithm"), ".");
+    newCounter(Problem, SectionCounter, tr("Problem"), textFontBold, tr("Problem"), ".");
+    newCounter(Remark, SectionCounter, tr("Remark"), textFontItalic, tr("Remark"), ".");
+    newCounter(Note, SectionCounter, tr("Note"), textFontItalic, tr("Note"), ".");
+    newCounter(Example, SectionCounter, tr("Example"), textFontItalic, tr("Example"), ".");
+    newCounter(Exercise, SectionCounter, tr("Exercise"), textFontItalic, tr("Exercise"), ".");
 }
 
 void Document::setCounterFont(int type, const QString &fontFamily, qreal fontSize, QFont::Weight weight, bool italic)
@@ -113,10 +132,10 @@ QString Document::counterCurrentNumber(int type)
     list.append(QString::number(counter.count));
     switch (counter.baseType)
     {
-    case SubsectionCounterType:
-        list.prepend(QString::number(counters[SubsectionCounterType].count));
-    case SectionCounterType:
-        list.prepend(QString::number(counters[SectionCounterType].count));
+    case SubsectionCounter:
+        list.prepend(QString::number(counters[SubsectionCounter].count));
+    case SectionCounter:
+        list.prepend(QString::number(counters[SectionCounter].count));
         break;
     default:
         return list.front();
@@ -159,24 +178,151 @@ void Document::updateEnumeration()
 
 void Document::blockToParagraph(QTextCursor &cursor)
 {
-    QTextCharFormat format;
     QTextBlockFormat blockFormat = cursor.blockFormat();
-    format.setFont(textFont);
-    applyFormatToBlock(cursor, format, true);
-    cursor.setBlockCharFormat(format);
-    blockFormat.setProperty(Document::ParagraphStyleId, Document::TextBody);
+    blockFormat.setProperty(Document::ParagraphTypeId, Document::TextBody);
     blockFormat.setTextIndent(0.0);
     if (blockFormat.hasProperty(Document::CounterTypeId))
         blockFormat.setProperty(Document::CounterTypeId, Document::None);
+    blockFormat.setProperty(Document::ParagraphTypeId, Document::TextBody);
     cursor.mergeBlockFormat(blockFormat);
+    QTextCharFormat format;
+    format.setFont(textFont);
+    applyFormatToBlock(cursor, format, true);
 }
 
-void Document::applyFormatToBlock(const QTextCursor &cursor, const QTextCharFormat &format, bool fromStart)
+void Document::insertTitleFrame()
 {
-    QTextCursor pCursor(cursor);
+    if (titleFrame != nullptr)
+        return;
+    QTextCursor cursor(this);
+    cursor.movePosition(QTextCursor::Start);
+    QTextFrameFormat frameFormat;
+    titleFrame = cursor.insertFrame(frameFormat);
+    QTextCharFormat format;
+    QTextBlockFormat blockFormat = cursor.blockFormat();
+    format.setFont(titleFont);
+    blockFormat.setAlignment(Qt::AlignCenter);
+    cursor.setBlockFormat(blockFormat);
+    cursor.setBlockCharFormat(format);
+}
+
+void Document::addAuthor()
+{
+    if (!hasTitleFrame())
+        return;
+    if (numberOfAuthors() == 0)
+    {
+        QTextTableFormat tableFormat;
+        tableFormat.setTopMargin(12.0);
+        tableFormat.setAlignment(Qt::AlignCenter);
+        authorsTable = titleFrame->lastCursorPosition().insertTable(1,1);
+    }
+    else
+    {
+        authorsTable->appendColumns(1);
+        QTextTableFormat tableFormat = authorsTable->format();
+        int n = numberOfAuthors();
+        tableFormat.setColumnWidthConstraints(
+                    QVector<QTextLength>(n, QTextLength(QTextLength::PercentageLength, 100.0/n)));
+    }
+}
+
+int Document::numberOfAuthors()
+{
+    if (authorsTable == nullptr)
+        return 0;
+    return authorsTable->columns();
+}
+
+Document::Author Document::nthAuthor(int n)
+{
+    Author author;
+    int N = numberOfAuthors();
+    if (n >= 0 && n < N)
+    {
+        QTextTableCell cell = authorsTable->cellAt(0, n);
+        QTextFrame::iterator it;
+        QStringList names;
+        for (it = cell.begin(); !it.atEnd(); ++it)
+        {
+            QTextFrame *childFrame = it.currentFrame();
+            QTextBlock childBlock = it.currentBlock();
+            if (childFrame)
+            {
+                if (childFrame->frameFormat().intProperty(FrameTypeId) == AffiliationFrame)
+                    author.affiliation.append(getFrameLines(childFrame));
+                if (childFrame->frameFormat().intProperty(FrameTypeId) == EmailFrame)
+                    author.emails.append(getFrameLines(childFrame));
+            }
+            else if (childBlock.isValid())
+            {
+                names.append(childBlock.text().trimmed());
+            }
+        }
+        author.name = names.join(" ");
+    }
+    return author;
+}
+
+QList<QString> Document::getFrameLines(QTextFrame *frame)
+{
+    QList<QString> list;
+    QTextFrame::iterator it;
+    for (it = frame->begin(); !it.atEnd(); ++it)
+    {
+        QTextBlock block = it.currentBlock();
+        if (block.isValid())
+            list.append(block.text().trimmed());
+    }
+    return list;
+}
+
+void Document::applyFormatToBlock(const QTextCursor &originalCursor, const QTextCharFormat &format, bool fromStart)
+{
+    QTextCursor cursor(originalCursor);
     if (fromStart)
-        pCursor.movePosition(QTextCursor::StartOfBlock);
-    pCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    if (pCursor.hasSelection())
-        pCursor.mergeCharFormat(format);
+    {
+        cursor.setBlockCharFormat(format);
+        cursor.movePosition(QTextCursor::StartOfBlock);
+    }
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    if (cursor.hasSelection())
+        cursor.mergeCharFormat(format);
+}
+
+const QTextCursor Document::firstTitleCursorPosition()
+{
+   if (hasTitleFrame())
+       return titleFrame->firstCursorPosition();
+   return QTextCursor();
+}
+
+QString Document::getCurrentTitle()
+{
+    if (hasTitleFrame())
+    {
+        QTextCursor cursor(titleFrame->firstCursorPosition());
+        if (cursor.currentFrame() == titleFrame)
+        {
+            QTextBlock block = cursor.block();
+            return block.text();
+        }
+    }
+    return QString(tr("Untitled"));
+}
+
+void Document::on_modificationChanged(bool changed)
+{
+    if (!changed)
+        return;
+    timer->start(UPDATE_ON_MODIFICATION_TIMEOUT);
+    setModified(false);
+}
+
+void Document::updateProperties()
+{
+    QString title = getCurrentTitle();
+    if (title != lastTitle)
+        emit titleChanged(title);
+    lastTitle = title;
 }

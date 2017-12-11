@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>717</width>
-    <height>360</height>
+    <width>930</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,144 +28,47 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QSplitter" name="sidebarSplitter">
+     <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QSplitter" name="outlineSplitter">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QTreeWidget" name="outlineView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
-        </property>
-        <column>
-         <property name="text">
-          <string notr="true">1</string>
-         </property>
-        </column>
-       </widget>
-       <widget class="QTabWidget" name="editorTabs">
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <property name="tabsClosable">
-         <bool>true</bool>
-        </property>
-        <property name="movable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="tab">
-         <attribute name="title">
-          <string>Tab 1</string>
-         </attribute>
-        </widget>
-       </widget>
-      </widget>
-      <widget class="QTabWidget" name="sidebarTabs">
-       <property name="tabPosition">
-        <enum>QTabWidget::South</enum>
-       </property>
+      <widget class="QToolBox" name="toolBox">
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <property name="documentMode">
-        <bool>true</bool>
+       <widget class="QWidget" name="page_7">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>908</width>
+          <height>439</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Outline</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="page_8">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>908</width>
+          <height>439</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Page 2</string>
+        </attribute>
+       </widget>
+      </widget>
+      <widget class="QStackedWidget" name="documentView">
+       <property name="currentIndex">
+        <number>0</number>
        </property>
-       <widget class="QWidget" name="toolsTab">
-        <attribute name="title">
-         <string>Tools</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QToolBox" name="toolBox">
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <property name="tabSpacing">
-            <number>0</number>
-           </property>
-           <widget class="QWidget" name="page">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>312</width>
-              <height>183</height>
-             </rect>
-            </property>
-            <attribute name="label">
-             <string>Page 1</string>
-            </attribute>
-           </widget>
-           <widget class="QWidget" name="page_2">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>312</width>
-              <height>183</height>
-             </rect>
-            </property>
-            <attribute name="label">
-             <string>Page 2</string>
-            </attribute>
-           </widget>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="helpTab">
-        <attribute name="title">
-         <string>Documentation</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QTextBrowser" name="helpBrowser">
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Sunken</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <widget class="QWidget" name="page_9"/>
+       <widget class="QWidget" name="page_10"/>
       </widget>
      </widget>
     </item>
@@ -176,7 +79,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>717</width>
+     <width>930</width>
      <height>23</height>
     </rect>
    </property>
@@ -186,6 +89,7 @@
     </property>
     <addaction name="actionNewDocument"/>
     <addaction name="actionOpenDocument"/>
+    <addaction name="actionOpenRecent"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="actionExport"/>
@@ -212,13 +116,41 @@
    </widget>
    <widget class="QMenu" name="menu_Format">
     <property name="title">
-     <string>&amp;Format</string>
+     <string>F&amp;ormat</string>
     </property>
+    <widget class="QMenu" name="menuText_Alignment">
+     <property name="title">
+      <string>Text &amp;Alignment</string>
+     </property>
+     <addaction name="actionAlignLeft"/>
+     <addaction name="actionAlignRight"/>
+     <addaction name="actionAlignCenter"/>
+     <addaction name="actionAlignJustify"/>
+    </widget>
+    <widget class="QMenu" name="menuText_Style">
+     <property name="title">
+      <string>Text &amp;Style</string>
+     </property>
+     <addaction name="actionTextBold"/>
+     <addaction name="actionTextItalic"/>
+     <addaction name="actionTextMath"/>
+     <addaction name="separator"/>
+     <addaction name="actionClearFormatting"/>
+    </widget>
     <addaction name="actionParagraphStyle"/>
+    <addaction name="menuText_Style"/>
+    <addaction name="menuText_Alignment"/>
+   </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionSwitchDocuments"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
    <addaction name="menu_Format"/>
+   <addaction name="menu_View"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -304,7 +236,7 @@
      <normaloff>:/icons/document-open.svg</normaloff>:/icons/document-open.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open</string>
+    <string>&amp;Open…</string>
    </property>
    <property name="toolTip">
     <string>Open</string>
@@ -339,7 +271,7 @@
      <normaloff>:/icons/format-text-bold.svg</normaloff>:/icons/format-text-bold.svg</iconset>
    </property>
    <property name="text">
-    <string>Bold</string>
+    <string>&amp;Bold</string>
    </property>
    <property name="toolTip">
     <string>Bold</string>
@@ -357,7 +289,7 @@
      <normaloff>:/icons/format-text-italic.svg</normaloff>:/icons/format-text-italic.svg</iconset>
    </property>
    <property name="text">
-    <string>Italic</string>
+    <string>&amp;Italic</string>
    </property>
    <property name="toolTip">
     <string>Italic</string>
@@ -375,7 +307,7 @@
      <normaloff>:/icons/format-justify-left.svg</normaloff>:/icons/format-justify-left.svg</iconset>
    </property>
    <property name="text">
-    <string>Left align</string>
+    <string>&amp;Left align</string>
    </property>
    <property name="toolTip">
     <string>Left align</string>
@@ -393,7 +325,7 @@
      <normaloff>:/icons/format-justify-right.svg</normaloff>:/icons/format-justify-right.svg</iconset>
    </property>
    <property name="text">
-    <string>Right align</string>
+    <string>&amp;Right align</string>
    </property>
    <property name="toolTip">
     <string>Right align</string>
@@ -411,7 +343,7 @@
      <normaloff>:/icons/format-justify-center.svg</normaloff>:/icons/format-justify-center.svg</iconset>
    </property>
    <property name="text">
-    <string>Center</string>
+    <string>C&amp;enter</string>
    </property>
    <property name="toolTip">
     <string>Center</string>
@@ -429,7 +361,7 @@
      <normaloff>:/icons/format-justify-fill.svg</normaloff>:/icons/format-justify-fill.svg</iconset>
    </property>
    <property name="text">
-    <string>Justify</string>
+    <string>&amp;Justify</string>
    </property>
    <property name="toolTip">
     <string>Justify</string>
@@ -444,7 +376,7 @@
      <normaloff>:/icons/insert-table.svg</normaloff>:/icons/insert-table.svg</iconset>
    </property>
    <property name="text">
-    <string>Table</string>
+    <string>&amp;Table…</string>
    </property>
    <property name="toolTip">
     <string>Table</string>
@@ -459,13 +391,13 @@
      <normaloff>:/icons/insert-image.svg</normaloff>:/icons/insert-image.svg</iconset>
    </property>
    <property name="text">
-    <string>Image</string>
+    <string>I&amp;mage…</string>
    </property>
    <property name="toolTip">
     <string>Image</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+P</string>
+    <string>Ctrl+Shift+I</string>
    </property>
   </action>
   <action name="actionClearFormatting">
@@ -474,7 +406,7 @@
      <normaloff>:/icons/format-text-none.svg</normaloff>:/icons/format-text-none.svg</iconset>
    </property>
    <property name="text">
-    <string>Clear formatting</string>
+    <string>Clear &amp;formatting</string>
    </property>
    <property name="toolTip">
     <string>Clear formatting</string>
@@ -486,10 +418,13 @@
      <normaloff>:/icons/edit-copy.svg</normaloff>:/icons/edit-copy.svg</iconset>
    </property>
    <property name="text">
-    <string>Copy</string>
+    <string>&amp;Copy</string>
    </property>
    <property name="toolTip">
     <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionCut">
@@ -498,10 +433,13 @@
      <normaloff>:/icons/edit-cut.svg</normaloff>:/icons/edit-cut.svg</iconset>
    </property>
    <property name="text">
-    <string>Cut</string>
+    <string>Cu&amp;t</string>
    </property>
    <property name="toolTip">
     <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
    </property>
   </action>
   <action name="actionPaste">
@@ -510,10 +448,13 @@
      <normaloff>:/icons/edit-paste.svg</normaloff>:/icons/edit-paste.svg</iconset>
    </property>
    <property name="text">
-    <string>Paste</string>
+    <string>&amp;Paste</string>
    </property>
    <property name="toolTip">
     <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="actionRevert">
@@ -522,7 +463,7 @@
      <normaloff>:/icons/document-revert.svg</normaloff>:/icons/document-revert.svg</iconset>
    </property>
    <property name="text">
-    <string>Revert</string>
+    <string>&amp;Revert</string>
    </property>
    <property name="toolTip">
     <string>Revert</string>
@@ -534,7 +475,7 @@
      <normaloff>:/icons/document-export.svg</normaloff>:/icons/document-export.svg</iconset>
    </property>
    <property name="text">
-    <string>Export</string>
+    <string>E&amp;xport…</string>
    </property>
    <property name="toolTip">
     <string>Export</string>
@@ -546,7 +487,7 @@
      <normaloff>:/icons/open-recent.svg</normaloff>:/icons/open-recent.svg</iconset>
    </property>
    <property name="text">
-    <string>Open recent</string>
+    <string>Open &amp;recent</string>
    </property>
    <property name="toolTip">
     <string>Open recent</string>
@@ -558,7 +499,7 @@
      <normaloff>:/icons/edit-find.svg</normaloff>:/icons/edit-find.svg</iconset>
    </property>
    <property name="text">
-    <string>Find</string>
+    <string>&amp;Find…</string>
    </property>
    <property name="toolTip">
     <string>Find</string>
@@ -573,7 +514,7 @@
      <normaloff>:/icons/document-save.svg</normaloff>:/icons/document-save.svg</iconset>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
    <property name="toolTip">
     <string>Save</string>
@@ -588,7 +529,7 @@
      <normaloff>:/icons/document-save-as.svg</normaloff>:/icons/document-save-as.svg</iconset>
    </property>
    <property name="text">
-    <string>Save as</string>
+    <string>Save &amp;As…</string>
    </property>
    <property name="toolTip">
     <string>Save as</string>
@@ -711,7 +652,7 @@
      <normaloff>:/icons/paragraph-style.svg</normaloff>:/icons/paragraph-style.svg</iconset>
    </property>
    <property name="text">
-    <string>Paragraph</string>
+    <string>&amp;Paragraph</string>
    </property>
    <property name="toolTip">
     <string>Paragraph</string>
@@ -740,10 +681,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Paragraph</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+4</string>
+    <string>&amp;Paragraph</string>
    </property>
   </action>
   <action name="actionParagraphStyleTitle">
@@ -751,10 +689,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Title</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+1</string>
+    <string>&amp;Title</string>
    </property>
   </action>
   <action name="actionParagraphStyleSection">
@@ -762,10 +697,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Section</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+2</string>
+    <string>&amp;Section</string>
    </property>
   </action>
   <action name="actionParagraphStyleSubsection">
@@ -773,10 +705,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Subsection</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+3</string>
+    <string>S&amp;ubsection</string>
    </property>
   </action>
   <action name="actionParagraphStyleList">
@@ -784,13 +713,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>List</string>
+    <string>&amp;List</string>
    </property>
    <property name="toolTip">
     <string>Itemized list</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+I</string>
    </property>
   </action>
   <action name="actionParagraphStyleNumberedList">
@@ -798,10 +724,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Numbered list</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+N</string>
+    <string>&amp;Numbered list</string>
    </property>
   </action>
   <action name="actionNewLabel">
@@ -825,7 +748,7 @@
      <normaloff>:/icons/documents.svg</normaloff>:/icons/documents.svg</iconset>
    </property>
    <property name="text">
-    <string>Switch documents</string>
+    <string>&amp;Switch document</string>
    </property>
    <property name="toolTip">
     <string>Switch documents</string>

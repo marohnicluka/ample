@@ -70,23 +70,26 @@ MainWindow::MainWindow(QWidget *parent) :
     paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
     ui->textToolBar->insertWidget(ui->actionTextBold,paragraphStyleToolButton);
 
-    switchDocumentsToolButton = new QToolButton(this);
-    switchDocumentsMenu = new QMenu(this);
-    ui->actionSwitchDocuments->setMenu(switchDocumentsMenu);
-    switchDocumentsToolButton->setDefaultAction(ui->actionSwitchDocuments);
-    switchDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
-    ui->mainToolBar->insertWidget(ui->actionDocumentProperties,switchDocumentsToolButton);
+    activeDocumentsToolButton = new QToolButton(this);
+    activeDocumentsMenu = new QMenu(this);
+    activeDocumentsGroup = new QActionGroup(this);
+    activeDocumentsGroup->setExclusive(true);
+    ui->actionSwitchDocuments->setMenu(activeDocumentsMenu);
+    activeDocumentsToolButton->setDefaultAction(ui->actionSwitchDocuments);
+    activeDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
+    ui->mainToolBar->insertWidget(ui->actionDocumentProperties,activeDocumentsToolButton);
 
     recentDocumentsToolButton = new QToolButton(this);
     recentDocumentsMenu = new QMenu(this);
+    recentDocumentsGroup = new QActionGroup(this);
     ui->actionOpenRecent->setMenu(recentDocumentsMenu);
     recentDocumentsToolButton->setDefaultAction(ui->actionOpenRecent);
     recentDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
     ui->mainToolBar->insertWidget(ui->actionNewDocument,recentDocumentsToolButton);
 
-    QList<int> outlineSplitterSizes;
-    outlineSplitterSizes << 100 << 450;
-    ui->outlineSplitter->setSizes(outlineSplitterSizes);
+    QList<int> splitterSizes;
+    splitterSizes << 183 << 747;
+    ui->splitter->setSizes(splitterSizes);
 
     loadFonts();
 }
@@ -98,9 +101,7 @@ MainWindow::~MainWindow()
 
 TextEditor *MainWindow::currentTextEditor()
 {
-    TextEditor *editor = (TextEditor*)ui->editorTabs->currentWidget();
-    assert(editor != nullptr);
-    return editor;
+    return (TextEditor*)ui->documentView->currentWidget();
 }
 
 void MainWindow::loadFonts()
@@ -109,8 +110,8 @@ void MainWindow::loadFonts()
     fonts << "FreeMono.ttf" << "FreeMonoBold.ttf" << "FreeMonoBoldOblique.ttf" << "FreeMonoOblique.ttf"
           << "FreeSans.ttf" << "FreeSansBold.ttf" << "FreeSansBoldOblique.ttf" << "FreeSansOblique.ttf"
           << "FreeSerif.ttf" << "FreeSerifBold.ttf" << "FreeSerifBoldItalic.ttf" << "FreeSerifItalic.ttf"
-          << "LiberationSans-Bold.ttf" << "LiberationSans-BoldItalic.ttf"
-          << "LiberationSans-Italic.ttf" << "LiberationSans-Regular.ttf";
+          << "LiberationSans-Bold.ttf" << "LiberationSans-BoldItalic.ttf" << "LiberationSans-Italic.ttf"
+          << "LiberationSans-Regular.ttf";
     foreach (const QString fontName, fonts)
     {
         QFile res(":/fonts/" + fontName);
@@ -136,9 +137,13 @@ void MainWindow::addNewDocument()
 #ifndef QT_NO_CLIPBOARD
     connect(editor, SIGNAL(copyAvailable(bool)), this, SLOT(copyAvailableChanged(bool)));
 #endif
-    int index = ui->editorTabs->addTab(editor, QString("Unnamed"));
-    ui->editorTabs->setCurrentIndex(index);
-    connect(doc, SIGNAL(blockCountChanged(int)), this, SLOT(blockCountChanged(int)));
+    int index = ui->documentView->addWidget(editor);
+    ui->documentView->setCurrentIndex(index);
+    QAction *action = editor->createMenuAction(index, activeDocumentsGroup);
+    activeDocumentsMenu->addAction(action);
+    connect(editor, SIGNAL(focusRequested(int)), this, SLOT(currentDocumentChanged(int)));
+    connect(doc, SIGNAL(titleChanged(QString)), this, SLOT(currentDocumentTitleChanged(QString)));
+    doc->insertTitleFrame();
 }
 
 void MainWindow::updateTextStyleActions(const QFont &font)
@@ -167,10 +172,6 @@ void MainWindow::paragraphStyleChanged(QAction *a)
     else
         return;
     currentTextEditor()->paragraphStyleChanged(type);
-}
-
-void MainWindow::blockCountChanged(int count) {
-    currentTextEditor()->blockCountChanged(count);
 }
 
 void MainWindow::textAlignChanged(QAction *a)
@@ -208,19 +209,14 @@ void MainWindow::currentCharFormatChanged(const QTextCharFormat &format)
     updateTextStyleActions(format.font());
 }
 
-void MainWindow::on_sidebarTabs_currentChanged(int index)
+void MainWindow::currentDocumentChanged(int index)
 {
-    ui->sidebarTabs->setDocumentMode(index == 0);
+    ui->documentView->setCurrentIndex(index);
 }
 
-void MainWindow::on_editorTabs_currentChanged(int index)
+void MainWindow::currentDocumentTitleChanged(const QString &newTitle)
 {
-    currentDocument = qobject_cast<Document*>(currentTextEditor()->document());
-}
-
-void MainWindow::on_editorTabs_tabCloseRequested(int index)
-{
-
+    this->setWindowTitle(newTitle);
 }
 
 void MainWindow::on_actionNewDocument_triggered()
@@ -273,4 +269,10 @@ void MainWindow::on_actionTextMath_triggered()
     fmt.setFont(isMath ? currentDocument->codeFont : currentDocument->textFont);
     fmt.setProperty(Document::TextStyleId, isMath ? Document::MathTextStyle : Document::NormalTextStyle);
     mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::on_documentView_currentChanged(int index)
+{
+    TextEditor *editor = (TextEditor*)ui->documentView->widget(index);
+    currentDocument = editor->getDocument();
 }

@@ -40,10 +40,12 @@ private:
     Ui::MainWindow *ui;
     Document *currentDocument;
     QToolButton *paragraphStyleToolButton;
-    QToolButton *switchDocumentsToolButton;
+    QToolButton *activeDocumentsToolButton;
     QToolButton *recentDocumentsToolButton;
-    QMenu *switchDocumentsMenu;
+    QMenu *activeDocumentsMenu;
     QMenu *recentDocumentsMenu;
+    QActionGroup *activeDocumentsGroup;
+    QActionGroup *recentDocumentsGroup;
     void addNewDocument();
     TextEditor *currentTextEditor();
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
@@ -54,14 +56,12 @@ private:
 private slots:
     void textAlignChanged(QAction *a);
     void paragraphStyleChanged(QAction *a);
-    void blockCountChanged(int count);
+    void currentDocumentChanged(int index);
     void clipboardDataChanged();
     void copyAvailableChanged(bool yes);
     void currentCharFormatChanged(const QTextCharFormat &format);
+    void currentDocumentTitleChanged(const QString &newTitle);
 
-    void on_sidebarTabs_currentChanged(int index);
-    void on_editorTabs_currentChanged(int index);
-    void on_editorTabs_tabCloseRequested(int index);
     void on_actionNewDocument_triggered();
     void on_actionTextBold_triggered();
     void on_actionTextItalic_triggered();
@@ -71,6 +71,8 @@ private slots:
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
     void on_actionTextMath_triggered();
+    void on_documentView_currentChanged(int index);
+
 };
 
 #endif // MAINWINDOW_H
