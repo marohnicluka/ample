@@ -1,3 +1,3 @@
 # Ample
 
-A Math-Processing LaTeX Editor (AMPLE) is Qt GUI interface for Giac computer algebra system
+Ample, which is short for "A(nother) Math-Processing LaTeX Editor", is a new Qt GUI interface for Giac computer algebra system.
