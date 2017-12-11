@@ -1,2 +1,3 @@
-# giac-qt
-A new Qt GUI interface for Giac computer algebra system
+# Ample
+
+A Math-Processing LaTeX Editor (AMPLE) is Qt GUI interface for Giac computer algebra system
