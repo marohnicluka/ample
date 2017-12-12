@@ -18,7 +18,7 @@
 #ifndef GIACHIGHLIGHTER_H
 #define GIACHIGHLIGHTER_H
 
-#include "document.h"
+#include "worksheet.h"
 #include <QSyntaxHighlighter>
 #include <QTextDocument>
 #include <QTextCharFormat>
@@ -28,12 +28,12 @@
 #include <QDebug>
 #include <QVector>
 
-class Document;
+class Worksheet;
 
 class GiacHighlighter : public QSyntaxHighlighter
 {
 private:
-    Document *doc;
+    Worksheet *doc;
     struct HighlightingRule
     {
         QRegExp pattern;
@@ -56,8 +56,8 @@ private:
     static void setFormatProperties(QTextCharFormat *format, const QBrush &color, bool bold, bool italic);
 
 public:
-    GiacHighlighter(Document *parent);
-    inline Document *document() { return doc; }
+    GiacHighlighter(Worksheet *parent);
+    inline Worksheet *document() { return doc; }
 
 protected:
     void highlightBlock(const QString &text) override;

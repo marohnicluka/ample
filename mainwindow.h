@@ -38,7 +38,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Document *currentDocument;
+    Worksheet *currentDocument;
     QToolButton *paragraphStyleToolButton;
     QToolButton *activeDocumentsToolButton;
     QToolButton *recentDocumentsToolButton;

@@ -21,16 +21,16 @@
 #include <QTextEdit>
 #include <QAction>
 #include <QActionGroup>
-#include "document.h"
+#include "worksheet.h"
 
 class TextEditor : public QTextEdit
 {
     Q_OBJECT
 
 public:
-    TextEditor(Document *document, QWidget *parent = nullptr);
+    TextEditor(Worksheet *document, QWidget *parent = nullptr);
     ~TextEditor();
-    inline Document *getDocument() { return doc; }
+    inline Worksheet *getDocument() { return doc; }
     void paragraphStyleChanged(int type);
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     bool cursorAtEndOfWord();
@@ -47,7 +47,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
-    Document *doc;
+    Worksheet *doc;
     int lastBlockCount;
     QAction *menuAction;
     static int unnamedCount;

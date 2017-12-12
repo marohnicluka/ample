@@ -128,7 +128,7 @@ void MainWindow::loadFonts()
 void MainWindow::addNewDocument()
 {
     context ct;
-    Document *doc = new Document(&ct, this);
+    Worksheet *doc = new Worksheet(&ct, this);
     TextEditor *editor = new TextEditor(doc, this);
     connect(editor, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(currentCharFormatChanged(QTextCharFormat)));
@@ -156,19 +156,19 @@ void MainWindow::updateTextStyleActions(const QFont &font)
 
 void MainWindow::paragraphStyleChanged(QAction *a)
 {
-    Document::ParagraphType type;
+    Worksheet::ParagraphType type;
     if (a == ui->actionParagraphStyleTextBody)
-        type = Document::TextBody;
+        type = Worksheet::TextBody;
     else if (a == ui->actionParagraphStyleTitle)
-        type = Document::Title;
+        type = Worksheet::Title;
     else if (a == ui->actionParagraphStyleSection)
-        type = Document::Section;
+        type = Worksheet::Section;
     else if (a == ui->actionParagraphStyleSubsection)
-        type = Document::Subsection;
+        type = Worksheet::Subsection;
     else if (a == ui->actionParagraphStyleList)
-        type = Document::List;
+        type = Worksheet::List;
     else if (a == ui->actionParagraphStyleNumberedList)
-        type = Document::NumberedList;
+        type = Worksheet::NumberedList;
     else
         return;
     currentTextEditor()->paragraphStyleChanged(type);
@@ -267,7 +267,7 @@ void MainWindow::on_actionTextMath_triggered()
     QTextCharFormat fmt;
     bool isMath = ui->actionTextMath->isChecked();
     fmt.setFont(isMath ? currentDocument->codeFont : currentDocument->textFont);
-    fmt.setProperty(Document::TextStyleId, isMath ? Document::MathTextStyle : Document::NormalTextStyle);
+    fmt.setProperty(Worksheet::TextStyleId, isMath ? Worksheet::MathTextStyle : Worksheet::NormalTextStyle);
     mergeFormatOnWordOrSelection(fmt);
 }
 

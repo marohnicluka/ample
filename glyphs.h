@@ -18,13 +18,16 @@
 #ifndef GLYPHS_H
 #define GLYPHS_H
 
-#include <QObject>
+#include <QFont>
+#include <QFontMetrics>
 
-class Glyphs : public QObject
+class Glyphs
 {
-    Q_OBJECT
+private:
+    QFont m_font;
+
 public:
-    explicit Glyphs(QObject *parent = nullptr);
+    Glyphs(const QFont &font);
 
     static inline QChar emQuad() { return QChar(0x2001); }
 };

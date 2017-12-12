@@ -25,7 +25,7 @@
 
 int TextEditor::unnamedCount = 0;
 
-TextEditor::TextEditor(Document *document, QWidget *parent)
+TextEditor::TextEditor(Worksheet *document, QWidget *parent)
     : QTextEdit(parent)
 {
     setDocument(document);
@@ -63,22 +63,22 @@ void TextEditor::paintEvent(QPaintEvent *event)
 {
     QTextEdit::paintEvent(event);
     QTextBlock block = doc->begin();
+    QPainter painter(this->viewport());
+    painter.translate(-horizontalScrollBar()->value(), -verticalScrollBar()->value());
     while (block.isValid())
     {
         QTextLayout *layout = block.layout();
         QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(Document::CounterTypeId) &&
-                format.intProperty(Document::CounterTypeId) != Document::None &&
-                format.hasProperty(Document::CounterTagId))
+        if (format.hasProperty(Worksheet::CounterTypeId) &&
+                format.intProperty(Worksheet::CounterTypeId) != Worksheet::None &&
+                format.hasProperty(Worksheet::CounterTagId))
         {
-            QFont font = doc->counterFont(format.intProperty(Document::CounterTypeId));
+            QFont font = doc->counterFont(format.intProperty(Worksheet::CounterTypeId));
             QFontMetrics fontMetrics(font);
             qreal x = layout->position().x() - doc->paragraphMargin;
             qreal y = layout->position().y() + fontMetrics.leading() + layout->lineAt(0).ascent() + 1;
-            QString tag = format.stringProperty(Document::CounterTagId);
+            QString tag = format.stringProperty(Worksheet::CounterTagId);
             QPointF where(x,y);
-            QPainter painter(this->viewport());
-            painter.translate(-horizontalScrollBar()->value(), -verticalScrollBar()->value());
             painter.setFont(font);
             painter.drawText(where, tag);
         }
@@ -88,6 +88,8 @@ void TextEditor::paintEvent(QPaintEvent *event)
 
 void TextEditor::keyPressEvent(QKeyEvent *event)
 {
+    if (!event->matches(QKeySequence::Copy) && event->text().length() > 0)
+        return;
     QTextCursor cursor = textCursor();
     bool isShiftPressed = event->modifiers().testFlag(Qt::ShiftModifier);
     //bool isCtrlPressed = event->modifiers().testFlag(Qt::ControlModifier);
@@ -95,7 +97,7 @@ void TextEditor::keyPressEvent(QKeyEvent *event)
     if (!cursor.hasSelection()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat blockFormat = block.blockFormat();
-        bool isParagraph = blockFormat.intProperty(Document::CounterTypeId) == Document::None;
+        bool isParagraph = blockFormat.intProperty(Worksheet::CounterTypeId) == Worksheet::None;
         switch (event->key())
         {
         case Qt::Key_Delete:
@@ -104,7 +106,6 @@ void TextEditor::keyPressEvent(QKeyEvent *event)
             {
                 doc->blockToParagraph(cursor);
                 doc->updateEnumeration();
-                event->accept();
                 return;
             }
             break;
@@ -120,9 +121,9 @@ void TextEditor::blockCountChanged(int count)
     QTextCursor cursor = textCursor();
     if (cursor.currentFrame() != doc->rootFrame())
         return;
-    if (count < lastBlockCount && Document::isHeading(cursor.block()))
+    if (count < lastBlockCount && Worksheet::isHeading(cursor.block()))
     {
-        Document::applyFormatToBlock(cursor, cursor.charFormat(), false);
+        Worksheet::applyFormatToBlock(cursor, cursor.charFormat(), false);
     }
     else if (count > lastBlockCount)
     {
@@ -133,7 +134,7 @@ void TextEditor::blockCountChanged(int count)
             block = block.previous();
             ++m;
         }
-        if (m == n && Document::isHeading(block))
+        if (m == n && Worksheet::isHeading(block))
         {
             QTextCursor tempCursor(doc);
             tempCursor.setPosition(block.position());
@@ -159,38 +160,38 @@ void TextEditor::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 
 void TextEditor::paragraphStyleChanged(int type)
 {
-    bool isList = type == Document::List || type == Document::NumberedList;
+    bool isList = type == Worksheet::List || type == Worksheet::NumberedList;
     QTextCursor cursor = textCursor();
     QTextBlockFormat blockFormat = cursor.blockFormat();
     QTextCharFormat charFormat;
     if (cursor.currentFrame() != doc->rootFrame() ||
-            blockFormat.intProperty(Document::ParagraphTypeId) == type)
+            blockFormat.intProperty(Worksheet::ParagraphTypeId) == type)
         return;
     switch (type)
     {
-    case Document::TextBody:
+    case Worksheet::TextBody:
         doc->blockToParagraph(cursor);
         break;
-    case Document::Title:
+    case Worksheet::Title:
         charFormat.setFont(doc->titleFont);
-        blockFormat.setProperty(Document::CounterTypeId, Document::None);
+        blockFormat.setProperty(Worksheet::CounterTypeId, Worksheet::None);
         blockFormat.setTextIndent(0.0);
         break;
-    case Document::Section:
+    case Worksheet::Section:
         charFormat.setFont(doc->sectionFont);
-        blockFormat.setProperty(Document::CounterTypeId, Document::SectionCounter);
+        blockFormat.setProperty(Worksheet::CounterTypeId, Worksheet::SectionCounter);
         break;
-    case Document::Subsection:
+    case Worksheet::Subsection:
         charFormat.setFont(doc->subsectionFont);
-        blockFormat.setProperty(Document::CounterTypeId, Document::SubsectionCounter);
+        blockFormat.setProperty(Worksheet::CounterTypeId, Worksheet::SubsectionCounter);
         break;
     default:
         break;
     }
-    if (!isList && type != Document::TextBody)
+    if (!isList && type != Worksheet::TextBody)
     {
         cursor.setBlockCharFormat(charFormat);
-        blockFormat.setProperty(Document::ParagraphTypeId, type);
+        blockFormat.setProperty(Worksheet::ParagraphTypeId, type);
         cursor.setBlockFormat(blockFormat);
         doc->applyFormatToBlock(cursor, charFormat, true);
     }
@@ -199,8 +200,10 @@ void TextEditor::paragraphStyleChanged(int type)
 
 void TextEditor::cursorMoved()
 {
+    /*
     if (textCursor().atStart() && doc->hasTitleFrame())
         setTextCursor(doc->firstTitleCursorPosition());
+    */
 }
 
 bool TextEditor::cursorAtEndOfWord()

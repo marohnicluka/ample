@@ -28,20 +28,22 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     giachighlighter.cpp \
-    document.cpp \
     mathtextobject.cpp \
     mathexpression.cpp \
     glyphs.cpp \
-    texteditor.cpp
+    texteditor.cpp \
+    textframegroup.cpp \
+    worksheet.cpp
 
 HEADERS += \
         mainwindow.h \
     giachighlighter.h \
-    document.h \
     mathtextobject.h \
     mathexpression.h \
     glyphs.h \
-    texteditor.h
+    texteditor.h \
+    textframegroup.h \
+    worksheet.h
 
 FORMS += \
         mainwindow.ui

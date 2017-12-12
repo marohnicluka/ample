@@ -63,7 +63,7 @@ void GiacHighlighter::setFormatProperties(QTextCharFormat *format, const QBrush 
     format->setFontItalic(italic);
 }
 
-GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent)
+GiacHighlighter::GiacHighlighter(Worksheet *parent) : QSyntaxHighlighter(parent)
 {
     doc = parent;
     QStringList keywords,variables,options,commands,constants,units;
@@ -148,7 +148,7 @@ GiacHighlighter::GiacHighlighter(Document *parent) : QSyntaxHighlighter(parent)
 void GiacHighlighter::highlightBlock(const QString &text)
 {
     QTextBlock block = currentBlock();
-    if (Document::isHeading(block))
+    if (Worksheet::isHeading(block))
         return;
     UnionOfRanges unhighlightedRanges(0, text.length());
     int pos, len;
@@ -159,7 +159,7 @@ void GiacHighlighter::highlightBlock(const QString &text)
             QTextFragment fragment = it.fragment();
             QTextCharFormat format = fragment.charFormat();
             int fragmentStart = fragment.position() - block.position();
-            if (format.intProperty(Document::TextStyleId) != Document::MathTextStyle)
+            if (format.intProperty(Worksheet::TextStyleId) != Worksheet::MathTextStyle)
             {
                 unhighlightedRanges.cutOut(fragmentStart, fragment.length());
                 continue;
