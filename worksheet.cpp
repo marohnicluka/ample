@@ -18,6 +18,7 @@
 #include <QTextTableCell>
 #include <QTextTableFormat>
 #include <QTextLength>
+#include <QDebug>
 #include "worksheet.h"
 #include "glyphs.h"
 
@@ -27,7 +28,6 @@ Worksheet::Worksheet(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
 {
     gcontext = contextptr;
     ghighlighter = new GiacHighlighter(this);
-    worksheetMode = false;
     setModified(false);
     connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(on_modificationChanged(bool)));
 }
@@ -58,11 +58,12 @@ void Worksheet::insertHeadingFrame(QTextCursor &cursor, int level)
     QTextCharFormat format;
     format.setFontFamily("LiberationSans");
     QList<int> fontSizes = QList<int>() << 24 << 17 << 12;
-    format.setFontPointSize(fontSizes.at(level));
+    format.setFontPointSize(fontSizes.at(level - 1));
     format.setFontWeight(QFont::Bold);
     cursor.setCharFormat(format);
     cursor.setBlockCharFormat(format);
     connect(frame, SIGNAL(destroyed(QObject*)), SLOT(updateEnumeration(QObject*)));
+    updateEnumeration();
 }
 
 void Worksheet::insertCasInputFrame(QTextCursor &cursor)
@@ -73,7 +74,7 @@ void Worksheet::insertCasInputFrame(QTextCursor &cursor)
     QTextCharFormat format;
     format.setFontFamily("FreeMono");
     format.setFontPointSize(12);
-    int margin = QFontMetrics(format.font()).width(QChar(">")) * 3;
+    int margin = QFontMetrics(format.font()).width(">") * 3;
     frameFormat.setProperty(Subtype, CasInput);
     frameFormat.setLeftMargin(margin);
     QTextFrame *frame = cursor.insertFrame(frameFormat);
@@ -84,11 +85,12 @@ void Worksheet::insertCasInputFrame(QTextCursor &cursor)
 
 QTextFrame* Worksheet::insertCasOutputFrame(QTextFrame *inputFrame)
 {
-    QTextFrameFormat inputFrameFormat = inputFrame->format();
-    if (inputFrameFormat.hasProperty(CasOutputFrame))
-        return;
+    QTextFrameFormat inputFrameFormat = inputFrame->frameFormat();
+    if (inputFrameFormat.hasProperty(AssociatedFrame))
+        return 0;
     QTextFrameFormat outputFrameFormat;
-    outputFrameFormat.setProperty(CasInputFrame, (void*)inputFrame);
+    outputFrameFormat.setProperty(Subtype, CasOutput);
+    outputFrameFormat.setProperty(AssociatedFrame, qVariantFromValue((void*)inputFrame));
     outputFrameFormat.setProperty(Editable, false);
     QTextCursor cursor(inputFrame->lastCursorPosition());
     cursor.movePosition(QTextCursor::NextBlock);
@@ -110,26 +112,24 @@ void Worksheet::removeFrame(QTextFrame *frame)
 
 void Worksheet::casInputDestroyed(QObject *casInput)
 {
-    QTextFrame *frame = qobject_cast<QTextFrame*>casInput;
-    QTextFrameFormat frameFormat = frame->format();
+    QTextFrame *frame = (QTextFrame*)casInput;
+    QTextFrameFormat frameFormat = frame->frameFormat();
     QString text = frameText(frame);
-    qDebug(text);
-    if (frameFormat.hasProperty(CasOutputFrame))
+    qDebug() << text;
+    if (frameFormat.hasProperty(AssociatedFrame))
     {
-        QObject *object = qvariant_cast<QObject*>frameFormat.property(CasOutputFrame);
-        QTextFrame *outputFrame = qobject_cast<QTextFrame*>object;
+        QTextFrame *outputFrame = (QTextFrame*)(frameFormat.property(AssociatedFrame).data());
         removeFrame(outputFrame);
     }
 }
 
 void Worksheet::casOutputDestroyed(QObject *casOutput)
 {
-    QTextFrame *frame = qobject_cast<QTextFrame*>casOutput;
-    QTextFrameFormat frameFormat = frame->format();
-    QObject *object = qvariant_cast<QObject*>frameFormat.property(CasInputFrame);
-    QTextFrame *inputFrame = qobject_cast<QTextFrame*>object;
-    frameFormat = inputFrame->format();
-    frameFormat.clearProperty(CasOutputFrame);
+    QTextFrame *frame = (QTextFrame*)casOutput;
+    QTextFrameFormat frameFormat = frame->frameFormat();
+    QTextFrame *inputFrame = (QTextFrame*)(frameFormat.property(AssociatedFrame).data());
+    frameFormat = inputFrame->frameFormat();
+    frameFormat.clearProperty(AssociatedFrame);
     inputFrame->setFrameFormat(frameFormat);
 }
 
@@ -137,17 +137,17 @@ void Worksheet::updateEnumeration(QObject *deletedObject)
 {
     int counter[3] = { 0, 0, 0 };
     QTextFrame::iterator it;
-    QTextFrame *deletedFrame = deletedObject == nullptr ?
-                nullptr : qobject_cast<QTextFrame*>deletedObject;
+    QTextFrame *deletedFrame = (deletedObject == nullptr ?
+                                    nullptr : (QTextFrame*)deletedObject);
     for (it = rootFrame()->begin(); !it.atEnd(); ++it)
     {
         QTextFrame *frame = it.currentFrame();
         QTextFrameFormat frameFormat;
         if (frame && frame != deletedFrame &&
-                (frameFormat = frame->format()).intProperty(Subtype) == Heading)
+                (frameFormat = frame->frameFormat()).intProperty(Subtype) == Heading)
         {
             int level = frameFormat.intProperty(Level);
-            ++counter[level];
+            ++counter[level - 1];
             if (level < 3)
                 counter[2] = 0;
             if (level == 1)
@@ -156,7 +156,8 @@ void Worksheet::updateEnumeration(QObject *deletedObject)
             for (int i = 0; i < level; ++i)
                 list.append(QString::number(counter[i]));
             QString number = list.join(".");
-            frameFormat.setProperty(Number, number);
+            frameFormat.setProperty(Label, number);
+            frame->setFrameFormat(frameFormat);
             QTextCursor cursor(frame->firstCursorPosition());
             QTextBlockFormat blockFormat = cursor.blockFormat();
             number += Glyphs::emQuad();
@@ -167,30 +168,60 @@ void Worksheet::updateEnumeration(QObject *deletedObject)
     }
 }
 
-void Worksheet::insertTable(QTextCursor &cursor, int rows, int columns, bool isNumeric,
-                           bool hasHeaderRow, bool hasHeaderColumn, QBrush &headerBgColor)
+void Worksheet::insertTable(QTextCursor &cursor, int rows, int columns, int headerRowCount, int flags)
 {
-    QTextCursor cursor(this);
-    cursor.movePosition(QTextCursor::Start);
     QTextTableFormat tableFormat;
     tableFormat.setAlignment(Qt::AlignCenter);
     tableFormat.setCellPadding(6);
     tableFormat.setCellSpacing(0);
-    tableFormat.setBorder(1.0);
-    QTextTable *table = cursor.insertTable(2,2,tableFormat);
-    table->mergeCells(0,1,2,1);
-    QTextTableCell cell = table->cellAt(cursor);
-    QTextCharFormat format = cell.format();
-    format.setVerticalAlignment(QTextCharFormat::AlignMiddle);
-    format.setFont(textFont);
-    cell.setFormat(format);
-    QTextBlockFormat blockFormat;
-    blockFormat.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    blockFormat.setLineHeight(-QFontMetrics(textFont).leading(), QTextBlockFormat::LineDistanceHeight);
-    cursor.setBlockFormat(blockFormat);
-    cursor.insertText("x\ny");
+    tableFormat.setBorder(2.0);
+    tableFormat.setBorderBrush(QBrush(Qt::gray));
+    tableFormat.setProperty(Flags, flags);
+    tableFormat.setHeaderRowCount(headerRowCount);
+    QTextTable *table = cursor.insertTable(
+                rows, columns, tableFormat);
+    for (int i = headerRowCount; i < rows; ++i)
+    {
+        for (int j = 0; j < columns; ++j)
+        {
+            QTextTableCell cell = table->cellAt(i, j);
+            QTextCharFormat cellFormat = cell.format();
+            cellFormat.setVerticalAlignment(QTextCharFormat::AlignMiddle);
+            if ((flags & Worksheet::Numeric) != 0)
+                cellFormat.setFontFamily("FreeSans");
+            cell.setFormat(cellFormat);
+        }
+    }
 }
 
+bool Worksheet::isHeadingFrame(QTextFrame *frame, int &level)
+{
+    QTextFrameFormat format = frame->frameFormat();
+    bool yes = format.hasProperty(Subtype) && format.intProperty(Subtype) == Heading;
+    if (yes)
+        level = format.intProperty(Level);
+    return yes;
+}
+
+bool Worksheet::isCasInputFrame(QTextFrame *frame)
+{
+    QTextFrameFormat format = frame->frameFormat();
+    return format.hasProperty(Subtype) && format.intProperty(Subtype) == CasInput;
+}
+
+bool Worksheet::isCasOutputFrame(QTextFrame *frame)
+{
+    QTextFrameFormat format = frame->frameFormat();
+    return format.hasProperty(Subtype) && format.intProperty(Subtype) == CasOutput;
+}
+
+bool Worksheet::isTable(QTextFrame *frame, int &flags)
+{
+    bool yes = frame->format().isTableFormat();
+    if (yes)
+        flags = qobject_cast<QTextTable*>(frame)->format().intProperty(Flags);
+    return yes;
+}
 
 void Worksheet::on_modificationChanged(bool changed)
 {

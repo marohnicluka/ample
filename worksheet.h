@@ -43,6 +43,8 @@ class Worksheet : public QTextDocument
 private:
     const context *gcontext;
     GiacHighlighter *ghighlighter;
+    QString m_fileName;
+    QString m_language;
 
     QString frameText(QTextFrame *frame);
     QTextFrame *insertCasOutputFrame(QTextFrame *inputFrame);
@@ -58,31 +60,24 @@ public:
         Subtype = 1,
         Level = 2,
         Editable = 3,
-        Number = 4,
-        CasOutputFrame = 5,
-        CasInputFrame = 6,
-        Flags = 7,
+        Label = 4,
+        AssociatedFrame = 5,
+        Flags = 6,
     };
 
-    enum TableProperty {
-        HasHeaderRow = 0x1,
-        HasHeaderColumn = 0x2,
-        Numeric = 0x4,
+    enum TableFlag {
+        None = 0x0,
+        Numeric = 0x1,
     };
-    Q_DECLARE_FLAGS(TableProperties, TableProperty)
+    Q_DECLARE_FLAGS(TableFlags, TableFlag)
 
     enum FrameSubtype { CasInput, CasOutput, Heading };
 
     Worksheet(GIAC_CONTEXT, QObject *parent = 0);
 
-    QString fileName;
-    QString language;
-    bool worksheetMode;
-
     void insertHeadingFrame(QTextCursor &cursor, int level);
     void insertCasInputFrame(QTextCursor &cursor);
-    void insertTable(QTextCursor &cursor, int rows, int columns, bool isNumeric,
-                     bool hasHeaderRow, bool hasHeaderColumn, QBrush &headerBgColor);
+    void insertTable(QTextCursor &cursor, int rows, int columns, int headerRowCount, int flags);
     void insertImage(QTextCursor &cursor, QString name);
     void removeFrame(QTextFrame *frame);
     bool isHeadingFrame(QTextFrame *frame, int &level);
@@ -90,12 +85,16 @@ public:
     bool isCasOutputFrame(QTextFrame *frame);
     bool isTable(QTextFrame *frame, int &flags);
 
+    inline bool isUnnamed() { return m_fileName.length() == 0; }
+    inline const QString fileName() { return m_fileName; }
+    inline void setFileName(QString fname) { m_fileName = fname; }
+
 signals:
     void stylingEnableChanged(bool enabled);
     void alignEnableChanged(bool enabled);
 
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Document::TableProperties)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Worksheet::TableFlags)
 
 #endif // DOCUMENT_H

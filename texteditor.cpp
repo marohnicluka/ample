@@ -25,15 +25,12 @@
 
 int TextEditor::unnamedCount = 0;
 
-TextEditor::TextEditor(Worksheet *document, QWidget *parent)
+TextEditor::TextEditor(Worksheet *worksheet, QWidget *parent)
     : QTextEdit(parent)
 {
-    setDocument(document);
-    doc = document;
-    setAcceptRichText(false);
-    //setFrameStyle(QFrame::NoFrame);
-    lastBlockCount = doc->blockCount();
-    connect(doc, SIGNAL(blockCountChanged(int)), this, SLOT(blockCountChanged(int)));
+    setDocument(worksheet);
+    m_worksheet = worksheet;
+    //setAcceptRichText(false);
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(cursorMoved()));
 }
 
@@ -49,10 +46,10 @@ QAction* TextEditor::createMenuAction(int index, QActionGroup *actionGroup)
     menuAction->setCheckable(true);
     connect(menuAction, SIGNAL(triggered(bool)), this, SLOT(menuActionTriggered(bool)));
     QString text;
-    if (doc->isUnnamed())
+    if (worksheet()->isUnnamed())
         text = tr("Unnamed document ") + QString::number(++unnamedCount);
     else
-        text = QFileInfo(doc->fileName).baseName();
+        text = QFileInfo(worksheet()->fileName()).baseName();
     menuAction->setText(text);
     activeDocuments = actionGroup;
     activeDocuments->addAction(menuAction);
@@ -62,91 +59,49 @@ QAction* TextEditor::createMenuAction(int index, QActionGroup *actionGroup)
 void TextEditor::paintEvent(QPaintEvent *event)
 {
     QTextEdit::paintEvent(event);
-    QTextBlock block = doc->begin();
     QPainter painter(this->viewport());
     painter.translate(-horizontalScrollBar()->value(), -verticalScrollBar()->value());
-    while (block.isValid())
+    QTextFrame::iterator it;
+    int level;
+    for (it = worksheet()->rootFrame()->begin(); !it.atEnd(); ++it)
     {
-        QTextLayout *layout = block.layout();
-        QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(Worksheet::CounterTypeId) &&
-                format.intProperty(Worksheet::CounterTypeId) != Worksheet::None &&
-                format.hasProperty(Worksheet::CounterTagId))
+        QTextFrame *frame = it.currentFrame();
+        if (frame == 0)
+            continue;
+        if (worksheet()->isHeadingFrame(frame, level))
         {
-            QFont font = doc->counterFont(format.intProperty(Worksheet::CounterTypeId));
+
+            QTextBlock block = frame->firstCursorPosition().block();
+            QFont font = block.charFormat().font();
+            QTextLayout *layout = block.layout();
+            int headingHeight = layout->lineAt(0).ascent() + 1;
+            block = block.previous();
+            if (!block.isValid())
+                continue;
+            layout = block.layout();
+            int previousHeight = layout->boundingRect().height();
             QFontMetrics fontMetrics(font);
-            qreal x = layout->position().x() - doc->paragraphMargin;
-            qreal y = layout->position().y() + fontMetrics.leading() + layout->lineAt(0).ascent() + 1;
-            QString tag = format.stringProperty(Worksheet::CounterTagId);
-            QPointF where(x,y);
+            qreal x = layout->position().x();
+            qreal y = layout->position().y() + fontMetrics.leading() + previousHeight + headingHeight;
+            QString label = frame->frameFormat().stringProperty(Worksheet::Label);
+            QPointF location(x,y);
             painter.setFont(font);
-            painter.drawText(where, tag);
+            painter.drawText(location, label);
         }
-        block = block.next();
     }
 }
 
 void TextEditor::keyPressEvent(QKeyEvent *event)
 {
+    /*
     if (!event->matches(QKeySequence::Copy) && event->text().length() > 0)
         return;
+    */
     QTextCursor cursor = textCursor();
     bool isShiftPressed = event->modifiers().testFlag(Qt::ShiftModifier);
     //bool isCtrlPressed = event->modifiers().testFlag(Qt::ControlModifier);
     //bool isAltPressed = event->modifiers().testFlag(Qt::AltModifier);
-    if (!cursor.hasSelection()) {
-        QTextBlock block = cursor.block();
-        QTextBlockFormat blockFormat = block.blockFormat();
-        bool isParagraph = blockFormat.intProperty(Worksheet::CounterTypeId) == Worksheet::None;
-        switch (event->key())
-        {
-        case Qt::Key_Delete:
-        case Qt::Key_Backspace:
-            if (!isParagraph && (isShiftPressed || block.text().length() == 0))
-            {
-                doc->blockToParagraph(cursor);
-                doc->updateEnumeration();
-                return;
-            }
-            break;
-        default:
-            break;
-        }
-    }
     QTextEdit::keyPressEvent(event);
-}
-
-void TextEditor::blockCountChanged(int count)
-{
-    QTextCursor cursor = textCursor();
-    if (cursor.currentFrame() != doc->rootFrame())
-        return;
-    if (count < lastBlockCount && Worksheet::isHeading(cursor.block()))
-    {
-        Worksheet::applyFormatToBlock(cursor, cursor.charFormat(), false);
-    }
-    else if (count > lastBlockCount)
-    {
-        int n = count - lastBlockCount, m = 0;
-        QTextBlock block = cursor.block();
-        for (int i = 0; i < n && block.isValid(); ++i)
-        {
-            block = block.previous();
-            ++m;
-        }
-        if (m == n && Worksheet::isHeading(block))
-        {
-            QTextCursor tempCursor(doc);
-            tempCursor.setPosition(block.position());
-            for (int i = 0; i < n; ++i)
-            {
-                tempCursor.movePosition(QTextCursor::NextBlock);
-                doc->blockToParagraph(tempCursor);
-            }
-        }
-    }
-    lastBlockCount = count;
-    doc->updateEnumeration();
 }
 
 void TextEditor::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
@@ -156,46 +111,6 @@ void TextEditor::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
         cursor.select(QTextCursor::WordUnderCursor);
     cursor.mergeCharFormat(format);
     mergeCurrentCharFormat(format);
-}
-
-void TextEditor::paragraphStyleChanged(int type)
-{
-    bool isList = type == Worksheet::List || type == Worksheet::NumberedList;
-    QTextCursor cursor = textCursor();
-    QTextBlockFormat blockFormat = cursor.blockFormat();
-    QTextCharFormat charFormat;
-    if (cursor.currentFrame() != doc->rootFrame() ||
-            blockFormat.intProperty(Worksheet::ParagraphTypeId) == type)
-        return;
-    switch (type)
-    {
-    case Worksheet::TextBody:
-        doc->blockToParagraph(cursor);
-        break;
-    case Worksheet::Title:
-        charFormat.setFont(doc->titleFont);
-        blockFormat.setProperty(Worksheet::CounterTypeId, Worksheet::None);
-        blockFormat.setTextIndent(0.0);
-        break;
-    case Worksheet::Section:
-        charFormat.setFont(doc->sectionFont);
-        blockFormat.setProperty(Worksheet::CounterTypeId, Worksheet::SectionCounter);
-        break;
-    case Worksheet::Subsection:
-        charFormat.setFont(doc->subsectionFont);
-        blockFormat.setProperty(Worksheet::CounterTypeId, Worksheet::SubsectionCounter);
-        break;
-    default:
-        break;
-    }
-    if (!isList && type != Worksheet::TextBody)
-    {
-        cursor.setBlockCharFormat(charFormat);
-        blockFormat.setProperty(Worksheet::ParagraphTypeId, type);
-        cursor.setBlockFormat(blockFormat);
-        doc->applyFormatToBlock(cursor, charFormat, true);
-    }
-    doc->updateEnumeration();
 }
 
 void TextEditor::cursorMoved()

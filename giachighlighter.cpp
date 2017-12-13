@@ -147,31 +147,22 @@ GiacHighlighter::GiacHighlighter(Worksheet *parent) : QSyntaxHighlighter(parent)
 
 void GiacHighlighter::highlightBlock(const QString &text)
 {
-    QTextBlock block = currentBlock();
-    if (Worksheet::isHeading(block))
+    QTextCursor cursor(doc);
+    cursor.setPosition(currentBlock().position());
+    QTextFrame *frame = cursor.currentFrame();
+    if (!doc->isCasInputFrame(frame))
         return;
     UnionOfRanges unhighlightedRanges(0, text.length());
     int pos, len;
     foreach (const HighlightingRule &rule, rules)
     {
-        for (QTextBlock::iterator it = block.begin(); !it.atEnd(); ++it)
+        pos = 0;
+        while ((pos = rule.pattern.indexIn(text, pos)) != -1)
         {
-            QTextFragment fragment = it.fragment();
-            QTextCharFormat format = fragment.charFormat();
-            int fragmentStart = fragment.position() - block.position();
-            if (format.intProperty(Worksheet::TextStyleId) != Worksheet::MathTextStyle)
-            {
-                unhighlightedRanges.cutOut(fragmentStart, fragment.length());
-                continue;
-            }
-            pos = 0;
-            while ((pos = rule.pattern.indexIn(fragment.text(),pos)) != -1)
-            {
-                len = rule.pattern.matchedLength();
-                unhighlightedRanges.cutOut(fragmentStart + pos,len);
-                setFormat(fragmentStart + pos, len, rule.format);
-                pos += len;
-            }
+            len = rule.pattern.matchedLength();
+            unhighlightedRanges.cutOut(pos,len);
+            setFormat(pos, len, rule.format);
+            pos += len;
         }
     }
     int n = 0;

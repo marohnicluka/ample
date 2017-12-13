@@ -25,6 +25,7 @@
 #include <qmath.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "tablepropertiesdialog.h"
 
 using namespace giac;
 
@@ -52,19 +53,12 @@ MainWindow::MainWindow(QWidget *parent) :
     alignGroup->addAction(ui->actionAlignJustify);
     alignGroup->setExclusive(true);
     connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlignChanged(QAction*)));
-    QActionGroup *paragraphGroup = new QActionGroup(this);
-    paragraphGroup->addAction(ui->actionParagraphStyleTitle);
-    paragraphGroup->addAction(ui->actionParagraphStyleSection);
-    paragraphGroup->addAction(ui->actionParagraphStyleSubsection);
-    paragraphGroup->addAction(ui->actionParagraphStyleTextBody);
-    paragraphGroup->addAction(ui->actionParagraphStyleList);
-    paragraphGroup->addAction(ui->actionParagraphStyleNumberedList);
-    paragraphGroup->setExclusive(true);
-    connect(paragraphGroup, SIGNAL(triggered(QAction*)), this, SLOT(paragraphStyleChanged(QAction*)));
 
     paragraphStyleToolButton = new QToolButton(this);
     QMenu *paragraphStyleMenu = new QMenu(this);
-    paragraphStyleMenu->addActions(paragraphGroup->actions());
+    paragraphStyleMenu->addAction(ui->actionInsertSection);
+    paragraphStyleMenu->addAction(ui->actionInsertSubsection);
+    paragraphStyleMenu->addAction(ui->actionInsertSubsubsection);
     ui->actionParagraphStyle->setMenu(paragraphStyleMenu);
     paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
     paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
@@ -142,36 +136,6 @@ void MainWindow::addNewDocument()
     QAction *action = editor->createMenuAction(index, activeDocumentsGroup);
     activeDocumentsMenu->addAction(action);
     connect(editor, SIGNAL(focusRequested(int)), this, SLOT(currentDocumentChanged(int)));
-    connect(doc, SIGNAL(titleChanged(QString)), this, SLOT(currentDocumentTitleChanged(QString)));
-    doc->insertTitleFrame();
-}
-
-void MainWindow::updateTextStyleActions(const QFont &font)
-{
-    bool isCode = font.family() == currentDocument->codeFont.family();
-    ui->actionTextBold->setChecked(!isCode && font.bold());
-    ui->actionTextItalic->setChecked(!isCode && font.italic());
-    ui->actionTextMath->setChecked(isCode);
-}
-
-void MainWindow::paragraphStyleChanged(QAction *a)
-{
-    Worksheet::ParagraphType type;
-    if (a == ui->actionParagraphStyleTextBody)
-        type = Worksheet::TextBody;
-    else if (a == ui->actionParagraphStyleTitle)
-        type = Worksheet::Title;
-    else if (a == ui->actionParagraphStyleSection)
-        type = Worksheet::Section;
-    else if (a == ui->actionParagraphStyleSubsection)
-        type = Worksheet::Subsection;
-    else if (a == ui->actionParagraphStyleList)
-        type = Worksheet::List;
-    else if (a == ui->actionParagraphStyleNumberedList)
-        type = Worksheet::NumberedList;
-    else
-        return;
-    currentTextEditor()->paragraphStyleChanged(type);
 }
 
 void MainWindow::textAlignChanged(QAction *a)
@@ -206,7 +170,6 @@ void MainWindow::copyAvailableChanged(bool yes) {
 
 void MainWindow::currentCharFormatChanged(const QTextCharFormat &format)
 {
-    updateTextStyleActions(format.font());
 }
 
 void MainWindow::currentDocumentChanged(int index)
@@ -264,15 +227,51 @@ void MainWindow::on_actionTextItalic_triggered()
 
 void MainWindow::on_actionTextMath_triggered()
 {
-    QTextCharFormat fmt;
+    QTextCharFormat format;
     bool isMath = ui->actionTextMath->isChecked();
-    fmt.setFont(isMath ? currentDocument->codeFont : currentDocument->textFont);
-    fmt.setProperty(Worksheet::TextStyleId, isMath ? Worksheet::MathTextStyle : Worksheet::NormalTextStyle);
-    mergeFormatOnWordOrSelection(fmt);
+    format.setFontFamily(isMath ? "FreeMono" : "FreeSerif");
+    mergeFormatOnWordOrSelection(format);
 }
 
 void MainWindow::on_documentView_currentChanged(int index)
 {
     TextEditor *editor = (TextEditor*)ui->documentView->widget(index);
-    currentDocument = editor->getDocument();
+    currentDocument = editor->worksheet();
+}
+
+void MainWindow::on_actionInsertSection_triggered()
+{
+    QTextCursor cursor = currentTextEditor()->textCursor();
+    currentDocument->insertHeadingFrame(cursor, 1);
+}
+
+void MainWindow::on_actionInsertSubsection_triggered()
+{
+    QTextCursor cursor = currentTextEditor()->textCursor();
+    currentDocument->insertHeadingFrame(cursor, 2);
+}
+
+void MainWindow::on_actionInsertSubsubsection_triggered()
+{
+    QTextCursor cursor = currentTextEditor()->textCursor();
+    currentDocument->insertHeadingFrame(cursor, 3);
+}
+
+void MainWindow::on_actionInsertCAS_triggered()
+{
+    QTextCursor cursor = currentTextEditor()->textCursor();
+    currentDocument->insertCasInputFrame(cursor);
+}
+
+void MainWindow::on_actionInsertTable_triggered()
+{
+    TablePropertiesDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QTextCursor cursor = currentTextEditor()->textCursor();
+        int flags = dialog.tableFlags();
+        int rows = dialog.tableRows(), columns = dialog.tableColumns();
+        int headerRowCount = dialog.tableHeaderRows();
+        currentDocument->insertTable(cursor, rows, columns, headerRowCount, flags);
+    }
 }

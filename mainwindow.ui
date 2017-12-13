@@ -622,10 +622,10 @@
      <normaloff>:/icons/insert-cas.svg</normaloff>:/icons/insert-cas.svg</iconset>
    </property>
    <property name="text">
-    <string>CAS input</string>
+    <string>&amp;CAS entry</string>
    </property>
    <property name="toolTip">
-    <string>CAS input</string>
+    <string>Insert CAS entry</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -676,55 +676,26 @@
     <string>Ctrl+M</string>
    </property>
   </action>
-  <action name="actionParagraphStyleTextBody">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Paragraph</string>
-   </property>
-  </action>
-  <action name="actionParagraphStyleTitle">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Title</string>
-   </property>
-  </action>
-  <action name="actionParagraphStyleSection">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
+  <action name="actionInsertSection">
    <property name="text">
     <string>&amp;Section</string>
    </property>
-  </action>
-  <action name="actionParagraphStyleSubsection">
-   <property name="checkable">
-    <bool>true</bool>
+   <property name="toolTip">
+    <string>Insert section</string>
    </property>
-   <property name="text">
-    <string>S&amp;ubsection</string>
+   <property name="shortcut">
+    <string>Alt+Shift+1</string>
    </property>
   </action>
-  <action name="actionParagraphStyleList">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
+  <action name="actionInsertSubsection">
    <property name="text">
-    <string>&amp;List</string>
+    <string>Subsection</string>
    </property>
    <property name="toolTip">
-    <string>Itemized list</string>
+    <string>Insert subsection</string>
    </property>
-  </action>
-  <action name="actionParagraphStyleNumberedList">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Numbered list</string>
+   <property name="shortcut">
+    <string>Alt+Shift+2</string>
    </property>
   </action>
   <action name="actionNewLabel">
@@ -767,6 +738,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionInsertSubsubsection">
+   <property name="text">
+    <string>Subsubsection</string>
+   </property>
+   <property name="toolTip">
+    <string>Insert subsubsection</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+3</string>
    </property>
   </action>
  </widget>

@@ -28,34 +28,28 @@ class TextEditor : public QTextEdit
     Q_OBJECT
 
 public:
-    TextEditor(Worksheet *document, QWidget *parent = nullptr);
+    TextEditor(Worksheet *worksheet, QWidget *parent = nullptr);
     ~TextEditor();
-    inline Worksheet *getDocument() { return doc; }
-    void paragraphStyleChanged(int type);
+    inline Worksheet *worksheet() { return m_worksheet; }
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     bool cursorAtEndOfWord();
     QAction *createMenuAction(int index, QActionGroup *actionGroup);
 
 signals:
     void focusRequested(int index);
-    void canAddAuthor(bool yes);
-    void canAddAffiliation(bool yes);
-    void canAddEmail(bool yes);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
-    Worksheet *doc;
-    int lastBlockCount;
+    Worksheet *m_worksheet;
     QAction *menuAction;
-    static int unnamedCount;
     QActionGroup *activeDocuments;
+    static int unnamedCount;
 
 private slots:
     void menuActionTriggered(bool active);
-    void blockCountChanged(int count);
     void cursorMoved();
 
 };

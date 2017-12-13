@@ -32,8 +32,8 @@ SOURCES += \
     mathexpression.cpp \
     glyphs.cpp \
     texteditor.cpp \
-    textframegroup.cpp \
-    worksheet.cpp
+    worksheet.cpp \
+    tablepropertiesdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,11 +42,12 @@ HEADERS += \
     mathexpression.h \
     glyphs.h \
     texteditor.h \
-    textframegroup.h \
-    worksheet.h
+    worksheet.h \
+    tablepropertiesdialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    tablepropertiesdialog.ui
 
 RESOURCES += \
     resources.qrc

@@ -49,13 +49,11 @@ private:
     void addNewDocument();
     TextEditor *currentTextEditor();
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
-    void updateTextStyleActions(const QFont &font);
     bool cursorAt(QTextCursor::MoveOperation op);
     void loadFonts();
 
 private slots:
     void textAlignChanged(QAction *a);
-    void paragraphStyleChanged(QAction *a);
     void currentDocumentChanged(int index);
     void clipboardDataChanged();
     void copyAvailableChanged(bool yes);
@@ -73,6 +71,11 @@ private slots:
     void on_actionTextMath_triggered();
     void on_documentView_currentChanged(int index);
 
+    void on_actionInsertSection_triggered();
+    void on_actionInsertSubsection_triggered();
+    void on_actionInsertSubsubsection_triggered();
+    void on_actionInsertCAS_triggered();
+    void on_actionInsertTable_triggered();
 };
 
 #endif // MAINWINDOW_H
