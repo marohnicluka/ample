@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QString>
 #include <QFileInfo>
+#include <QTextDocumentFragment>
 #include "texteditor.h"
 
 int TextEditor::unnamedCount = 0;
@@ -115,10 +116,6 @@ void TextEditor::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 
 void TextEditor::cursorMoved()
 {
-    /*
-    if (textCursor().atStart() && doc->hasTitleFrame())
-        setTextCursor(doc->firstTitleCursorPosition());
-    */
 }
 
 bool TextEditor::cursorAtEndOfWord()

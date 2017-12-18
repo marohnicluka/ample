@@ -27,8 +27,6 @@
 #include "ui_mainwindow.h"
 #include "tablepropertiesdialog.h"
 
-using namespace giac;
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -62,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionParagraphStyle->setMenu(paragraphStyleMenu);
     paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
     paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
-    ui->textToolBar->insertWidget(ui->actionTextBold,paragraphStyleToolButton);
+    ui->textToolBar->insertWidget(ui->actionInsertCAS,paragraphStyleToolButton);
 
     activeDocumentsToolButton = new QToolButton(this);
     activeDocumentsMenu = new QMenu(this);
@@ -121,8 +119,7 @@ void MainWindow::loadFonts()
 
 void MainWindow::addNewDocument()
 {
-    context ct;
-    Worksheet *doc = new Worksheet(&ct, this);
+    Worksheet *doc = new Worksheet(this);
     TextEditor *editor = new TextEditor(doc, this);
     connect(editor, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(currentCharFormatChanged(QTextCharFormat)));

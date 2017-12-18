@@ -20,8 +20,8 @@
 
 #include <QMainWindow>
 #include <QToolButton>
+#include <QAction>
 #include "texteditor.h"
-#include <giac/giac.h>
 
 namespace Ui {
 

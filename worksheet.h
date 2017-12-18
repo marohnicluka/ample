@@ -28,10 +28,7 @@
 #include <QTextTable>
 #include <QList>
 #include <qmath.h>
-#include <giac/giac.h>
 #include "giachighlighter.h"
-
-using namespace giac;
 
 class GiacHighlighter;
 class DocumentCounter;
@@ -41,7 +38,6 @@ class Worksheet : public QTextDocument
     Q_OBJECT
 
 private:
-    const context *gcontext;
     GiacHighlighter *ghighlighter;
     QString m_fileName;
     QString m_language;
@@ -73,7 +69,7 @@ public:
 
     enum FrameSubtype { CasInput, CasOutput, Heading };
 
-    Worksheet(GIAC_CONTEXT, QObject *parent = 0);
+    Worksheet(QObject *parent = 0);
 
     void insertHeadingFrame(QTextCursor &cursor, int level);
     void insertCasInputFrame(QTextCursor &cursor);

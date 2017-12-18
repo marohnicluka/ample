@@ -198,8 +198,9 @@
    </attribute>
    <addaction name="actionTextBold"/>
    <addaction name="actionTextItalic"/>
-   <addaction name="actionClearFormatting"/>
+   <addaction name="actionTextUnderline"/>
    <addaction name="actionTextMath"/>
+   <addaction name="actionClearFormatting"/>
    <addaction name="separator"/>
    <addaction name="actionAlignLeft"/>
    <addaction name="actionAlignCenter"/>
@@ -210,8 +211,6 @@
    <addaction name="actionInsertGraph"/>
    <addaction name="actionInsertTable"/>
    <addaction name="actionInsertImage"/>
-   <addaction name="actionReference"/>
-   <addaction name="actionNewLabel"/>
    <addaction name="separator"/>
    <addaction name="actionSpellCheck"/>
   </widget>
@@ -586,21 +585,6 @@
     <string>Properties</string>
    </property>
   </action>
-  <action name="actionReference">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/insert-link.svg</normaloff>:/icons/insert-link.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Reference</string>
-   </property>
-   <property name="toolTip">
-    <string>Reference</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+R</string>
-   </property>
-  </action>
   <action name="actionSpellCheck">
    <property name="checkable">
     <bool>true</bool>
@@ -698,21 +682,6 @@
     <string>Alt+Shift+2</string>
    </property>
   </action>
-  <action name="actionNewLabel">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/label-new.svg</normaloff>:/icons/label-new.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Label</string>
-   </property>
-   <property name="toolTip">
-    <string>Label</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+L</string>
-   </property>
-  </action>
   <action name="actionSwitchDocuments">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -749,6 +718,24 @@
    </property>
    <property name="shortcut">
     <string>Alt+Shift+3</string>
+   </property>
+  </action>
+  <action name="actionTextUnderline">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/format-text-underline.svg</normaloff>:/icons/format-text-underline.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Underline</string>
+   </property>
+   <property name="toolTip">
+    <string>Underline</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
  </widget>

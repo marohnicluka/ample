@@ -33,7 +33,8 @@ SOURCES += \
     glyphs.cpp \
     texteditor.cpp \
     worksheet.cpp \
-    tablepropertiesdialog.cpp
+    tablepropertiesdialog.cpp \
+    equation.cpp \
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     glyphs.h \
     texteditor.h \
     worksheet.h \
-    tablepropertiesdialog.h
+    tablepropertiesdialog.h \
+    equation.h \
 
 FORMS += \
         mainwindow.ui \

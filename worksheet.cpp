@@ -22,11 +22,8 @@
 #include "worksheet.h"
 #include "glyphs.h"
 
-using namespace giac;
-
-Worksheet::Worksheet(GIAC_CONTEXT, QObject *parent) : QTextDocument(parent)
+Worksheet::Worksheet(QObject *parent) : QTextDocument(parent)
 {
-    gcontext = contextptr;
     ghighlighter = new GiacHighlighter(this);
     setModified(false);
     connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(on_modificationChanged(bool)));
@@ -160,7 +157,7 @@ void Worksheet::updateEnumeration(QObject *deletedObject)
             frame->setFrameFormat(frameFormat);
             QTextCursor cursor(frame->firstCursorPosition());
             QTextBlockFormat blockFormat = cursor.blockFormat();
-            number += Glyphs::emQuad();
+            number += Glyphs::emQuadSpace();
             qreal indent = QFontMetrics(cursor.blockCharFormat().font()).width(number);
             blockFormat.setTextIndent(indent);
             cursor.setBlockFormat(blockFormat);
@@ -171,24 +168,29 @@ void Worksheet::updateEnumeration(QObject *deletedObject)
 void Worksheet::insertTable(QTextCursor &cursor, int rows, int columns, int headerRowCount, int flags)
 {
     QTextTableFormat tableFormat;
+    tableFormat.setPosition(QTextFrameFormat::FloatRight);
     tableFormat.setAlignment(Qt::AlignCenter);
     tableFormat.setCellPadding(6);
     tableFormat.setCellSpacing(0);
-    tableFormat.setBorder(2.0);
-    tableFormat.setBorderBrush(QBrush(Qt::gray));
     tableFormat.setProperty(Flags, flags);
     tableFormat.setHeaderRowCount(headerRowCount);
     QTextTable *table = cursor.insertTable(
                 rows, columns, tableFormat);
-    for (int i = headerRowCount; i < rows; ++i)
+    for (int i = 0; i < rows; ++i)
     {
         for (int j = 0; j < columns; ++j)
         {
             QTextTableCell cell = table->cellAt(i, j);
             QTextCharFormat cellFormat = cell.format();
-            cellFormat.setVerticalAlignment(QTextCharFormat::AlignMiddle);
-            if ((flags & Worksheet::Numeric) != 0)
-                cellFormat.setFontFamily("FreeSans");
+            if (i < headerRowCount) {
+                cellFormat.setFontWeight(QFont::Bold);
+                cellFormat.setFontFamily("LiberationSans");
+            }
+            else {
+                cellFormat.setVerticalAlignment(QTextCharFormat::AlignMiddle);
+                if ((flags & Worksheet::Numeric) != 0)
+                    cellFormat.setFontFamily("FreeSans");
+            }
             cell.setFormat(cellFormat);
         }
     }
