@@ -29,23 +29,21 @@ SOURCES += \
         mainwindow.cpp \
     giachighlighter.cpp \
     mathtextobject.cpp \
-    mathexpression.cpp \
-    glyphs.cpp \
     texteditor.cpp \
     worksheet.cpp \
     tablepropertiesdialog.cpp \
-    equation.cpp \
+    qgen.cpp \
+    mathglyphs.cpp
 
 HEADERS += \
         mainwindow.h \
     giachighlighter.h \
     mathtextobject.h \
-    mathexpression.h \
-    glyphs.h \
     texteditor.h \
     worksheet.h \
     tablepropertiesdialog.h \
-    equation.h \
+    qgen.h \
+    mathglyphs.h
 
 FORMS += \
         mainwindow.ui \

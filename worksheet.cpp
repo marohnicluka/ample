@@ -20,7 +20,7 @@
 #include <QTextLength>
 #include <QDebug>
 #include "worksheet.h"
-#include "glyphs.h"
+#include "mathglyphs.h"
 
 Worksheet::Worksheet(QObject *parent) : QTextDocument(parent)
 {
@@ -157,7 +157,7 @@ void Worksheet::updateEnumeration(QObject *deletedObject)
             frame->setFrameFormat(frameFormat);
             QTextCursor cursor(frame->firstCursorPosition());
             QTextBlockFormat blockFormat = cursor.blockFormat();
-            number += Glyphs::emQuadSpace();
+            number += MathGlyphs::emQuadSpace();
             qreal indent = QFontMetrics(cursor.blockCharFormat().font()).width(number);
             blockFormat.setTextIndent(indent);
             cursor.setBlockFormat(blockFormat);

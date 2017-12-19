@@ -26,14 +26,14 @@
      inkscape:window-width="1366"
      inkscape:window-height="701"
      id="namedview54"
-     showgrid="true"
+     showgrid="false"
      inkscape:zoom="19.666667"
      inkscape:cx="12"
-     inkscape:cy="12"
+     inkscape:cy="9.9661017"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g4239">
+     inkscape:current-layer="layer1-3">
     <inkscape:grid
        type="xygrid"
        id="grid72" />
@@ -293,7 +293,7 @@
        id="linearGradient3167"
        xlink:href="#linearGradient7916"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.3077295,-0.29497944,0.3077295,0.29497944,25.944842,17.144019)" />
+       gradientTransform="matrix(0.3077295,-0.29497944,0.3077295,0.29497944,25.944842,16.698639)" />
     <linearGradient
        id="linearGradient7916">
       <stop
@@ -313,7 +313,32 @@
        id="linearGradient2419"
        xlink:href="#linearGradient7916"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.3077295,-0.29497944,0.3077295,0.29497944,25.634631,17.292858)" />
+       gradientTransform="matrix(0.3077295,-0.29497944,0.3077295,0.29497944,25.634631,16.817786)" />
+    <radialGradient
+       cx="23.070683"
+       cy="35.127438"
+       r="10.31934"
+       fx="23.070683"
+       fy="35.127438"
+       id="radialGradient2410"
+       xlink:href="#linearGradient2091"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.644777,0.00716345,-0.0057901,0.12093388,1.3315158,17.694357)" />
+    <linearGradient
+       id="linearGradient2091">
+      <stop
+         id="stop2093"
+         style="stop-color:#000000;stop-opacity:0.39215687"
+         offset="0" />
+      <stop
+         id="stop3169"
+         style="stop-color:#000000;stop-opacity:0.3137255"
+         offset="0.5" />
+      <stop
+         id="stop2095"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
   </defs>
   <metadata
      id="metadata3833">
@@ -330,11 +355,6 @@
   <g
      transform="matrix(1.6498774,0,0,1.7125204,-14.273915,-15.819188)"
      id="g4239">
-    <path
-       inkscape:connector-curvature="0"
-       d="m 22.262975,21.820971 a 6.2629757,1.4091694 0 0 1 -12.5259514,0 6.2629757,1.4091694 0 1 1 12.5259514,0 z"
-       id="path3843-1"
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.4;fill:url(#radialGradient5584);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate" />
     <g
        transform="translate(-25.02201,-0.941175)"
        id="layer1-3">
@@ -342,17 +362,24 @@
          inkscape:connector-curvature="0"
          d="m 46.52201,20.385514 -3.184991,-2.946158 3.06471,-3.086417 -2.209232,-1.911764 -3.154011,2.941176 -3.217945,-2.941176 -2.298531,1.982082 3.217944,3.003528 -3.217944,2.955566 2.298531,2.058824 3.214211,-3.088236 3.22168,3.088236 z"
          id="text1314"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:59.90107727px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3217);fill-opacity:1;stroke:url(#linearGradient5567);stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:59.90107727px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3217);fill-opacity:1;stroke:url(#linearGradient5567);stroke-width:0.59491687;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          inkscape:connector-curvature="0"
-         d="m 44.93385,14.418281 -0.647334,-0.627116 -3.264508,2.866366 -3.225731,-2.863558 -0.824531,0.673766"
+         d="m 45.51941,14.358892 -1.294532,-1.131873 -3.20287,2.985132 -3.25655,-2.982324 -1.369609,1.184721"
          id="path7076"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:59.90107727px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:none;stroke:url(#linearGradient3167);stroke-width:0.99999994;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:59.90107727px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:none;stroke:url(#linearGradient3167);stroke-width:0.59491688;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="ccccc" />
       <path
          inkscape:connector-curvature="0"
-         d="m 45.42749,20.732088 -2.99345,-2.713434 m -2.968147,0.03651 -2.804358,2.701545"
+         d="m 45.797317,20.52424 -3.085907,-2.8322 m -3.399612,0.03651 -3.081728,2.79062"
          id="path3165"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:59.90107727px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.4;fill:none;stroke:url(#linearGradient2419);stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:59.90107727px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.4;fill:none;stroke:url(#linearGradient2419);stroke-width:0.59491688;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="cccc" />
     </g>
+    <path
+       inkscape:connector-curvature="0"
+       d="m 23.198036,22.083934 a 7.2732689,1.3138576 0 1 1 -14.5465372,0 7.2732689,1.3138576 0 1 1 14.5465372,0 z"
+       id="path1361"
+       style="opacity:0.4;fill:url(#radialGradient2410);fill-opacity:1;stroke:none;stroke-width:0.63175815" />
   </g>
 </svg>

@@ -70,7 +70,7 @@ private:
 
 public:
     UnionOfRanges(int start, int length) { ranges.push_back(QPair<int, int>(start, start + length)); }
-    inline int nRanges() { return ranges.size(); }
+    int nRanges() { return ranges.size(); }
     void cutOut(int start, int length);
     bool nthRange(int n, int &start, int &length);
 };

@@ -15,9 +15,9 @@
  * along with Ample.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "glyphs.h"
+#include "mathglyphs.h"
 
-Glyphs::Glyphs(const QFont &font)
+MathGlyphs::MathGlyphs(const QFont &font)
     : QFontMetricsF(font)
 {
     smallGreekLetterNames << "alpha" << "beta" << "gamma" << "delta" << "epsilon" << "zeta" << "eta" << "theta"
@@ -28,7 +28,7 @@ Glyphs::Glyphs(const QFont &font)
                             << "Sigma" << "Tau" << "Upsilon" << "Phi" << "Chi" << "Psi" << "Omega";
 }
 
-bool Glyphs::isGreekLetter(const QString &name, QChar &chr)
+bool MathGlyphs::isGreekLetter(const QString &name, QChar &chr)
 {
     for (int i = 0; i < 24; ++i)
     {
@@ -50,7 +50,7 @@ bool Glyphs::isGreekLetter(const QString &name, QChar &chr)
     return false;
 }
 
-QChar Glyphs::letterToMath(QChar letter, LetterType letterType, bool bold, bool italic)
+QChar MathGlyphs::letterToMath(QChar letter, LetterType letterType, bool bold, bool italic)
 {
     ushort code, letterCode = letter.unicode();
     bool isCapital = letter.isUpper();
@@ -197,7 +197,7 @@ QChar Glyphs::letterToMath(QChar letter, LetterType letterType, bool bold, bool 
     return QChar(code);
 }
 
-QString Glyphs::digitsToSuperscript(const QString &digits)
+QString MathGlyphs::digitsToSuperscript(const QString &digits)
 {
     QString text("");
     QString::const_iterator it;
@@ -223,7 +223,7 @@ QString Glyphs::digitsToSuperscript(const QString &digits)
     return text;
 }
 
-QString Glyphs::digitsToSubscript(const QString &digits)
+QString MathGlyphs::digitsToSubscript(const QString &digits)
 {
     QString text("");
     QString::const_iterator it;
