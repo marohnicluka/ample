@@ -17,69 +17,59 @@
 
 #include "qgen.h"
 
-const QGen QGen::typeError(const QString &message)
+QGen::~QGen()
 {
-    giac::gen err(giac::gentypeerr(message.toStdString()));
-    return QGen(err, contextPtr);
 }
 
-QString QGen::paddedString(QString str, bool padLeft, bool padRight)
+QGen QGen::identifier(const QString &name, const giac::context *ctx)
 {
-    QChar space = MathGlyphs::mediumMathSpace();
-    QString padded(str);
-    if (padLeft)
-        padded.prepend(space);
-    if (padRight)
-        padded.append(space);
-    return padded;
+    return QGen(giac::identificateur(name.toStdString().c_str()), ctx);
 }
 
-QString QGen::toString()
+QGen QGen::string(const QString &text, const giac::context *ctx)
+{
+    return QGen(giac::string2gen(text.toStdString()), ctx);
+}
+
+QGen QGen::fraction(int numerator, int denominator, const giac::context *ctx)
+{
+    return QGen(giac::fraction(numerator, denominator), ctx);
+}
+
+QGen QGen::binomial(int n, int k, const giac::context *ctx)
+{
+    return QGen(giac::symbolic(giac::at_binomial, giac::makesequence(n, k)), ctx);
+}
+
+QGen QGen::plusInfinity(const giac::context *ctx)
+{
+    return QGen(giac::symbolic(giac::at_plus, giac::_IDNT_infinity()), ctx);
+}
+
+QGen QGen::minusInfinity(const giac::context *ctx)
+{
+    return QGen(giac::symbolic(giac::at_neg, giac::_IDNT_infinity()), ctx);
+}
+
+QGen QGen::makeSymb(const giac::unary_function_ptr *p, const giac::gen &args) const
+{
+    return QGen(giac::symbolic(p, args), contextPtr);
+}
+
+QString QGen::toString() const
 {
     std::stringstream ss;
     ss << (giac::gen)*this;
     return QString(ss.str().data());
 }
 
-QString QGen::numberToSuperscript(int integer, bool parens)
+bool QGen::hasMinusSign() const
 {
-    bool neg = integer < 0;
-    QString digits = QString::number(neg ? -integer : integer);
-    QString raised = MathGlyphs::digitsToSuperscript(digits);
-    if (neg)
-        raised.prepend(MathGlyphs::superscriptMinusSignSymbol());
-    if (parens)
-    {
-        raised.prepend(MathGlyphs::superscriptLeftParenthesisSymbol());
-        raised.append(MathGlyphs::superscriptRightParenthesisSymbol());
-    }
-    return raised;
+    return  (isSymbolic() && isMinus()) || (isInteger() && integerValue() < 0) ||
+            (isApproximate() && doubleValue() < 0) || (isFraction() && fractionNumerator() > 0);
 }
 
-QString QGen::numberToSubscript(int integer, bool parens)
-{
-    bool neg = integer < 0;
-    QString digits = QString::number(neg ? -integer : integer);
-    QString raised = MathGlyphs::digitsToSubscript(digits);
-    if (neg)
-        raised.prepend(MathGlyphs::subscriptMinusSignSymbol());
-    if (parens)
-    {
-        raised.prepend(MathGlyphs::subscriptLeftParenthesisSymbol());
-        raised.append(MathGlyphs::subscriptRightParenthesisSymbol());
-    }
-    return raised;
-}
-
-bool QGen::hasMinusSign()
-{
-    return  (isSymbolic() && isSommet(giac::at_neg)) ||
-            (isInteger() && integerValue() < 0) ||
-            (isApproximate() && doubleValue() < 0) ||
-            (isFraction() && !giac::is_positive(fractionNumerator(),contextPtr));
-}
-
-bool QGen::isElementaryFunction() {
+bool QGen::isElementaryFunction() const {
     return  isSommet(giac::at_exp) || isSommet(giac::at_ln) || isSommet(giac::at_log10) ||
             isSommet(giac::at_sin) || isSommet(giac::at_cos) || isSommet(giac::at_tan) ||
             isSommet(giac::at_sec) || isSommet(giac::at_csc) || isSommet(giac::at_cot) ||
@@ -89,44 +79,63 @@ bool QGen::isElementaryFunction() {
             isSommet(giac::at_acosh) || isSommet(giac::at_atanh);
 }
 
-bool QGen::isAssociativeOperation()
+bool QGen::isRational() const
 {
-    return  isSummation() || isProduct() || isUnion() || isIntersection() ||
-            isConjunction() || isDisjunction() || isExclusiveOr() || isComposition();
+    if (isReciprocal())
+        return true;
+    if (isProduct())
+    {
+        giac::const_iterateur it;
+        giac::vecteur &args(*_SYMBptr->feuille._VECTptr);
+        for (it = args.begin(); it != args.end(); ++it)
+        {
+            if (it->is_symb_of_sommet(giac::at_inv))
+                return true;
+        }
+    }
+    return false;
 }
 
-bool QGen::isUnaryOperation()
+bool QGen::isAssociativeOperator() const
 {
-    return  isNegation() || isMinusSign() || isDerivative() || isFactorial() ||
+    return  isSummation() || isProduct() || isUnion() || isIntersection() ||
+            isConjunction() || isDisjunction() || isExclusiveOr() || isComposition() ||
+            isHadamardSummation() || isHadamardProduct() || isHadamardDifference();
+}
+
+bool QGen::isUnaryOperator() const
+{
+    return  isNegation() || isMinus() || isDerivative() || isFactorial() ||
             isIntegral() || isReciprocal() || isIncrement() || isDecrement();
 }
 
-bool QGen::isBinaryOperation()
+bool QGen::isBinaryOperator() const
 {
     return  isPower() || isEqual() || isDifferent() || isLessThan() || isGreaterThan() ||
-            isLessThanOrEqualTo() || isGreaterThanOrEqualTo() || isSetMinus() ||
-            isDefinition() || isCompositionPower() || isCrossProduct();
+            isLessThanOrEqualTo() || isGreaterThanOrEqualTo() || isSetDifference() || isDefinition() ||
+            isCompositionPower() || isCrossProduct() || isHadamardPower() || isHadamardDivision();
 }
 
-bool QGen::isRelation()
+bool QGen::isInequalityOperator() const
 {
-    return  isEquality() || isLessThan() || isGreaterThan() ||
-            isLessThanOrEqualTo() || isGreaterThanOrEqualTo();
+    return  isEquation() || isLessThan() || isGreaterThan() || isLessThanOrEqualTo() || isGreaterThanOrEqualTo();
 }
 
-QGen::Vector QGen::assocOperands()
+QGen::Vector QGen::flattenOperands() const
 {
+    Q_ASSERT(isSymbolic());
     Vector operands;
     QGen feuille = getFeuille();
     if (!feuille.isVector())
         operands.push_back(feuille);
     else
     {
+        Vector feuilleVector = feuille.toVector();
         Vector::iterator it;
-        for (int i = 0 ; i < feuille.vectorLength(); ++i) {
-            QGen operand = feuille.getOperand(i);
+        for (int i = 0 ; i < feuilleVector.length(); ++i) {
+            QGen operand = feuilleVector.at(i);
             if (operand.isSommet(getSommet())) {
-                Vector subOperands = operand.assocOperands();
+                Vector subOperands = operand.flattenOperands();
                 for (it = subOperands.begin(); it != subOperands.end(); ++it)
                     operands.push_back(*it);
             }
@@ -136,222 +145,81 @@ QGen::Vector QGen::assocOperands()
     return operands;
 }
 
-QGen QGen::getOperand(int n)
+QGen::Vector QGen::toVector() const
 {
-    QGen operands(getFeuille(), contextPtr);
-    if (operands.isVector())
+    Vector vector;
+    if (isVector())
     {
-        Q_ASSERT(operands.vectorLength() > n);
-        QGen operand(operands.toVector().at(n), contextPtr);
-        return operand;
+        giac::const_iterateur it;
+        for (it = _VECTptr->begin(); it != _VECTptr->end(); ++it)
+            vector.append(QGen(*it, contextPtr));
     }
-    Q_ASSERT(n == 0);
-    return operands;
+    return vector;
 }
 
-void QGen::render()
+qreal QGen::approximateValue() const
 {
-    if (isString())
-        renderString();
-    else if (isExplicitNumber())
-        renderNumber();
-    else if (isIdentifier())
-        renderIdentifier();
-    else if (isFunction())
-        renderFunction();
-    else if (isModular())
-        renderModulo();
-    else if (isMap())
-        renderMap();
-    else if (isVector())
-        renderVector();
-    else if (isSymbolic())
-        renderSymbolic();
-    else
-        putText(toString());
+    giac::gen e(giac::_evalf(*this, contextPtr));
+    return e.is_approx() ? e.DOUBLE_val() : 0;
 }
 
-QPointF QGen::putText(QString text, QPointF where)
+bool QGen::getModularComponents(QGen &value, QGen &modulus) const
 {
-    QPainter painter();
-    painter.drawText(QPointF(where.x()-glyphs.leftBearing(*text.begin()),where.y()), text);
-    return QPointF(where.x() + glyphs.boundingRect(text).width(), where.y());
+    if (!isModular())
+        return false;
+    value = *_MODptr;
+    modulus = *(_MODptr + 1);
+    return true;
 }
 
-QPicture QGen::renderString()
+QPicture QGen::toPicture(const QString &family, int size) const
 {
-    Q_ASSERT(isString());
-    QString text(stringValue());
-    text.prepend(MathGlyphs::leftDoubleQuotationMarkSymbol());
-    text.append(MathGlyphs::rightDoubleQuotationMarkSymbol());
-    putText(text);
 }
 
-QPicture QGen::renderNumber()
+giac::gen QGen::seq(const giac::gen &g1, const giac::gen &g2) const
 {
-    if (isFraction())
-        renderFraction(fractionNumerator(), fractionDenominator());
-    else
-    {
-        QString text = toString(absoluteValue());
-        int index;
-        if ((index = text.indexOf("e")) >= 0)
-        {
-            QString mantissa = text.left(index);
-            QString exponent = text.mid(index + 1);
-            bool negativeExponent = exponent.at(0) == '-';
-            if (negativeExponent)
-                exponent = exponent.mid(1);
-            text = mantissa;
-            text.append(paddedString(MathGlyphs::multiplicationSignSymbol()));
-            QString exponentDigits = glyphs.digitsToSuperscript(exponent);
-            QString sign = negativeExponent ? QString(MathGlyphs::superscriptMinusSignSymbol()) : "";
-            text.append("10" + sign + exponentDigits);
-        }
-        if (isNegative())
-            text.prepend(MathGlyphs::minusSignSymbol());
-        putText(text);
-    }
+    return giac::makesequence(g1, g2);
 }
 
-QPicture QGen::renderIdentifier()
+giac::gen QGen::seq(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3) const
 {
-    Q_ASSERT(isIdentifier());
-    giac::identificateur ident(*expression._IDNTptr);
-    QString symbol;
-    if (ident == giac::_IDNT_infinity())
-        symbol = QString(MathGlyphs::infinitySymbol());
-    else if (ident == giac::_IDNT_undef())
-        symbol = tr("undefined");
-    else
-    {
-        QString text = toString();
-        if (text == "euler_gamma")
-            symbol = QString(MathGlyphs::smallGreekGammaSymbol());
-        else
-        {
-            bool italic = text != "pi";
-            bool bold = false;
-            if (text.startsWith(' '))
-            {
-                text = text.mid(1);
-                bold = true;
-            }
-            QChar greekLetter;
-            if (glyphs.isGreekLetter(text, greekLetter))
-                symbol = MathGlyphs::letterToMath(greekLetter, MathGlyphs::Greek, bold, italic);
-            else
-            {
-                QString::iterator it;
-                for (it = text.begin(); it != text.end(); ++it)
-                {
-                    if (it->isLetter())
-                        symbol.append(MathGlyphs::letterToMath(*it, MathGlyphs::Serif, bold, italic));
-                    else
-                        symbol.append(*it);
-                }
-            }
-        }
-    }
-    putText(symbol);
+    return giac::makesequence(g1, g2, g3);
 }
 
-QPicture QGen::renderFunction(int exponent)
+giac::gen QGen::seq(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3, const giac::gen &g4) const
 {
-    Q_ASSERT(isSymbolic());
-    giac::gen arg(getFeuille());
-    bool noParens = isElementaryFunction() &&
-            (isExplicitNumber(arg) || isIdentifier(arg) || isSommet(argiac::at_abs));
-    QString symbol = sommetName();
-    QString digits("");
-    if (symbol.length() == 1)
-        symbol = QString(MathGlyphs::letterToMath(*symbol.begin(), MathGlyphs::Serif, false, true));
-    if (exponent > 0)
-        digits = MathGlyphs::digitsToSuperscript(QString::number(exponent));
-    symbol += digits;
-    symbol.append(MathGlyphs::functionApplicationSpace());
-    QPointF where = putText(symbol);
-    QGen argument(arcontextptr, fontFamily, fontSize);
-    if (!noParens)
-        argument.setBracketType(Parenthesis);
-    argument.render();
-    QPainter painter(this);
-    painter.drawPicture(where, argument);
+    return giac::makesequence(g1, g2, g3, g4);
 }
 
-QPicture QGen::renderModulo()
+QGen QGen::derive(const QGen &var, int n) const
 {
-    QGen valueSymbol(*expression._MODptr, contextPtr, fontFamily, fontSize);
-    QGen modulusSymbol(*(expression._MODptr + 1), contextPtr, fontFamily, fontSize);
-    valueSymbol.render();
-    modulusSymbol.setBracketType(Parenthesis);
-    modulusSymbol.render();
-    QPointF where(0.0,0.0);
-    painter.drawPicture(where, valueSymbol);
-    where.setX(where.x() + valueSymbol.width());
-    where = putText(" (mod ", where);
-    painter.drawPicture(where, modulusSymbol);
-    where.setX(where.x() + modulusSymbol.width());
-    putText(")", where);
+    return QGen(giac::_derive(seq(*this, var, giac::gen(n)), contextPtr), contextPtr);
 }
 
-QPicture QGen::renderMap()
+QGen QGen::functionalDerive(const QGen &var) const
 {
-
+    return QGen(giac::_function_diff(seq(*this, var), contextPtr), contextPtr);
 }
 
-QPicture QGen::renderVector()
+QGen QGen::integrate(const QGen &var, const QGen &a, const QGen &b, bool approx) const
 {
-    Q_ASSERT(isVector());
-    if (isPolynomialVector())
-    {
-
-    }
-    else if (isMatrixVector() || isMatrix())
-    {
-
-    }
-    else if (isAssumeVector())
-    {
-
-    }
-    else
-    {
-
-    }
+    return QGen(giac::_integrate(seq(*this, var, a, b), contextPtr), contextPtr);
 }
 
-QPicture QGen::renderSymbolic()
+QGen QGen::limit(const QGen &var, const QGen &dest, int dir) const
 {
-    Q_ASSERT(isSymbolic());
+    giac::gen args = seq(*this, var, dest);
+    if (dir != 0)
+        args._VECTptr->push_back(dir);
+    return QGen(giac::_limit(args, contextPtr), contextPtr);
 }
 
-QPicture QGen::renderUnaryOperation()
+QGen QGen::solve(const QGen &unknown) const
 {
-
+    return QGen(giac::_solve(seq(*this, unknown), contextPtr));
 }
 
-QPicture QGen::renderBinaryOperation()
+QGen QGen::approxSolve(const QGen &unknown, const QGen &guess) const
 {
-
-}
-
-QPicture QGen::renderAssociativeOperation()
-{
-
-}
-
-QPicture QGen::renderFraction(const QGen &numerator, const QGen &denominator)
-{
-
-}
-
-QPicture QGen::renderPower(const QGen &base, const QGen &exponent)
-{
-
-}
-
-QPicture QGen::renderRoot(const QGen &argument, int degree)
-{
-
+    return QGen(giac::_fsolve(seq(*this, unknown, guess), contextPtr));
 }

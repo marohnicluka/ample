@@ -33,7 +33,8 @@ SOURCES += \
     worksheet.cpp \
     tablepropertiesdialog.cpp \
     qgen.cpp \
-    mathglyphs.cpp
+    mathglyphs.cpp \
+    qgenrenderer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     worksheet.h \
     tablepropertiesdialog.h \
     qgen.h \
-    mathglyphs.h
+    mathglyphs.h \
+    qgenrenderer.h
 
 FORMS += \
         mainwindow.ui \

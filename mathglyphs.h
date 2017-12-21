@@ -74,6 +74,7 @@ public:
     static QChar squareRootSymbol()                      { return QChar(0x221a); }
     static QChar logicalAndSymbol()                      { return QChar(0x2227); }
     static QChar logicalOrSymbol()                       { return QChar(0x2228); }
+    static QChar logicalXorSymbol()                      { return QChar(0x22BB); }
     static QChar intersectionSymbol()                    { return QChar(0x2229); }
     static QChar unionSymbol()                           { return QChar(0x222a); }
     static QChar lessThanOrEqualToSymbol()               { return QChar(0x2264); }
@@ -88,6 +89,7 @@ public:
     static QChar doublePrimeSymbol()                     { return QChar(0x2033); }
     static QChar triplePrimeSymbol()                     { return QChar(0x2034); }
     static QChar ratioSymbol()                           { return QChar(0x2236); }
+    static QChar circledDivisionSlashSymbol()            { return QChar(0x2298); }
 
     // special symbols
     static QChar emptySetSymbol()                        { return QChar(0x2205); }
