@@ -22,6 +22,7 @@
 
 #include <QPicture>
 #include <QStringList>
+#include <QMap>
 #include <sstream>
 #include <giac/config.h>
 #include <giac/giac.h>
@@ -31,60 +32,82 @@ typedef giac::unary_function_ptr GiacFunctionPointer;
 
 class QGen : public giac::gen
 {
-
 public:
     typedef QList<QGen> Vector;
-    enum LimitDirectionType
-    {
-        FromLeft = -1,
-        FromRight = 1
-    };
 
 private:
+    struct UserDefinedOperator
+    {
+        QString symbol;
+        bool isRelation;
+        bool isAssociative;
+        bool isCommutative;
+    };
 
-    giac::gen qString2gen(const QString &str) const { return giac::gen(str.toStdString().c_str(), contextPtr); }
+    static QMap<QString, UserDefinedOperator> userDefinedOperators;
+    static bool findUserDefinedOperator(const QString &name, UserDefinedOperator &properties);
 
-    giac::gen seq(const giac::gen &g1, const giac::gen &g2) const;
-    giac::gen seq(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3) const;
-    giac::gen seq(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3, const giac::gen &g4) const;
+    static giac::gen seq(const giac::gen &g1, const giac::gen &g2);
+    static giac::gen seq(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3);
+    static giac::gen seq(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3, const giac::gen &g4);
 
-    QGen undefined() const { return QGen(giac::undef, contextPtr); }
+    static giac::gen vec(const giac::gen &g);
+    static giac::gen vec(const giac::gen &g1, const giac::gen &g2);
+    static giac::gen vec(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3);
+    static giac::gen vec(const giac::gen &g1, const giac::gen &g2, const giac::gen &g3, const giac::gen &g4);
+
+    QGen undefined() const { return QGen(giac::undef, context); }
     QGen makeSymb(const giac::unary_function_ptr *p, const giac::gen &args) const;
-    Vector flattenOperands() const;
+    VectorOperator flattenOperands() const;
 
 public:
-    const giac::context *contextPtr;
+    enum InequationType
+    {
+        None, LessThan, GreaterThan, LessThanOrEqualTo, GreaterThanOrEqualTo
+    };
 
-    static QGen identifier(const QString &name, const giac::context *ctx);
-    static QGen string(const QString &text, const giac::context *ctx);
-    static QGen fraction(int numerator, int denominator, const giac::context *ctx);
-    static QGen binomial(int n, int k, const giac::context *ctx);
-    static QGen plusInfinity(const giac::context *ctx);
-    static QGen minusInfinity(const giac::context *ctx);
+    enum OperatorClass
+    {
+        Associative = 1, Unary = 2, Binary = 3, Ternary = 4, Other = 5
+    };
 
-    QGen(const giac::context *ctx = 0)
+    const giac::context *context;
+
+    static QGen identifier(const QString &name, const giac::context *ctx = giac::context0);
+    static QGen string(const QString &text, const giac::context *ctx = giac::context0);
+    static QGen fraction(int numerator, int denominator, const giac::context *ctx = giac::context0);
+    static QGen binomial(const QGen &n, const QGen &k, const giac::context *ctx = giac::context0);
+    static QGen plusInfinity(const giac::context *ctx = giac::context0);
+    static QGen minusInfinity(const giac::context *ctx = giac::context0);
+    static bool defineBinaryOperator(const QString &name, const QString &symbol,
+                                     const QGen &realFunction, bool checkProperties,
+                                     const giac::context *ctx = giac::context0);
+    static bool defineBinaryRelation(const QString &name, const QString &symbol,
+                                     const QGen &booleanFunction, const giac::context *ctx = giac::context0);
+
+    QGen(const giac::context *ctx = giac::context0)
         : giac::gen(0)
-        , contextPtr(ctx) { }
+        , context(ctx) { }
 
     QGen(const QGen &e)
         : giac::gen(e)
-        , contextPtr(e.contextPtr) { }
+        , context(e.context) { }
 
-    QGen(const giac::gen &e, const giac::context *ctx = 0)
+    QGen(const giac::gen &e, const giac::context *ctx = giac::context0)
         : giac::gen(e)
-        , contextPtr(ctx) { }
+        , context(ctx) { }
 
-    QGen(const QString &text, const giac::context *ctx = 0)
+    QGen(const QString &text, const giac::context *ctx = giac::context0)
         : giac::gen(text.toStdString().c_str(), ctx)
-        , contextPtr(ctx) { }
+        , context(ctx) { }
 
-    QGen(int value, const giac::context *ctx = 0)
+    QGen(int value, const giac::context *ctx = giac::context0)
         : giac::gen(value)
-        , contextPtr(ctx) { }
+        , context(ctx) { }
 
-    QGen(qreal value, const giac::context *ctx = 0)
+    QGen(qreal value, const giac::context *ctx = giac::context0)
         : giac::gen(value)
-        , contextPtr(ctx) { }
+        , context(ctx) { }
 
     ~QGen();
 
@@ -94,7 +117,14 @@ public:
     QPicture toPicture(const QString &family, int size) const;
 
     bool isString() const { return type == giac::_STRNG; }
+    bool isUnaryFunction(const GiacFunctionPointer *f) const { return is_symb_of_sommet(f); }
+    GiacFunctionPointer *unaryFunctionPointer() const { return isSymbolic() ? &_SYMBptr->sommet : NULL; }
+    QString unaryFunctionName() const { return isSymbolic() ? unaryFunctionPointer()->ptr()->print(context) : ""; }
+    QGen unaryFunctionArgument() const { return isSymbolic() ? QGen(_SYMBptr->feuille, context) : undefined(); }
+
     bool isIdentifier() const { return type == giac::_IDNT; }
+    bool isAutoGeneratedIdentifier() const { return isIdentifier() && toString().startsWith(" "); }
+    bool isDoubleLetterIdentifier() const;
     bool isIdentifierWithName(const QString &name) const { return is_identificateur_with_name(name.toStdString().c_str()); }
     bool isVector() const { return type == giac::_VECT; }
     bool isVectorOfLength(int length) const { return is_vector_of_size(length); }
@@ -107,204 +137,161 @@ public:
     bool isSymbolic() const { return type == giac::_SYMB; }
     bool isMap() const { return type == giac::_MAP; }
     bool isFraction() const { return type == giac::_FRAC; }
+    bool isFraction(QGen &numerator, QGen &denominator) const;
     bool isConstant() const { return is_constant() || isFraction(); }
     bool isMultiPrecisionFloat() const { return type == giac::_REAL; }
     bool isFloat() const { return type == giac::_FLOAT_; }
     bool isDouble() const { return type == giac::_DOUBLE_; }
     bool isComplex() const { return type == giac::_CPLX; }
+    bool isComplex(QGen &realPart, QGen &imaginaryPart) const;
     bool isInteger() const { return is_integer(); }
+    bool isBoolean() const { return type == giac::_INT_ && subtype == giac::_INT_BOOLEAN; }
+    bool isRational() const { return isFraction() && _FRACptr->num.is_integer() && _FRACptr->den.is_integer(); }
     bool isExact() const { return giac::is_exact(*this); }
-    bool isApproximate() const { return is_approx(); }
     bool isModular() const { return type == giac::_MOD; }
+    bool isModular(QGen &value, QGen &modulus) const;
     bool isMatrix() const { return isMatrixVector() || giac::ckmatrix(*this); }
     bool isSparsePolynomial() const { return type == giac::_SPOL1; }
-    bool isFunction() const { return type == giac::_FUNC; }
-    bool isElementaryFunction() const;
+    bool isFunction() const { return type == giac::_FUNC; || isUnaryFunction(giac::at_program); }
     bool isAlgebraicExtension() const { return type == giac::_EXT; }
     bool isUserDefined() const { return type == giac::_USER; }
     bool isUndefined() const { return giac::is_undef(*this); }
     bool isInfinite() const { return giac::is_inf(*this); }
-    bool isZero() const { return giac::is_zero(*this, contextPtr); }
+    bool isZero() const { return giac::is_zero(*this, context); }
     bool isExactlyZero() const { return giac::is_exactly_zero(*this); }
-    bool isVectorOfZeros() const { return isVector() ? giac::is_zero__VECT(*this->_VECTptr, contextPtr) : false; }
+    bool isVectorOfZeros() const { return isVector() ? giac::is_zero__VECT(*this->_VECTptr, context) : false; }
     bool isOne() const { return giac::is_one(*this); }
     bool isMinusOne() const { return giac::is_minus_one(*this); }
-    bool isNonnegative() const { return giac::is_positive(*this, contextPtr); }
+    bool isEulerMascheroniConstant() const { return isIdentifier() && toString() == "euler_gamma"; }
+    bool isEulerNumber() const { return isIdentifier() && toString() == "e"; }
+    bool isPi() const { return isIdentifier() && *_IDNTptr == giac::_IDNT_pi(); }
+    bool isImaginaryUnit() const { return isIdentifier() && toString() == "i"; }
+    bool isNonnegative() const { return giac::is_positive(*this, context); }
     bool isNegative() const { return !isNonnegative(); }
-    bool isPositive() const { return giac::is_strictly_positive(*this, contextPtr); }
-    bool isRational() const;
-    bool hasMinusSign() const;
+    bool isPositive() const { return giac::is_strictly_positive(*this, context); }
+    bool isRationalExpression() const;
+    bool isRationalExpression(QGen &numerator, QGen &denominator) const;
+    bool isWellDefined() const { return !giac::has_inf_or_undef(*this); }
+    bool isElementary() const;
+    bool isMonolithic() const;
 
-    bool isSommet(const GiacFunctionPointer *f) const { return is_symb_of_sommet(f); }
-    GiacFunctionPointer *getSommet() const { return isSymbolic() ? &_SYMBptr->sommet : NULL; }
-    QString sommetName() const { return isSymbolic() ? getSommet()->ptr()->print(contextPtr) : ""; }
-    QGen getFeuille() const { return isSymbolic() ? QGen(_SYMBptr->feuille, contextPtr) : undefined(); }
+    bool isNegativeConstant() const;
+    bool elementaryNeedsArgumentBrackets() const;
 
-    bool isPolynomialRoot() const { return isSommet(giac::at_rootof); }
+    bool containsApproximateValue() const { return is_approx(); }
+    bool containsErrorMessage(QString &message) const;
+    bool containsImaginaryUnit() const { return giac::has_i(*this); }
 
-    bool isSummation() const { return isSommet(giac::at_plus); }
-    bool isHadamardSummation() const { return isSommet(giac::at_pointplus); }
-    bool isHadamardDifference() const { return isSommet(giac::at_pointminus); }
-    bool isProduct() const { return isSommet(giac::at_prod); }
-    bool isHadamardProduct() const { return isSommet(giac::at_pointprod); }
-    bool isPower() const { return isSommet(giac::at_pow); }
-    bool isHadamardPower() const { return isSommet(giac::at_pointpow); }
-    bool isReciprocal() const { return isSommet(giac::at_inv); }
-    bool isHadamardDivision() const { return isSommet(giac::at_pointdivision); }
-    bool isConjunction() const { return isSommet(giac::at_and); }
-    bool isDisjunction() const { return isSommet(giac::at_ou); }
-    bool isExclusiveOr() const { return isSommet(giac::at_xor); }
-    bool isNegation() const { return isSommet(giac::at_not); }
-    bool isMinus() const { return isSommet(giac::at_neg); }
-    bool isEqual() const { return isSommet(giac::at_same); }
-    bool isDifferent() const { return isSommet(giac::at_different); }
-    bool isLessThan() const { return isSommet(giac::at_inferieur_strict); }
-    bool isGreaterThan() const { return isSommet(giac::at_superieur_strict); }
-    bool isLessThanOrEqualTo() const { return isSommet(giac::at_inferieur_egal); }
-    bool isGreaterThanOrEqualTo() const { return isSommet(giac::at_superieur_egal); }
-    bool isIncrement() const { return isSommet(giac::at_increment); }
-    bool isDecrement() const { return isSommet(giac::at_decrement); }
-    bool isUnion() const { return isSommet(giac::at_union); }
-    bool isIntersection() const { return isSommet(giac::at_intersect); }
-    bool isSetDifference() const { return isSommet(giac::at_minus); }
-    bool isFactorial() const { return isSommet(giac::at_factorial); }
-    bool isDerivative() const { return isSommet(giac::at_derive); }
-    bool isIntegral() const { return isSommet(giac::at_integrate); }
-    bool isIfThenElse() const { return isSommet(giac::at_when); }
-    bool isDefinition() const { return isSommet(giac::at_sto); }
-    bool isComposition() const { return isSommet(giac::at_compose); }
-    bool isCompositionPower() const { return isSommet(giac::at_composepow); }
-    bool isEquation() const { return isSommet(giac::at_equal); }
-    bool isCrossProduct() const { return isSommet(giac::at_cross); }
-    bool isInterval() const { return isSommet(giac::at_interval); }
-    bool isBinomial() const { return isSommet(giac::at_binomial); }
-    bool isAbsoluteValue() const { return isSommet(giac::at_abs); }
+    bool isPolynomialRoot() const { return isUnaryFunction(giac::at_rootof); }
 
-    bool isUnaryOperator() const;
-    bool isBinaryOperator() const;
-    bool isAssociativeOperator() const;
-    bool isInequalityOperator() const;
+    // operators
+    bool isAssignmentOperator() const { return isUnaryFunction(giac::at_sto); }
+    bool isArrayAssignmentOperator() const { return isUnaryFunction(giac::at_array_sto); }
+    bool isAtOperator() const { return isUnaryFunction(giac::at_at); }
+    bool isSumOperator() const { return isUnaryFunction(giac::at_plus); }
+    bool isIncrementOperator() const { return isUnaryFunction(giac::at_increment); }
+    bool isDecrementOperator() const { return isUnaryFunction(giac::at_decrement); }
+    bool isHadamardSumOperator() const { return isUnaryFunction(giac::at_pointplus); }
+    bool isHadamardDifferenceOperator() const { return isUnaryFunction(giac::at_pointminus); }
+    bool isProductOperator() const { return isUnaryFunction(giac::at_prod); }
+    bool isAmpersandProductOperator() const { return isUnaryFunction(giac::at_ampersand_times); }
+    bool isHadamardProductOperator() const { return isUnaryFunction(giac::at_pointprod); }
+    bool isFactorialOperator() const { return isUnaryFunction(giac::at_factorial); }
+    bool isCrossProductOperator() const { return isUnaryFunction(giac::at_cross); }
+    bool isComposeOperator() const { return isUnaryFunction(giac::at_compose); }
+    bool isPowerOperator() const { return isUnaryFunction(giac::at_pow); }
+    bool isHadamardPowerOperator() const { return isUnaryFunction(giac::at_pointpow); }
+    bool isFunctionalPowerOperator() const { return isUnaryFunction(giac::at_composepow); }
+    bool isReciprocalOperator() const { return isUnaryFunction(giac::at_inv); }
+    bool isHadamardDivisionOperator() const { return isUnaryFunction(giac::at_pointdivision); }
+    bool isConjunctionOperator() const { return isUnaryFunction(giac::at_and); }
+    bool isDisjunctionOperator() const { return isUnaryFunction(giac::at_ou); }
+    bool isExclusiveOrOperator() const { return isUnaryFunction(giac::at_xor); }
+    bool isNegationOperator() const { return isUnaryFunction(giac::at_not); }
+    bool isBitwiseAndOperator() const { return isUnaryFunction(giac::at_bitand); }
+    bool isBitwiseOrOperator() const { return isUnaryFunction(giac::at_bitor); }
+    bool isBitwiseXorOperator() const { return isUnaryFunction(giac::at_bitxor); }
+    bool isComplexConjugateOperator() const { return isUnaryFunction(giac::at_conj); }
+    bool isMinusOperator() const { return isUnaryFunction(giac::at_neg); }
+    bool isTranspositionOperator() const { return isUnaryFunction(giac::at_tran); }
+    bool isUnionOperator() const { return isUnaryFunction(giac::at_union); }
+    bool isIntersectionOperator() const { return isUnaryFunction(giac::at_intersect); }
+    bool isSetDifferenceOperator() const { return isUnaryFunction(giac::at_minus); }
+    bool isElementOperator() const { return isUnaryFunction(giac::at_contains); }
+    bool isEqualOperator() const { return isUnaryFunction(giac::at_same); }
+    bool isNotEqualOperator() const { return isUnaryFunction(giac::at_different); }
+    bool isLessThanOperator() const { return isUnaryFunction(giac::at_inferieur_strict); }
+    bool isGreaterThanOperator() const { return isUnaryFunction(giac::at_superieur_strict); }
+    bool isLessThanOrEqualOperator() const { return isUnaryFunction(giac::at_inferieur_egal); }
+    bool isGreaterThanOrEqualOperator() const { return isUnaryFunction(giac::at_superieur_egal); }
+    bool isWhenOperator() const { return isUnaryFunction(giac::at_when); }
+    bool isIfThenElseOperator() const { return isUnaryFunction(giac::at_ifte); }
+    bool isUnitApplicationOperator() const { return isUnaryFunction(giac::at_unit); }
+    bool isUnitApplicationOperator(bool &hasConstant) const;
+    bool isFunctionApplicationOperator() const { return isUnaryFunction(giac::at_of); }
+    bool isFunctionApplicationOperator(QString &functionName, VectorOperator &arguments) const;
+    bool isMapsToOperator() const { return isUnaryFunction(giac::at_program); }
+    bool isMapsToOperator(VectorOperator &variables, QGen &expression) const;
+    bool isIntervalOperator() const { return isUnaryFunction(giac::at_interval); }
+    bool isIntervalOperator(QGen &lowerBound, QGen &upperBound) const;
+    bool isDerivativeOperator(bool simple) const;
+    bool isSequenceOperator() const { return isUnaryFunction(giac::at_dollar); }
+    bool isUserOperator() const { return dynamic_cast<const giac::unary_function_user *>(_SYMBptr->sommet.ptr()) != 0; }
+    bool isUserOperator(QString &name) const;
+
+    bool isBinomialCoefficient() const { return isUnaryFunction(giac::at_binomial); }
+    bool isBinomialCoefficient(int &n, int &k) const;
+    bool isAbsoluteValue() const { return isUnaryFunction(giac::at_abs); }
+    bool isEquation() const { return isUnaryFunction(giac::at_equal); }
+    bool isEquation(QGen &leftHandSide, QGen &rightHandSide) const;
+    bool isInequation() const;
+    InequationType isInequation(QGen &leftHandSide, QGen &rightHandSide) const;
+    bool isIntegral() const { return isUnaryFunction(giac::at_integrate); }
+    bool isIndefiniteIntegral(QGen &expression, QGen &variable) const;
+    bool isDefiniteIntegral(QGen &expression, QGen &variable, QGen &lowerBound, QGen &upperBound) const;
+
+    int operatorType(int &priority) const;
 
     int integerValue() const { return isInteger() ? this->val : 0; }
-    qreal doubleValue() const { return isApproximate() ? this->DOUBLE_val() : 0; }
+    qreal doubleValue() const { return isDouble() ? this->DOUBLE_val() : 0; }
     qreal approximateValue() const;
     QString stringValue() const { return isString() ? this->_STRNGptr->data() : ""; }
-    int fractionNumerator() const { return isFraction() ? _FRACptr->num.val : 0; }
-    int fractionDenominator() const { return isFraction() ? _FRACptr->den.val : 0; }
 
-    bool getModularComponents(QGen &value, QGen &modulus) const;
+    int argumentCount() const;
+    QGen firstArgument() const;
+    QGen secondArgument() const;
+    QGen thirdArgument() const;
+    VectorOperator associativeOperands() const;
 
-    QGen evaluate() { return QGen(giac::_eval(*this, contextPtr), contextPtr); }
+    QGen evaluate() const { return QGen(giac::_eval(*this, context), context); }
+    QGen simplify() const { return QGen(giac::_simplify(*this, context), context); }
 
-    Vector toVector() const;
-    int operandCount() const { return isSymbolic() && getFeuille().isVector() ? int(getFeuille().toVector().size()) : -1; }
+    VectorOperator toVector() const;
+    int length() const { return isVector() ? _VECTptr->size() : -1; }
+    int rows() const { return isMatrix() ? giac::_dim(*this, context)._VECTptr->front().val : -1; }
+    int columns() const { return isMatrix() ? giac::_dim(*this, context)._VECTptr->back().val : -1; }
+    QGen &toSequenceVector() { if (isVector()) this->operator =(change_subtype(giac::_SEQ__VECT)); return *this; }
+    QGen &toSetVector() { if (isVector()) this->operator =(change_subtype(giac::_SET__VECT)); return *this; }
+    QGen &toListVector() { if (isVector()) this->operator =(change_subtype(giac::_LIST__VECT)); return *this; }
+    QGen &toPolynomVector() { if (isVector()) this->operator =(change_subtype(giac::_POLY__VECT)); return *this; }
 
-    QGen operator +(const QGen &other) { return QGen((giac::gen)*this + other, contextPtr); }
-    QGen operator +(int other) { return QGen((giac::gen)*this + other, contextPtr); }
-    QGen operator +(qreal other) { return QGen((giac::gen)*this + other, contextPtr); }
+    QGen& operator =(const QGen &other) { ((giac::gen*)this)->operator =(other); context = other.context; return *this; }
+    QGen& operator +=(const QGen &other) { ((giac::gen*)this)->operator =(giac::operator +=(*this, other)); return *this; }
+    QGen& operator -=(const QGen &other) { ((giac::gen*)this)->operator =(giac::operator -=(*this, other)); return *this; }
 
-    QGen operator -(const QGen &other) { return QGen((giac::gen)*this - other, contextPtr); }
-    QGen operator -(int other) { return QGen((giac::gen)*this - other, contextPtr); }
-    QGen operator -(qreal other) { return QGen((giac::gen)*this - other, contextPtr); }
-
-    QGen operator *(const QGen &other) { return QGen((giac::gen)*this * other, contextPtr); }
-    QGen operator *(int other) { return QGen((giac::gen)*this * (giac::gen)other, contextPtr); }
-    QGen operator *(qreal other) { return QGen((giac::gen)*this * (giac::gen)other, contextPtr); }
-
-    QGen operator /(const QGen &other) { return QGen((giac::gen)*this / other, contextPtr); }
-    QGen operator /(int other) { return QGen((giac::gen)*this / other, contextPtr); }
-    QGen operator /(qreal other) { return QGen((giac::gen)*this / other, contextPtr); }
-
-    QGen operator &&(const QGen &other) { return QGen(giac::symbolic(giac::at_and, seq(*this, other)), contextPtr); }
-    QGen operator ||(const QGen &other) { return QGen(giac::symbolic(giac::at_ou, seq(*this, other)), contextPtr); }
-    QGen operator !() { return QGen(giac::symbolic(giac::at_not, *this), contextPtr); }
-
-    QGen& operator =(const QGen &other) { giac::gen::operator =(other); contextPtr = other.contextPtr; return *this; }
-    QGen& operator =(int number) { giac::gen::operator =(number); return *this; }
-    QGen& operator =(qreal number) { giac::gen::operator =(number); return *this; }
-    QGen& operator =(const QString &s) { giac::gen::operator =(qString2gen(s)); return *this; }
-
-    QGen& operator +=(const QGen &other) { giac::gen::operator =((giac::gen)*this + other); return *this; }
-    QGen& operator +=(int number) { giac::gen::operator =((giac::gen)*this + number); return *this; }
-    QGen& operator +=(qreal number) { giac::gen::operator =((giac::gen)*this + number); return *this; }
-
-    QGen& operator -=(const QGen &other) { giac::gen::operator =((giac::gen)*this - other); return *this; }
-    QGen& operator -=(int number) { giac::gen::operator =((giac::gen)*this - number); return *this; }
-    QGen& operator -=(qreal number) { giac::gen::operator =((giac::gen)*this - number); return *this; }
-
-    QGen& operator *=(const QGen &other) { giac::gen::operator =((giac::gen)*this * other); return *this; }
-    QGen& operator *=(int number) { giac::gen::operator =((giac::gen)*this * (giac::gen)number); return *this; }
-    QGen& operator *=(qreal number) { giac::gen::operator =((giac::gen)*this * (giac::gen)number); return *this; }
-
-    QGen& operator /=(const QGen &other) { giac::gen::operator =((giac::gen)*this / other); return *this; }
-    QGen& operator /=(int number) { giac::gen::operator =((giac::gen)*this / number); return *this; }
-    QGen& operator /=(qreal number) { giac::gen::operator =((giac::gen)*this / number); return *this; }
-
-    bool operator <(const QGen &other) { return giac::is_strictly_greater(other, *this, contextPtr); }
-    bool operator >(const QGen &other) { return giac::is_strictly_greater(*this, other, contextPtr); }
-    bool operator <=(const QGen &other) { return giac::is_greater(other, *this, contextPtr); }
-    bool operator >=(const QGen &other) { return giac::is_greater(*this, other, contextPtr); }
-
-    /*
-     * Binary operations
-     */
-
-    QGen makeUnion(const QGen &other) const { return makeSymb(giac::at_union, seq(*this, other)); }
-    QGen makeIntersection(const QGen &other) const { return makeSymb(giac::at_intersect, seq(*this, other)); }
-    QGen makeSetDifference(const QGen &other) const { return makeSymb(giac::at_minus, seq(*this, other)); }
-    QGen makeCrossProduct(const QGen &other) const { return makeSymb(giac::at_cross, seq(*this, other)); }
-    QGen makeInterval(const QGen &other) const { return makeSymb(giac::at_interval, seq(*this, other)); }
-    QGen makeBinomial(const QGen &other) const { return makeSymb(giac::at_binomial, seq(*this, other)); }
-    QGen makeEqualTo(const QGen &other) const { return makeSymb(giac::at_equal, seq(*this, other)); }
-    QGen makeLessThan(const QGen &other) const { return makeSymb(giac::at_inferieur_strict, seq(*this, other)); }
-    QGen makeGreaterThan(const QGen &other) const { return makeSymb(giac::at_superieur_strict, seq(*this, other)); }
-    QGen makeLessOrEqualTo(const QGen &other) const { return makeSymb(giac::at_inferieur_egal, seq(*this, other)); }
-    QGen makeGreaterOrEqualTo(const QGen &other) const { return makeSymb(giac::at_superieur_egal, seq(*this, other)); }
-    QGen makePower(const QGen &other) const { return makeSymb(giac::at_pow, seq(*this, other)); }
-    QGen makeCompositionPower(const QGen &other) const { return makeSymb(giac::at_composepow, seq(*this, other)); }
-    QGen makeComposition(const QGen &other) const { return makeSymb(giac::at_compose, seq(*this, other)); }
-
-    /*
-     * Unary operations
-     */
-
-    QGen makeRoot(int n) const { return makePower(QGen(makeSymb(giac::at_inv, n), contextPtr)); }
-    QGen makeSquareRoot() const { return makeRoot(2); }
-    QGen makeNegative() const { return makeSymb(giac::at_neg, *this); }
-    QGen makeFactorial() const { return makeSymb(giac::at_factorial, *this); }
-    QGen makeAbsoluteValue() const { return makeSymb(giac::at_abs, *this); }
-
-    /*
-     * Basic functions
-     */
-
-    // absolute value of this expression
-    QGen absoluteValue() const { return QGen(giac::abs(*this, contextPtr), contextPtr); }
-    // power for given exponent
-    QGen pow(const QGen &exponent) const { return QGen(giac::_pow(seq(*this, exponent), contextPtr), contextPtr); }
-    // n-th power
-    QGen pow(int n) const { return pow(QGen(giac::gen(n), contextPtr)); }
-
-    /*
-     * Equation and inequation solving
-     */
-
-    QGen solve(const QGen &unknown) const;
-    QGen approxSolve(const QGen &unknown, const QGen &guess) const;
-
-    /*
-     * Calculus functions
-     */
-
-    // n-th derivative w.r.t. var
-    QGen derive(const QGen &var, int n) const;
-    // function derivative w.r.t. var
-    QGen functionalDerive(const QGen &var) const;
-    // Riemann integral on [a,b] w.r.t. var
-    QGen integrate(const QGen &var, const QGen &a, const QGen &b, bool approx = false) const;
-    // limit when var->dest with optional direction (-1: from left, 1: from right)
-    QGen limit(const QGen &var, const QGen &dest, int dir = 0) const;
+    QGen operator ()(const QGen &g) const;
+    QGen operator ()(const QGen &g1, const QGen &g2) const;
+    QGen operator ()(const QGen &g1, const QGen &g2, const QGen &g3) const;
+    QGen operator ()(const QGen &g1, const QGen &g2, const QGen &g3, const QGen &g4) const;
+    QGen operator ()(const VectorOperator &arguments) const;
 };
 
+inline QGen operator +(const QGen &a, const QGen &b) { return QGen(giac::operator +(a, b), a.context); }
+inline QGen operator -(const QGen &a) { return QGen(giac::operator -(a), a.context); }
+inline QGen operator -(const QGen &a, const QGen &b) { return QGen(giac::operator -(a, b), a.context); }
+inline QGen operator *(const QGen &a, const QGen &b) { return QGen(giac::operator *(a, b), a.context); }
+inline QGen operator /(const QGen &a, const QGen &b) { return QGen(giac::operator /(a, b), a.context); }
+inline QGen operator &&(const QGen &a, const QGen &b) { return QGen(giac::operator &&(a, b), a.context); }
+inline QGen operator ||(const QGen &a, const QGen &b) { return QGen(giac::operator ||(a, b), a.context); }
 
 #endif // QGEN_H

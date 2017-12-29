@@ -17,184 +17,195 @@
 
 #include "mathglyphs.h"
 
-MathGlyphs::MathGlyphs(const QFont &font)
-    : QFontMetricsF(font)
+QStringList MathGlyphs::smallGreekLetterNames = QStringList()
+        << "alpha" << "beta" << "gamma" << "delta" << "epsilon" << "zeta" << "eta" << "theta"
+        << "iota" << "kappa" << "lambda" << "mu" << "nu" << "xi" << "omicron" << "pi" << "rho"
+        << "sigma" << "tau" << "upsilon" << "phi" << "chi" << "psi" << "omega";
+
+QStringList MathGlyphs::capitalGreekLetterNames = QStringList()
+        << "Alpha" << "Beta" << "Gamma" << "Delta" << "Epsilon" << "Zeta" << "Eta" << "Theta"
+        << "Iota" << "Kappa" << "Lambda" << "Mu" << "Nu" << "Xi" << "Omicron" << "Pi" << "Rho"
+        << "Sigma" << "Tau" << "Upsilon" << "Phi" << "Chi" << "Psi" << "Omega";
+
+QString MathGlyphs::encodeUcs4(uint ucs4)
 {
-    smallGreekLetterNames << "alpha" << "beta" << "gamma" << "delta" << "epsilon" << "zeta" << "eta" << "theta"
-                          << "iota" << "kappa" << "lambda" << "mu" << "nu" << "xi" << "omicron" << "pi" << "rho"
-                          << "sigma" << "tau" << "upsilon" << "phi" << "chi" << "psi" << "omega";
-    capitalGreekLetterNames << "Alpha" << "Beta" << "Gamma" << "Delta" << "Epsilon" << "Zeta" << "Eta" << "Theta"
-                            << "Iota" << "Kappa" << "Lambda" << "Mu" << "Nu" << "Xi" << "Omicron" << "Pi" << "Rho"
-                            << "Sigma" << "Tau" << "Upsilon" << "Phi" << "Chi" << "Psi" << "Omega";
+    if (QChar::requiresSurrogates(ucs4))
+    {
+        QChar chars[2];
+        chars[0] = QChar::highSurrogate(ucs4);
+        chars[1] = QChar::lowSurrogate(ucs4);
+        return QString(chars, 2);
+    }
+    else return QChar(ucs4);
 }
 
-bool MathGlyphs::isGreekLetter(const QString &name, QChar &chr)
+bool MathGlyphs::getGreekLetter(const QString &name, QChar &letter)
 {
-    for (int i = 0; i < 24; ++i)
+    for (ushort i = 0; i < 24; ++i)
     {
         if (name == smallGreekLetterNames.at(i))
         {
             if (i > 16)
                 ++i;
-            chr = QChar(0x03b1 + i);
+            letter = QChar(i + 945);
             return true;
         }
         if (name == capitalGreekLetterNames.at(i))
         {
             if (i > 16)
                 ++i;
-            chr = QChar(0x0391 + i);
+            letter = QChar(i + 913);
             return true;
         }
     }
     return false;
 }
 
-QChar MathGlyphs::letterToMath(QChar letter, LetterType letterType, bool bold, bool italic)
+QString MathGlyphs::letterToMath(QChar letter, LetterType letterType, bool bold, bool italic)
 {
-    ushort code, letterCode = letter.unicode();
+    uint code, letterCode = letter.unicode();
     bool isCapital = letter.isUpper();
     if (letterType == Greek)
-        letterCode -= isCapital ? 0x0391 : 0x03b1;
+        letterCode -= isCapital ? 913 : 945;
     else
-        letterCode -= isCapital ? 0x0041 : 0x0061;
+        letterCode -= isCapital ? 65 : 97;
     code = letterCode;
     switch (letterType)
     {
     case Serif:
         if (bold && italic)
-            code += isCapital ? 0x1d468 : 0x1d482;
+            code += isCapital ? 119912 : 119938;
         else if (bold)
-            code += isCapital ? 0x1d400 : 0x1d41a;
+            code += isCapital ? 119808 : 119834;
         else if (italic)
         {
             if (letter == 'h')
-                code = 0x210e;
+                code = 8462;
             else
-                code += isCapital ? 0x1d434 : 0x1d44e;
+                code += isCapital ? 119860 : 119886;
         }
         else
             return letter;
         break;
     case Sans:
         if (bold && italic)
-            code += isCapital ? 0x1d63c : 0x1d656;
+            code += isCapital ? 120380 : 120406;
         if (bold)
-            code += isCapital ? 0x1d5d4 : 0x1d5ee;
+            code += isCapital ? 120276 : 120302;
         if (italic)
-            code += isCapital ? 0x1d608 : 0x1d622;
+            code += isCapital ? 120328 : 120354;
         else
-            code += isCapital ? 0x1d5a0 : 0x1d5ba;
+            code += isCapital ? 120224 : 120250;
         break;
     case Mono:
-        code += isCapital ? 0x1d670 : 0x1d68a;
+        code += isCapital ? 120432 : 120458;
         break;
     case Script:
         if (bold)
-            code += isCapital ? 0x1d4d0 : 0x1d4ea;
+            code += isCapital ? 120016 : 120042;
         else switch (letter.unicode())
         {
         case 'B':
-            code = 0x212c;
+            code = 8492;
             break;
         case 'E':
-            code = 0x2130;
+            code = 8496;
             break;
         case 'F':
-            code = 0x2131;
+            code = 8497;
             break;
         case 'H':
-            code = 0x210b;
+            code = 8459;
             break;
         case 'I':
-            code = 0x2110;
+            code = 8464;
             break;
         case 'L':
-            code = 0x2112;
+            code = 8466;
             break;
         case 'M':
-            code = 0x2133;
+            code = 8499;
             break;
         case 'R':
-            code = 0x211b;
+            code = 8475;
             break;
         case 'e':
-            code = 0x212f;
+            code = 8495;
             break;
         case 'g':
-            code = 0x210a;
+            code = 8458;
             break;
         case 'o':
-            code = 0x2134;
+            code = 8500;
             break;
         default:
-            code += isCapital ? 0x1d49c : 0x1d4b6;
+            code += isCapital ? 119964 : 119990;
         }
         break;
     case Fraktur:
         if (bold)
-            code += isCapital ? 0x1d56c : 0x1d586;
+            code += isCapital ? 120172 : 120198;
         else switch (letter.unicode())
         {
         case 'C':
-            code = 0x212d;
+            code = 8493;
             break;
         case 'H':
-            code = 0x210c;
+            code = 8460;
             break;
         case 'I':
-            code = 0x2111;
+            code = 8465;
             break;
         case 'R':
-            code = 0x211c;
+            code = 8476;
             break;
         case 'Z':
-            code = 0x2128;
+            code = 8488;
             break;
         default:
-            code += isCapital ? 0x1d504 : 0x1d51e;
+            code += isCapital ? 120068 : 120094;
         }
         break;
     case DoubleStruck:
         switch (letter.unicode())
         {
         case 'C':
-            code = 0x2102;
+            code = 8450;
             break;
         case 'H':
-            code = 0x210d;
+            code = 8461;
             break;
         case 'N':
-            code = 0x2115;
+            code = 8469;
             break;
         case 'P':
-            code = 0x2119;
+            code = 8473;
             break;
         case 'Q':
-            code = 0x211a;
+            code = 8474;
             break;
         case 'R':
-            code = 0x211d;
+            code = 8477;
             break;
         case 'Z':
-            code = 0x2124;
+            code = 8484;
             break;
         default:
-            code += isCapital ? 0x1d538 : 0x1d552;
+            code += isCapital ? 120120 : 120146;
         }
         break;
     case Greek:
         if (bold && italic)
-            code += isCapital ? 0x1d71c : 0x1d736;
+            code += isCapital ? 120604 : 120630;
         if (bold)
-            code += isCapital ? 0x1d6a8 : 0x1d6c2;
+            code += isCapital ? 120488 : 120514;
         if (italic)
-            code += isCapital ? 0x1d6e2 : 0x1d6fc;
+            code += isCapital ? 120546 : 120572;
         else
             return letter;
         break;
     }
-    return QChar(code);
+    return encodeUcs4(code);
 }
 
 QString MathGlyphs::digitsToSuperscript(const QString &digits)
