@@ -13,67 +13,7 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <widget class="QToolBox" name="toolBox">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="page_7">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>908</width>
-          <height>439</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Outline</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="page_8">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>908</width>
-          <height>439</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Page 2</string>
-        </attribute>
-       </widget>
-      </widget>
-      <widget class="QStackedWidget" name="documentView">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="page_9"/>
-       <widget class="QWidget" name="page_10"/>
-      </widget>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -133,11 +73,9 @@
      </property>
      <addaction name="actionTextBold"/>
      <addaction name="actionTextItalic"/>
-     <addaction name="actionTextMath"/>
      <addaction name="separator"/>
      <addaction name="actionClearFormatting"/>
     </widget>
-    <addaction name="actionParagraphStyle"/>
     <addaction name="menuText_Style"/>
     <addaction name="menuText_Alignment"/>
    </widget>
@@ -179,16 +117,29 @@
    <addaction name="actionPaste"/>
    <addaction name="actionFind"/>
    <addaction name="separator"/>
+   <addaction name="actionInsertCAS"/>
    <addaction name="actionDocumentProperties"/>
    <addaction name="actionRecompute"/>
    <addaction name="actionExport"/>
   </widget>
   <widget class="QToolBar" name="textToolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -199,7 +150,6 @@
    <addaction name="actionTextBold"/>
    <addaction name="actionTextItalic"/>
    <addaction name="actionTextUnderline"/>
-   <addaction name="actionTextMath"/>
    <addaction name="actionClearFormatting"/>
    <addaction name="separator"/>
    <addaction name="actionAlignLeft"/>
@@ -207,10 +157,9 @@
    <addaction name="actionAlignRight"/>
    <addaction name="actionAlignJustify"/>
    <addaction name="separator"/>
-   <addaction name="actionInsertCAS"/>
-   <addaction name="actionInsertGraph"/>
-   <addaction name="actionInsertTable"/>
+   <addaction name="actionInsertTextList"/>
    <addaction name="actionInsertImage"/>
+   <addaction name="actionInsertTable"/>
    <addaction name="separator"/>
    <addaction name="actionSpellCheck"/>
   </widget>
@@ -267,7 +216,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-text-bold.svg</normaloff>:/icons/format-text-bold.svg</iconset>
+     <normaloff>:/icons/format-text-bold-symbolic.svg</normaloff>:/icons/format-text-bold-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Bold</string>
@@ -285,7 +234,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-text-italic.svg</normaloff>:/icons/format-text-italic.svg</iconset>
+     <normaloff>:/icons/format-text-italic-symbolic.svg</normaloff>:/icons/format-text-italic-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Italic</string>
@@ -303,7 +252,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-justify-left.svg</normaloff>:/icons/format-justify-left.svg</iconset>
+     <normaloff>:/icons/format-justify-left-symbolic.svg</normaloff>:/icons/format-justify-left-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Left align</string>
@@ -321,7 +270,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-justify-right.svg</normaloff>:/icons/format-justify-right.svg</iconset>
+     <normaloff>:/icons/format-justify-right-symbolic.svg</normaloff>:/icons/format-justify-right-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Right align</string>
@@ -339,7 +288,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-justify-center.svg</normaloff>:/icons/format-justify-center.svg</iconset>
+     <normaloff>:/icons/format-justify-center-symbolic.svg</normaloff>:/icons/format-justify-center-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>C&amp;enter</string>
@@ -357,7 +306,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-justify-fill.svg</normaloff>:/icons/format-justify-fill.svg</iconset>
+     <normaloff>:/icons/format-justify-fill-symbolic.svg</normaloff>:/icons/format-justify-fill-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Justify</string>
@@ -372,7 +321,7 @@
   <action name="actionInsertTable">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/insert-table.svg</normaloff>:/icons/insert-table.svg</iconset>
+     <normaloff>:/icons/insert-table-symbolic.svg</normaloff>:/icons/insert-table-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Table…</string>
@@ -381,13 +330,13 @@
     <string>Table</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+T</string>
+    <string>Alt+Shift+T</string>
    </property>
   </action>
   <action name="actionInsertImage">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/insert-image.svg</normaloff>:/icons/insert-image.svg</iconset>
+     <normaloff>:/icons/insert-image-symbolic.svg</normaloff>:/icons/insert-image-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>I&amp;mage…</string>
@@ -396,13 +345,13 @@
     <string>Image</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+I</string>
+    <string>Alt+Shift+I</string>
    </property>
   </action>
   <action name="actionClearFormatting">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-text-none.svg</normaloff>:/icons/format-text-none.svg</iconset>
+     <normaloff>:/icons/format-text-clear-formatting-symbolic.svg</normaloff>:/icons/format-text-clear-formatting-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>Clear &amp;formatting</string>
@@ -591,7 +540,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/check-spelling.svg</normaloff>:/icons/check-spelling.svg</iconset>
+     <normaloff>:/icons/check-spelling-symbolic.svg</normaloff>:/icons/check-spelling-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>Check spelling</string>
@@ -612,74 +561,7 @@
     <string>Insert CAS entry</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+C</string>
-   </property>
-  </action>
-  <action name="actionInsertGraph">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/insert-graph.svg</normaloff>:/icons/insert-graph.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Graph</string>
-   </property>
-   <property name="toolTip">
-    <string>Graph</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+G</string>
-   </property>
-  </action>
-  <action name="actionParagraphStyle">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/paragraph-style.svg</normaloff>:/icons/paragraph-style.svg</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Paragraph</string>
-   </property>
-   <property name="toolTip">
-    <string>Paragraph</string>
-   </property>
-  </action>
-  <action name="actionTextMath">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-text-math.svg</normaloff>:/icons/format-text-math.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Math</string>
-   </property>
-   <property name="toolTip">
-    <string>Math</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+M</string>
-   </property>
-  </action>
-  <action name="actionInsertSection">
-   <property name="text">
-    <string>&amp;Section</string>
-   </property>
-   <property name="toolTip">
-    <string>Insert section</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Shift+1</string>
-   </property>
-  </action>
-  <action name="actionInsertSubsection">
-   <property name="text">
-    <string>Subsection</string>
-   </property>
-   <property name="toolTip">
-    <string>Insert subsection</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Shift+2</string>
+    <string>Alt+Shift+C</string>
    </property>
   </action>
   <action name="actionSwitchDocuments">
@@ -709,24 +591,13 @@
     <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionInsertSubsubsection">
-   <property name="text">
-    <string>Subsubsection</string>
-   </property>
-   <property name="toolTip">
-    <string>Insert subsubsection</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Shift+3</string>
-   </property>
-  </action>
   <action name="actionTextUnderline">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/format-text-underline.svg</normaloff>:/icons/format-text-underline.svg</iconset>
+     <normaloff>:/icons/format-text-underline-symbolic.svg</normaloff>:/icons/format-text-underline-symbolic.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Underline</string>
@@ -736,6 +607,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionInsertTextList">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/insert-list-symbolic.svg</normaloff>:/icons/insert-list-symbolic.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;List</string>
+   </property>
+   <property name="toolTip">
+    <string>Insert list</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+L</string>
    </property>
   </action>
  </widget>

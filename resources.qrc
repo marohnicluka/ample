@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/check-spelling.svg</file>
         <file>icons/dialog-error.svg</file>
         <file>icons/dialog-warning.svg</file>
         <file>icons/document-save-as.svg</file>
@@ -11,18 +10,9 @@
         <file>icons/edit-paste.svg</file>
         <file>icons/edit-redo.svg</file>
         <file>icons/edit-undo.svg</file>
-        <file>icons/format-justify-center.svg</file>
-        <file>icons/format-justify-fill.svg</file>
-        <file>icons/format-justify-left.svg</file>
-        <file>icons/format-justify-right.svg</file>
-        <file>icons/format-text-bold.svg</file>
-        <file>icons/format-text-italic.svg</file>
-        <file>icons/format-text-none.svg</file>
-        <file>icons/format-text-underline.svg</file>
         <file>icons/help-about.svg</file>
         <file>icons/insert-image.svg</file>
         <file>icons/insert-link.svg</file>
-        <file>icons/insert-table.svg</file>
         <file>icons/open-menu.svg</file>
         <file>icons/preferences.svg</file>
         <file>icons/process-completed.svg</file>
@@ -36,8 +26,6 @@
         <file>giac-keywords.xml</file>
         <file>icons/insert-cas.svg</file>
         <file>icons/insert-graph.svg</file>
-        <file>icons/paragraph-style.svg</file>
-        <file>icons/format-text-math.svg</file>
         <file>fonts/FreeMono.ttf</file>
         <file>fonts/FreeMonoBold.ttf</file>
         <file>fonts/FreeMonoBoldOblique.ttf</file>
@@ -54,9 +42,17 @@
         <file>icons/documents.svg</file>
         <file>icons/format-text-highlight.svg</file>
         <file>icons/document-close.svg</file>
-        <file>fonts/LiberationSans-Bold.ttf</file>
-        <file>fonts/LiberationSans-BoldItalic.ttf</file>
-        <file>fonts/LiberationSans-Italic.ttf</file>
-        <file>fonts/LiberationSans-Regular.ttf</file>
+        <file>icons/check-spelling-symbolic.svg</file>
+        <file>icons/format-justify-center-symbolic.svg</file>
+        <file>icons/format-justify-fill-symbolic.svg</file>
+        <file>icons/format-justify-left-symbolic.svg</file>
+        <file>icons/format-justify-right-symbolic.svg</file>
+        <file>icons/format-text-bold-symbolic.svg</file>
+        <file>icons/format-text-clear-formatting-symbolic.svg</file>
+        <file>icons/format-text-italic-symbolic.svg</file>
+        <file>icons/format-text-underline-symbolic.svg</file>
+        <file>icons/insert-image-symbolic.svg</file>
+        <file>icons/insert-list-symbolic.svg</file>
+        <file>icons/insert-table-symbolic.svg</file>
     </qresource>
 </RCC>

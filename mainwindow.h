@@ -38,44 +38,20 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Worksheet *currentDocument;
-    QToolButton *paragraphStyleToolButton;
     QToolButton *activeDocumentsToolButton;
     QToolButton *recentDocumentsToolButton;
     QMenu *activeDocumentsMenu;
     QMenu *recentDocumentsMenu;
     QActionGroup *activeDocumentsGroup;
     QActionGroup *recentDocumentsGroup;
-    void addNewDocument();
-    TextEditor *currentTextEditor();
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     bool cursorAt(QTextCursor::MoveOperation op);
     void loadFonts();
 
 private slots:
-    void textAlignChanged(QAction *a);
-    void currentDocumentChanged(int index);
+    void textAlignChanged(QAction* action);
     void clipboardDataChanged();
     void copyAvailableChanged(bool yes);
-    void currentCharFormatChanged(const QTextCharFormat &format);
-    void currentDocumentTitleChanged(const QString &newTitle);
-
-    void on_actionNewDocument_triggered();
-    void on_actionTextBold_triggered();
-    void on_actionTextItalic_triggered();
-    void on_actionCopy_triggered();
-    void on_actionCut_triggered();
-    void on_actionPaste_triggered();
-    void on_actionUndo_triggered();
-    void on_actionRedo_triggered();
-    void on_actionTextMath_triggered();
-    void on_documentView_currentChanged(int index);
-
-    void on_actionInsertSection_triggered();
-    void on_actionInsertSubsection_triggered();
-    void on_actionInsertSubsubsection_triggered();
-    void on_actionInsertCAS_triggered();
-    void on_actionInsertTable_triggered();
 };
 
 #endif // MAINWINDOW_H

@@ -31,7 +31,6 @@ SOURCES += \
     mathtextobject.cpp \
     texteditor.cpp \
     worksheet.cpp \
-    tablepropertiesdialog.cpp \
     qgen.cpp \
     mathglyphs.cpp \
     qgenrenderer.cpp
@@ -42,14 +41,12 @@ HEADERS += \
     mathtextobject.h \
     texteditor.h \
     worksheet.h \
-    tablepropertiesdialog.h \
     qgen.h \
     mathglyphs.h \
     qgenrenderer.h
 
 FORMS += \
-        mainwindow.ui \
-    tablepropertiesdialog.ui
+        mainwindow.ui
 
 RESOURCES += \
     resources.qrc

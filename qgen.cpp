@@ -49,7 +49,7 @@ bool QGen::isElementary() const {
             isUnaryFunction(giac::at_asin) || isUnaryFunction(giac::at_acos) || isUnaryFunction(giac::at_atan) ||
             isUnaryFunction(giac::at_acot) || isUnaryFunction(giac::at_sinh) || isUnaryFunction(giac::at_cosh) ||
             isUnaryFunction(giac::at_tanh) || isUnaryFunction(giac::at_asinh) || isUnaryFunction(giac::at_acosh) ||
-            isUnaryFunction(giac::at_atanh) || isUnaryFunction(giac::at_det) || isUnaryFunction(giac::det_minor);
+            isUnaryFunction(giac::at_atanh) || isUnaryFunction(giac::at_det) || isUnaryFunction(giac::at_det_minor);
 }
 
 int QGen::argumentCount() const
@@ -180,54 +180,105 @@ bool QGen::isInequation() const
 int QGen::operatorType(int &priority) const
 {
     if (isSumOperator() || isHadamardSumOperator()) {
-        priority = 6; return OperatorClass::Associative; }
+        priority = 6; return OperatorType::Associative; }
     if (isProductOperator() || isAmpersandProductOperator() || isHadamardProductOperator() || isComposeOperator()) {
-        priority = 5; return OperatorClass::Associative; }
+        priority = 5; return OperatorType::Associative; }
     if (isConjunctionOperator() || isDisjunctionOperator() || isExclusiveOrOperator()) {
-        priority = 11; return OperatorClass::Associative; }
+        priority = 11; return OperatorType::Associative; }
     if (isBitwiseAndOperator() || isBitwiseOrOperator() || isBitwiseXorOperator()) {
-        priority = 10; return OperatorClass::Associative; }
+        priority = 10; return OperatorType::Associative; }
     if (isUnionOperator() || isIntersectionOperator()) {
-        priority = 7; return OperatorClass::Associative; }
+        priority = 7; return OperatorType::Associative; }
     if (isMinusOperator() || isIncrementOperator() || isDecrementOperator() || isNegationOperator()) {
-        priority = 4; return OperatorClass::Unary; }
+        priority = 4; return OperatorType::Unary; }
     if (isComplexConjugateOperator() || isFactorialOperator()) {
-        priority = 2; return OperatorClass::Unary; }
+        priority = 2; return OperatorType::Unary; }
     if (isReciprocalOperator()) {
-        priority = 3; return OperatorClass::Unary; }
+        priority = 3; return OperatorType::Unary; }
     if (isTranspositionOperator()) {
-        priority = 2; return OperatorClass::Unary; }
+        priority = 2; return OperatorType::Unary; }
     if (isUnitApplicationOperator()) {
-        priority = 5; return OperatorClass::Binary; }
+        priority = 5; return OperatorType::Binary; }
     if (isPowerOperator() || isHadamardPowerOperator() || isFunctionalPowerOperator()) {
-        priority = 2; return OperatorClass::Binary; }
+        priority = 2; return OperatorType::Binary; }
     if (isHadamardDifferenceOperator()) {
-        priority = 6; return OperatorClass::Binary; }
+        priority = 6; return OperatorType::Binary; }
     if (isHadamardDivisionOperator()) {
-        priority = 5; return OperatorClass::Binary; }
+        priority = 5; return OperatorType::Binary; }
     if (isCrossProductOperator()) {
-        priority = 5; return OperatorClass::Binary; }
+        priority = 5; return OperatorType::Binary; }
     if (isSetDifferenceOperator()) {
-        priority = 7; return OperatorClass::Binary; }
+        priority = 7; return OperatorType::Binary; }
     if (isIntervalOperator()) {
-        priority = 13; return OperatorClass::Binary; }
+        priority = 13; return OperatorType::Binary; }
     if (isInequation()) {
-        priority = 8; return OperatorClass::Binary; }
+        priority = 8; return OperatorType::Binary; }
     if (isElementOperator() || isEqualOperator() || isNotEqualOperator()) {
-        priority = 9; return OperatorClass::Binary; }
+        priority = 9; return OperatorType::Binary; }
     if (isEquation()) {
-        priority = 14; return OperatorClass::Binary; }
+        priority = 14; return OperatorType::Binary; }
     if (isFunctionApplicationOperator()) {
-        priority = 1; return OperatorClass::Binary; }
+        priority = 1; return OperatorType::Binary; }
     if (isMapsToOperator()) {
-        priority = 14; return OperatorClass::Binary; }
+        priority = 14; return OperatorType::Binary; }
     if (isWhenOperator() || isIfThenElseOperator()) {
-        priority = 12; return OperatorClass::Ternary; }
+        priority = 12; return OperatorType::Ternary; }
     if (isAssignmentOperator() || isArrayAssignmentOperator()) {
-        priority = 15; return OperatorClass::Other; }
+        priority = 15; return OperatorType::Other; }
     if (isAtOperator()) {
-        priority = 1; return OperatorClass::Other; }
+        priority = 1; return OperatorType::Other; }
     return 0;
+}
+
+bool QGen::isOperator(int &type) const
+{
+    int priority, t;
+    if ((t = operatorType(priority)) == 0)
+        return false;
+    type = t;
+    return true;
+}
+
+bool QGen::isOperator() const
+{
+    int t;
+    return isOperator(t);
+}
+
+bool QGen::isAssociativeOperator(Vector &arguments) const
+{
+    int t;
+    if (!isOperator(t) || t != OperatorType::Associative)
+        return false;
+    arguments = flattenOperands();
+    return true;
+}
+
+bool QGen::isBinaryOperator(QGen &firstOperand, QGen &secondOperand) const
+{
+    int t;
+    if (!isOperator(t) || t != OperatorType::Binary)
+        return false;
+    firstOperand = firstArgument();
+    secondOperand = secondArgument();
+    return true;
+}
+
+bool QGen::isUnaryOperator(QGen &operand) const
+{
+    int t;
+    if (!isOperator(t) || t != OperatorType::Unary)
+        return false;
+    operand = unaryFunctionArgument();
+    return true;
+}
+
+int QGen::operatorPriority() const
+{
+    int priority;
+    if (operatorType(priority) == 0)
+        return -1;
+    return priority;
 }
 
 bool QGen::isDerivativeOperator(bool simple) const
@@ -305,13 +356,6 @@ QGen::Vector QGen::flattenOperands() const
     return operands;
 }
 
-QGen::Vector QGen::associativeOperands() const
-{
-    if (!isAssociativeOperator())
-        return Vector();
-    return flattenOperands();
-}
-
 QGen::Vector QGen::toVector() const
 {
     Vector vector;
@@ -361,9 +405,12 @@ QPicture QGen::toPicture(const QString &family, int size) const
 {
 }
 
-QPicture QGen::toLaTeX()
+QString QGen::toLaTeX() const
 {
-
+    QGen latex = giac::_latex(*this, context);
+    if (latex.isString())
+        return latex.stringValue();
+    return "";
 }
 
 QString QGen::toMathML() const

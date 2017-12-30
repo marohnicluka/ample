@@ -25,7 +25,6 @@
 #include <qmath.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tablepropertiesdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -52,16 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
     alignGroup->setExclusive(true);
     connect(alignGroup, SIGNAL(triggered(QAction*)), this, SLOT(textAlignChanged(QAction*)));
 
-    paragraphStyleToolButton = new QToolButton(this);
-    QMenu *paragraphStyleMenu = new QMenu(this);
-    paragraphStyleMenu->addAction(ui->actionInsertSection);
-    paragraphStyleMenu->addAction(ui->actionInsertSubsection);
-    paragraphStyleMenu->addAction(ui->actionInsertSubsubsection);
-    ui->actionParagraphStyle->setMenu(paragraphStyleMenu);
-    paragraphStyleToolButton->setDefaultAction(ui->actionParagraphStyle);
-    paragraphStyleToolButton->setPopupMode(QToolButton::InstantPopup);
-    ui->textToolBar->insertWidget(ui->actionInsertCAS,paragraphStyleToolButton);
-
     activeDocumentsToolButton = new QToolButton(this);
     activeDocumentsMenu = new QMenu(this);
     activeDocumentsGroup = new QActionGroup(this);
@@ -79,10 +68,6 @@ MainWindow::MainWindow(QWidget *parent) :
     recentDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
     ui->mainToolBar->insertWidget(ui->actionNewDocument,recentDocumentsToolButton);
 
-    QList<int> splitterSizes;
-    splitterSizes << 183 << 747;
-    ui->splitter->setSizes(splitterSizes);
-
     loadFonts();
 }
 
@@ -91,19 +76,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-TextEditor *MainWindow::currentTextEditor()
-{
-    return (TextEditor*)ui->documentView->currentWidget();
-}
-
 void MainWindow::loadFonts()
 {
     QStringList fonts, failed;
     fonts << "FreeMono.ttf" << "FreeMonoBold.ttf" << "FreeMonoBoldOblique.ttf" << "FreeMonoOblique.ttf"
           << "FreeSans.ttf" << "FreeSansBold.ttf" << "FreeSansBoldOblique.ttf" << "FreeSansOblique.ttf"
-          << "FreeSerif.ttf" << "FreeSerifBold.ttf" << "FreeSerifBoldItalic.ttf" << "FreeSerifItalic.ttf"
-          << "LiberationSans-Bold.ttf" << "LiberationSans-BoldItalic.ttf" << "LiberationSans-Italic.ttf"
-          << "LiberationSans-Regular.ttf";
+          << "FreeSerif.ttf" << "FreeSerifBold.ttf" << "FreeSerifBoldItalic.ttf" << "FreeSerifItalic.ttf";
     foreach (const QString fontName, fonts)
     {
         QFile res(":/fonts/" + fontName);
@@ -117,39 +95,16 @@ void MainWindow::loadFonts()
     }
 }
 
-void MainWindow::addNewDocument()
+void MainWindow::textAlignChanged(QAction *action)
 {
-    Worksheet *doc = new Worksheet(this);
-    TextEditor *editor = new TextEditor(doc, this);
-    connect(editor, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
-            this, SLOT(currentCharFormatChanged(QTextCharFormat)));
-    connect(editor, SIGNAL(undoAvailable(bool)), ui->actionUndo, SLOT(setEnabled(bool)));
-    connect(editor, SIGNAL(redoAvailable(bool)), ui->actionRedo, SLOT(setEnabled(bool)));
-#ifndef QT_NO_CLIPBOARD
-    connect(editor, SIGNAL(copyAvailable(bool)), this, SLOT(copyAvailableChanged(bool)));
-#endif
-    int index = ui->documentView->addWidget(editor);
-    ui->documentView->setCurrentIndex(index);
-    QAction *action = editor->createMenuAction(index, activeDocumentsGroup);
-    activeDocumentsMenu->addAction(action);
-    connect(editor, SIGNAL(focusRequested(int)), this, SLOT(currentDocumentChanged(int)));
-}
-
-void MainWindow::textAlignChanged(QAction *a)
-{
-    if (a == ui->actionAlignLeft)
-        currentTextEditor()->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
-    else if (a == ui->actionAlignCenter)
-        currentTextEditor()->setAlignment(Qt::AlignHCenter);
-    else if (a == ui->actionAlignRight)
-        currentTextEditor()->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
-    else if (a == ui->actionAlignJustify)
-        currentTextEditor()->setAlignment(Qt::AlignJustify);
-}
-
-void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
-{
-    currentTextEditor()->mergeFormatOnWordOrSelection(format);
+    if (action == ui->actionAlignLeft) //setAlignment(Qt::AlignLeft | Qt::AlignAbsolute)
+        ;
+    else if (action == ui->actionAlignCenter) //setAlignment(Qt::AlignHCenter)
+        ;
+    else if (action == ui->actionAlignRight) //setAlignment(Qt::AlignRight | Qt::AlignAbsolute)
+        ;
+    else if (action == ui->actionAlignJustify) //setAlignment(Qt::AlignJustify)
+        ;
 }
 
 void MainWindow::clipboardDataChanged()
@@ -163,112 +118,4 @@ void MainWindow::clipboardDataChanged()
 void MainWindow::copyAvailableChanged(bool yes) {
     ui->actionCopy->setEnabled(yes);
     ui->actionCut->setEnabled(yes);
-}
-
-void MainWindow::currentCharFormatChanged(const QTextCharFormat &format)
-{
-}
-
-void MainWindow::currentDocumentChanged(int index)
-{
-    ui->documentView->setCurrentIndex(index);
-}
-
-void MainWindow::currentDocumentTitleChanged(const QString &newTitle)
-{
-    this->setWindowTitle(newTitle);
-}
-
-void MainWindow::on_actionNewDocument_triggered()
-{
-    addNewDocument();
-}
-
-void MainWindow::on_actionCopy_triggered()
-{
-    currentTextEditor()->copy();
-}
-
-void MainWindow::on_actionCut_triggered()
-{
-    currentTextEditor()->cut();
-}
-
-void MainWindow::on_actionPaste_triggered()
-{
-    currentTextEditor()->paste();
-}
-
-void MainWindow::on_actionUndo_triggered()
-{
-    currentTextEditor()->undo();
-}
-
-void MainWindow::on_actionRedo_triggered()
-{
-    currentTextEditor()->redo();
-}
-void MainWindow::on_actionTextBold_triggered()
-{
-    QTextCharFormat fmt;
-    fmt.setFontWeight(ui->actionTextBold->isChecked() ? QFont::Bold : QFont::Normal);
-    mergeFormatOnWordOrSelection(fmt);
-}
-
-void MainWindow::on_actionTextItalic_triggered()
-{
-    QTextCharFormat fmt;
-    fmt.setFontItalic(ui->actionTextItalic->isChecked());
-    mergeFormatOnWordOrSelection(fmt);
-}
-
-void MainWindow::on_actionTextMath_triggered()
-{
-    QTextCharFormat format;
-    bool isMath = ui->actionTextMath->isChecked();
-    format.setFontFamily(isMath ? "FreeMono" : "FreeSerif");
-    mergeFormatOnWordOrSelection(format);
-}
-
-void MainWindow::on_documentView_currentChanged(int index)
-{
-    TextEditor *editor = (TextEditor*)ui->documentView->widget(index);
-    currentDocument = editor->worksheet();
-}
-
-void MainWindow::on_actionInsertSection_triggered()
-{
-    QTextCursor cursor = currentTextEditor()->textCursor();
-    currentDocument->insertHeadingFrame(cursor, 1);
-}
-
-void MainWindow::on_actionInsertSubsection_triggered()
-{
-    QTextCursor cursor = currentTextEditor()->textCursor();
-    currentDocument->insertHeadingFrame(cursor, 2);
-}
-
-void MainWindow::on_actionInsertSubsubsection_triggered()
-{
-    QTextCursor cursor = currentTextEditor()->textCursor();
-    currentDocument->insertHeadingFrame(cursor, 3);
-}
-
-void MainWindow::on_actionInsertCAS_triggered()
-{
-    QTextCursor cursor = currentTextEditor()->textCursor();
-    currentDocument->insertCasInputFrame(cursor);
-}
-
-void MainWindow::on_actionInsertTable_triggered()
-{
-    TablePropertiesDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        QTextCursor cursor = currentTextEditor()->textCursor();
-        int flags = dialog.tableFlags();
-        int rows = dialog.tableRows(), columns = dialog.tableColumns();
-        int headerRowCount = dialog.tableHeaderRows();
-        currentDocument->insertTable(cursor, rows, columns, headerRowCount, flags);
-    }
 }

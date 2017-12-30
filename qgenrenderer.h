@@ -102,15 +102,16 @@ class QGenRenderer
     void renderDisplayedAndAdvance(QPaintDevice *device, const Display &displayed, QPointF &penPoint);
     void renderNumber(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
     void renderIdentifier(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderPhysicalValue(QPaintDevice *device, const QGen &value, const QGen &unit, QPointF where = QPointF(0, 0));
+    void renderLeadingUnderscoreIdentifier(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
     void renderFunction(QPaintDevice *device, const QGen &g, int exponent = 0, QPointF where = QPointF(0, 0));
-    void renderVector(QPaintDevice *device, const QGen::VectorOperator &v, QPointF where = QPointF(0, 0));
+    void renderVector(QPaintDevice *device, const QGen::Vector &v, QPointF where = QPointF(0, 0));
     void renderModular(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
     void renderMap(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
     void renderSymbolic(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
     void renderUnaryOperation(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
     void renderBinaryOperation(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderAssociativeOperation(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderAssociativeOperation(QPaintDevice *device, const QGen &g, const QGen::Vector operands,
+                                    QPointF where = QPointF(0, 0));
     void renderFraction(QPaintDevice *device, const QGen &numerator, const QGen &denominator,
                         QPointF where = QPointF(0, 0));
     void renderPower(QPaintDevice *device, const QGen &base, const QGen &exponent,
