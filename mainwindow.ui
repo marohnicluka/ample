@@ -32,6 +32,7 @@
     <addaction name="actionOpenRecent"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionRevert"/>
     <addaction name="actionExport"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -92,11 +93,17 @@
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="movable">
+    <bool>true</bool>
+   </property>
    <property name="iconSize">
     <size>
      <width>24</width>
      <height>24</height>
     </size>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -107,7 +114,6 @@
    <addaction name="actionNewDocument"/>
    <addaction name="actionOpenDocument"/>
    <addaction name="actionSave"/>
-   <addaction name="actionRevert"/>
    <addaction name="actionDocumentClose"/>
    <addaction name="separator"/>
    <addaction name="actionUndo"/>
@@ -117,9 +123,8 @@
    <addaction name="actionPaste"/>
    <addaction name="actionFind"/>
    <addaction name="separator"/>
-   <addaction name="actionInsertCAS"/>
-   <addaction name="actionDocumentProperties"/>
    <addaction name="actionRecompute"/>
+   <addaction name="actionDocumentProperties"/>
    <addaction name="actionExport"/>
   </widget>
   <widget class="QToolBar" name="textToolBar">
@@ -132,6 +137,9 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
@@ -140,6 +148,9 @@
      <width>16</width>
      <height>16</height>
     </size>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -547,21 +558,6 @@
    </property>
    <property name="toolTip">
     <string>Check spelling</string>
-   </property>
-  </action>
-  <action name="actionInsertCAS">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/insert-cas.svg</normaloff>:/icons/insert-cas.svg</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;CAS entry</string>
-   </property>
-   <property name="toolTip">
-    <string>Insert CAS entry</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Shift+C</string>
    </property>
   </action>
   <action name="actionSwitchDocuments">

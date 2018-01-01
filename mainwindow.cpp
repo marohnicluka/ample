@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionSwitchDocuments->setMenu(activeDocumentsMenu);
     activeDocumentsToolButton->setDefaultAction(ui->actionSwitchDocuments);
     activeDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
-    ui->mainToolBar->insertWidget(ui->actionDocumentProperties,activeDocumentsToolButton);
+    ui->mainToolBar->insertWidget(ui->actionRecompute, activeDocumentsToolButton);
 
     recentDocumentsToolButton = new QToolButton(this);
     recentDocumentsMenu = new QMenu(this);
@@ -66,7 +66,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionOpenRecent->setMenu(recentDocumentsMenu);
     recentDocumentsToolButton->setDefaultAction(ui->actionOpenRecent);
     recentDocumentsToolButton->setPopupMode(QToolButton::InstantPopup);
-    ui->mainToolBar->insertWidget(ui->actionNewDocument,recentDocumentsToolButton);
+    ui->mainToolBar->insertWidget(ui->actionNewDocument, recentDocumentsToolButton);
+
+    fontFamilyChooser = new QFontComboBox(this);
+    fontSizeChooser = new QSpinBox(this);
+    fontChooser = new QWidget(this);
+    fontChooserLayout = new QGridLayout(fontChooser);
+    fontChooserLayout->addWidget(fontFamilyChooser, 0, 0, 1, 1);
+    fontChooserLayout->addWidget(fontSizeChooser, 0, 1, 1, 1);
+    fontChooserLayout->setHorizontalSpacing(6);
+    fontChooserLayout->setMargin(0);
+    ui->textToolBar->insertWidget(ui->actionTextBold, fontChooser);
+
+    setCentralWidget(new MathDisplayWidget(this));
 
     loadFonts();
 }

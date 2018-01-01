@@ -21,7 +21,11 @@
 #include <QMainWindow>
 #include <QToolButton>
 #include <QAction>
+#include <QFontComboBox>
+#include <QSpinBox>
+#include <QGridLayout>
 #include "texteditor.h"
+#include "mathdisplaywidget.h"
 
 namespace Ui {
 
@@ -38,6 +42,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QFontComboBox *fontFamilyChooser;
+    QSpinBox *fontSizeChooser;
+    QGridLayout *fontChooserLayout;
+    QWidget *fontChooser;
     QToolButton *activeDocumentsToolButton;
     QToolButton *recentDocumentsToolButton;
     QMenu *activeDocumentsMenu;

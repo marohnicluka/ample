@@ -155,18 +155,20 @@ public:
     static QChar rightFloorBracket()                    { return QChar(0x230b); }
     static QChar topHalfIntegral()                      { return QChar(0x2320); }
     static QChar bottomHalfIntegral()                   { return QChar(0x2321); }
+    static QChar summationTop()                         { return QChar(0x23b2); }
+    static QChar summationBottom()                      { return QChar(0x23b3); }
     static QChar leftParenthesisUpperHook()             { return QChar(0x239b); }
     static QChar leftParenthesisExtension()             { return QChar(0x239c); }
     static QChar leftParenthesisLowerHook()             { return QChar(0x239d); }
     static QChar rightParenthesisUpperHook()            { return QChar(0x239e); }
     static QChar rightParenthesisExtension()            { return QChar(0x239f); }
-    static QChar rightParenthesisLowerHook()            { return QChar(0x23A0); }
-    static QChar leftSquareBracketUpperCorner()         { return QChar(0x239b); }
-    static QChar leftSquareBracketExtension()           { return QChar(0x239c); }
-    static QChar leftSquareBracketLowerCorner()         { return QChar(0x239d); }
-    static QChar rightSquareBracketUpperCorner()        { return QChar(0x239e); }
-    static QChar rightSquareBracketExtension()          { return QChar(0x239f); }
-    static QChar rightSquareBracketLowerCorner()        { return QChar(0x23A0); }
+    static QChar rightParenthesisLowerHook()            { return QChar(0x23a0); }
+    static QChar leftSquareBracketUpperCorner()         { return QChar(0x23a1); }
+    static QChar leftSquareBracketExtension()           { return QChar(0x23a2); }
+    static QChar leftSquareBracketLowerCorner()         { return QChar(0x23a3); }
+    static QChar rightSquareBracketUpperCorner()        { return QChar(0x23a4); }
+    static QChar rightSquareBracketExtension()          { return QChar(0x23a5); }
+    static QChar rightSquareBracketLowerCorner()        { return QChar(0x23a6); }
     static QChar leftCurlyBracketUpperHook()            { return QChar(0x23a7); }
     static QChar leftCurlyBracketMiddlePiece()          { return QChar(0x23a8); }
     static QChar leftCurlyBracketLowerHook()            { return QChar(0x23a9); }

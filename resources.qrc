@@ -11,8 +11,6 @@
         <file>icons/edit-redo.svg</file>
         <file>icons/edit-undo.svg</file>
         <file>icons/help-about.svg</file>
-        <file>icons/insert-image.svg</file>
-        <file>icons/insert-link.svg</file>
         <file>icons/open-menu.svg</file>
         <file>icons/preferences.svg</file>
         <file>icons/process-completed.svg</file>
@@ -24,8 +22,6 @@
         <file>icons/document-export.svg</file>
         <file>icons/open-recent.svg</file>
         <file>giac-keywords.xml</file>
-        <file>icons/insert-cas.svg</file>
-        <file>icons/insert-graph.svg</file>
         <file>fonts/FreeMono.ttf</file>
         <file>fonts/FreeMonoBold.ttf</file>
         <file>fonts/FreeMonoBoldOblique.ttf</file>
@@ -38,9 +34,7 @@
         <file>fonts/FreeSerifBold.ttf</file>
         <file>fonts/FreeSerifBoldItalic.ttf</file>
         <file>fonts/FreeSerifItalic.ttf</file>
-        <file>icons/label-new.svg</file>
         <file>icons/documents.svg</file>
-        <file>icons/format-text-highlight.svg</file>
         <file>icons/document-close.svg</file>
         <file>icons/check-spelling-symbolic.svg</file>
         <file>icons/format-justify-center-symbolic.svg</file>
