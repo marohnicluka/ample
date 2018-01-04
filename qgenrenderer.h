@@ -110,7 +110,6 @@ class QGenRenderer
     void renderNumber(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
     void renderIdentifier(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
     void renderLeadingUnderscoreIdentifier(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderFunction(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
     void renderVector(Display &dest, const QGen::Vector &v, QPointF where = QPointF(0, 0));
     void renderModular(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
     void renderMap(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
@@ -121,8 +120,10 @@ class QGenRenderer
                            QPointF where = QPointF(0, 0));
     void renderFraction(Display &dest, const QGen &numerator, const QGen &denominator,
                         QPointF where = QPointF(0, 0));
-    void renderPower(Display &dest, const QGen &base, const QGen &exponent,
-                     QPointF where = QPointF(0, 0), bool circ = false);
+    void renderSuperscript(Display &dest, const QGen &base, const QGen &exponent, int priority,
+                           QPointF where = QPointF(0, 0), bool withCircle = false);
+    void renderSubscript(Display &dest, const QGen &base, const QGen &subscript, int priority,
+                         QPointF where = QPointF(0, 0));
 
     void movePenPointX(QPointF &penPoint, qreal offset) { penPoint.setX(penPoint.x() + offset); }
     void movePenPointY(QPointF &penPoint, qreal offset) { penPoint.setY(penPoint.y() + offset); }

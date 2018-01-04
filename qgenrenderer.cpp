@@ -76,7 +76,7 @@ QString QGenRenderer::numberToSuperscriptText(int integer, bool parens)
     QString digits = QString::number(neg ? -integer : integer);
     QString raised = MathGlyphs::digitsToSuperscript(digits);
     if (neg)
-        raised.prepend(MathGlyphs::superscriptMinusSignSymbol());
+        raised.prepend(MathGlyphs::superscriptMinus());
     if (parens)
     {
         raised.prepend(MathGlyphs::superscriptLeftParenthesis());
@@ -91,7 +91,7 @@ QString QGenRenderer::numberToSubscriptText(int integer, bool parens)
     QString digits = QString::number(neg ? -integer : integer);
     QString raised = MathGlyphs::digitsToSubscript(digits);
     if (neg)
-        raised.prepend(MathGlyphs::subscriptMinusSignSymbol());
+        raised.prepend(MathGlyphs::subscriptMinus());
     if (parens)
     {
         raised.prepend(MathGlyphs::subscriptLeftParenthesis());
@@ -143,8 +143,6 @@ void QGenRenderer::render(Display &dest, const QGen &g, int sizeLevel)
         renderNumber(dest, g);
     else if (g.isIdentifier())
         renderIdentifier(dest, g);
-    else if (g.isFunction())
-        renderFunction(dest, g);
     else if (g.isModular())
         renderModular(dest, g);
     else if (g.isMap())
@@ -271,7 +269,7 @@ void QGenRenderer::renderNumber(Display &dest, const QGen &g, QPointF where)
     QGen gAbs = (g.isNegativeConstant() ? -g : g), numerator, denominator, realPart, imaginaryPart;
     if (g.isNegativeConstant())
     {
-        renderTextAndAdvance(dest, MathGlyphs::minusSignSymbol(), penPoint);
+        renderTextAndAdvance(dest, MathGlyphs::minus(), penPoint);
         dest.setPriority(QGen::MultiplicationPriority);
     }
     if (gAbs.isFraction(numerator, denominator)) {
@@ -285,7 +283,7 @@ void QGenRenderer::renderNumber(Display &dest, const QGen &g, QPointF where)
         QGen imAbs = (imaginaryPart.isNegativeConstant() ? -imaginaryPart : imaginaryPart);
         Display imAbsDisplay = renderNormal(imAbs);
         renderDisplayAndAdvance(dest, realPartDisplay, penPoint);
-        QChar operatorChar = imaginaryPart.isNegativeConstant() ? MathGlyphs::minusSignSymbol() : '+';
+        QChar operatorChar = imaginaryPart.isNegativeConstant() ? MathGlyphs::minus() : '+';
         renderTextAndAdvance(dest, paddedText(operatorChar), penPoint);
         renderDisplayAndAdvance(dest, imAbsDisplay, penPoint);
         QString imaginaryUnit("i");
@@ -305,10 +303,10 @@ void QGenRenderer::renderNumber(Display &dest, const QGen &g, QPointF where)
             if (hasNegativeExponent)
                 exponent = exponent.mid(1);
             text = mantissa;
-            text.append(paddedText(MathGlyphs::multiplicationSignSymbol()));
+            text.append(paddedText(MathGlyphs::times()));
             QString exponentDigits = MathGlyphs::digitsToSuperscript(exponent);
             if (hasNegativeExponent)
-                exponentDigits.prepend(MathGlyphs::superscriptMinusSignSymbol());
+                exponentDigits.prepend(MathGlyphs::superscriptMinus());
             text.append("10" + exponentDigits);
             dest.setPriority(QGen::MultiplicationPriority);
         }
@@ -321,7 +319,7 @@ void QGenRenderer::renderIdentifier(Display &dest, const QGen &g, QPointF where)
     Q_ASSERT(g.isIdentifier());
     QString text, symbol, index;
     if (g.isInfinityIdentifier())
-        symbol = QString(MathGlyphs::infinitySymbol());
+        symbol = QString(MathGlyphs::infinity());
     else if (g.isUndefIdentifier())
         symbol = "undefined";
     else if ((text = g.toString()).startsWith("_"))
@@ -395,7 +393,7 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(Display &dest, const QGen &
         else if (text == "Rinfinity")
         {
             text = "R";
-            subscript = MathGlyphs::infinitySymbol();
+            subscript = MathGlyphs::infinity();
         }
         else if (QRegularExpression("^.(Sun|Earth)$").match(text).hasMatch())
         {
@@ -406,7 +404,7 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(Display &dest, const QGen &
             text = "lambda";
         else if (text == "angl")
         {
-            text = QString("180") + MathGlyphs::degreeSymbol();
+            text = QString("180") + MathGlyphs::degree();
             dest.setPriority(QGen::MultiplicationPriority);
         }
         else if (text == "twopi")
@@ -448,9 +446,9 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(Display &dest, const QGen &
         italic = false;
         text = text.mid(1);
         if (text == "deg")
-            text = MathGlyphs::degreeSymbol();
+            text = MathGlyphs::degree();
         else if (text == "degreeF")
-            text = MathGlyphs::degreeFahrenheitSymbol();
+            text = MathGlyphs::degreeFahrenheit();
         else if (text == "Ohm")
             text = "Omega";
     }
@@ -463,27 +461,6 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(Display &dest, const QGen &
         movePenPointY(penPoint, fontXHeight(-1));
         renderText(dest, subscript, -1, penPoint);
     }
-}
-
-void QGenRenderer::renderFunction(Display &dest, const QGen &g, QPointF where)
-{
-    QPointF penPoint(where);
-    int n = 0;
-    while (n < g.argumentCount() && !g.nthArgument(n).isZero())
-        n++;
-    QGen expression = g.lastArgument();
-    QGen arguments = g.unaryFunctionArgument();
-    arguments.resizeVector(n);
-    if (arguments.length() == 1)
-        arguments = g.firstArgument();
-    Display argumentsDisplay, expressionDisplay;
-    argumentsDisplay = renderNormal(arguments);
-    expressionDisplay = renderNormal(expression);
-    int priority = QGen::EquationPriority;
-    movePenPointX(penPoint, renderDisplayWithPriority(dest, argumentsDisplay, priority, penPoint));
-    renderTextAndAdvance(dest, paddedText(MathGlyphs::rightwardsArrowFromBar()), penPoint);
-    renderDisplayWithPriority(dest, expressionDisplay, priority, penPoint);
-    dest.setPriority(priority);
 }
 
 void QGenRenderer::renderModular(Display &dest, const QGen &g, QPointF where)
@@ -512,9 +489,9 @@ void QGenRenderer::renderUnary(Display &dest, const QGen &g, QPointF where)
     if (priority == QGen::UnaryPriority)
     {
         if (g.isMinusOperator())
-            prefix = MathGlyphs::minusSignSymbol();
+            prefix = MathGlyphs::minus();
         else if (g.isNegationOperator())
-            prefix = MathGlyphs::notSignSymbol();
+            prefix = MathGlyphs::notSign();
         else if (g.isIncrementOperator())
             prefix = "++";
         else if (g.isDecrementOperator())
@@ -527,7 +504,7 @@ void QGenRenderer::renderUnary(Display &dest, const QGen &g, QPointF where)
                 prefix = MathGlyphs::letterToMath('I', MathGlyphs::Fraktur, false, false);
             else if (g.isTraceOperator())
                 prefix = "tr";
-            else Q_ASSERT(false); // non reachable
+            else Q_ASSERT(false); // unreachanble
             prefix.append(MathGlyphs::functionApplicationSpace());
         }
         renderTextAndAdvance(dest, prefix, penPoint);
@@ -552,20 +529,21 @@ void QGenRenderer::renderUnary(Display &dest, const QGen &g, QPointF where)
         switch (degree)
         {
         case 1:
-            suffix = MathGlyphs::primeSymbol();
+            suffix = MathGlyphs::prime();
             break;
         case 2:
-            suffix = MathGlyphs::doublePrimeSymbol();
+            suffix = MathGlyphs::doublePrime();
             break;
         case 3:
-            suffix = MathGlyphs::triplePrimeSymbol();
+            suffix = MathGlyphs::triplePrime();
             break;
         default:
             suffix = MathGlyphs::digitsToSuperscript(QString::number(degree));
             suffix.prepend(MathGlyphs::superscriptLeftParenthesis());
             suffix.append(MathGlyphs::superscriptRightParenthesis());
         }
-        movePenPointY(penPoint, -qMax(0.0, argumentDisplay.ascent() - fontAscent()));
+        qreal yOffset = qMax(0.0, argumentDisplay.ascent() - fontAscent());
+        movePenPointY(penPoint, -yOffset);
         renderText(dest, suffix, 0, penPoint);
     }
     else if (priority == QGen::ExponentiationPriority)
@@ -578,7 +556,8 @@ void QGenRenderer::renderUnary(Display &dest, const QGen &g, QPointF where)
             if (g.isTranspositionOperator())
             {
                 renderText(operatorDisplay, "T", -1, penPoint);
-                movePenPointY(penPoint, -(fontXHeight() + qMax(0.0, argumentDisplay.ascent() - fontAscent())));
+                qreal yOffset = fontXHeight() + qMax(0.0, argumentDisplay.ascent() - fontAscent());
+                movePenPointY(penPoint, -yOffset);
                 renderDisplay(dest, operatorDisplay, penPoint);
             }
             else if (g.isFactorialOperator())
@@ -586,59 +565,77 @@ void QGenRenderer::renderUnary(Display &dest, const QGen &g, QPointF where)
         }
         else if (g.isComplexConjugateOperator())
             renderDisplayWithAccent(dest, argumentDisplay, AccentType::Bar, penPoint);
-        else Q_ASSERT(false); // not reachable
+        else Q_ASSERT(false); // unreachanble
     }
+    dest.setPriority(priority);
 }
 
 void QGenRenderer::renderBinary(Display &dest, const QGen &g, QPointF where)
 {
     QPointF penPoint(where);
-    QGen::Vector args = g.unaryFunctionArgument().toVector();
-    if (g.isPowerOperator() || g.isHadamardPowerOperator() || g.isFunctionalPowerOperator())
+    int priority = g.operatorPriority();
+    if (priority = QGen::ExponentiationPriority)
     {
-        QGen base = args.front(), exponent = args.back();
-        renderPower(dest, base, exponent, penPoint, g.isHadamardPowerOperator() || g.isFunctionalPowerOperator());
+        bool withCircle = g.isHadamardPowerOperator() || g.isFunctionalPowerOperator();
+        renderSuperscript(dest, g.firstOperand(), g.secondOperand(), penPoint, withCircle);
     }
     else
     {
-        QGen leftOperand = args.front(), rightOperand = args.back();
-        bool hasTopPriority = g.isEquation() || g.isNotEqualOperator() || g.isUnitApplicationOperator() ||
-                g.isEqualOperator() || g.isInequation() || g.isAssignmentOperator();
-        bool noRightParens = hasTopPriority || !rightOperand.isOperator();
-        bool noLeftParens = hasTopPriority || !leftOperand.isOperator();
-        Display leftOperandDisplay = renderNormal(leftOperand);
-        Display rightOperandDisplay = renderNormal(rightOperand);
-        QString opStr;
+        QGen left = g.firstOperand(), right = g.secondOperand();
+        QChar op;
+        bool hasConstant;
         if (g.isEquation())
-            opStr = paddedText("=");
+            op = '=';
         else if (g.isEqualOperator())
-            opStr = paddedText(MathGlyphs::questionedEqualToSymbol());
+            op = MathGlyphs::questionedEqualTo();
+        else if (g.isElementOperator())
+            op = MathGlyphs::elementOf();
         else if (g.isNotEqualOperator())
-            opStr = paddedText(MathGlyphs::notEqualToSymbol());
+            op = MathGlyphs::notEqualTo();
         else if (g.isLessThanOperator())
-            opStr = paddedText("<");
+            op = '<';
         else if (g.isGreaterThanOperator())
-            opStr = paddedText(">");
+            op = '>';
         else if (g.isLessThanOrEqualOperator())
-            opStr = paddedText(MathGlyphs::lessThanOrEqualToSymbol());
+            op = MathGlyphs::lessThanOrEqualTo();
         else if (g.isGreaterThanOrEqualOperator())
-            opStr = paddedText(MathGlyphs::greaterThanOrEqualToSymbol());
+            op = MathGlyphs::greaterThanOrEqualTo();
         else if (g.isAssignmentOperator())
-            opStr = paddedText(MathGlyphs::equalToByDefinitionSymbol());
+            op = MathGlyphs::equalToByDefinition();
+        else if (g.isArrayAssignmentOperator())
+            op = MathGlyphs::leftwardsArrow();
         else if (g.isCrossProductOperator())
-            opStr = paddedText(MathGlyphs::multiplicationSignSymbol());
+            op = MathGlyphs::vectorOrCrossProduct();
         else if (g.isSetDifferenceOperator())
-            opStr = paddedText(MathGlyphs::setMinusSymbol());
+            op = MathGlyphs::setMinus();
         else if (g.isHadamardDivisionOperator())
-            opStr = paddedText(MathGlyphs::circledDivisionSlashSymbol());
+            op = MathGlyphs::circledDivisionSlash();
         else if (g.isHadamardDifferenceOperator())
-            opStr = paddedText(MathGlyphs::minusSignSymbol());
+            op = MathGlyphs::minus();
+        else if (g.isUnitApplicationOperator(hasConstant))
+            op = hasConstant ? MathGlyphs::multiplicationDot() : MathGlyphs::thickSpace();
+        else if (g.isIntervalOperator())
+            op = MathGlyphs::twoDotLeader();
+        else if (g.isMappingOperator())
+        {
+            int n = 0;
+            while (n < g.operandCount() && !g.nthOperand(n).isZero())
+                n++;
+            left = g.unaryFunctionArgument();
+            left.resizeVector(n);
+            if (left.length() == 1)
+                left = g.firstOperand();
+            right = g.lastOperand();
+        }
         else
-            opStr = paddedText("??");
-        renderDisplayAndAdvance(dest, leftOperandDisplay, penPoint);
-        renderTextAndAdvance(dest, opStr, penPoint);
-        renderDisplay(dest, rightOperandDisplay, penPoint);
+            Q_ASSERT(false); // unreachable
+        Display leftDisplay = renderNormal(left);
+        Display rightDisplay = renderNormal(right);
+        movePenPointX(penPoint, renderDisplayWithPriority(dest, leftDisplay, priority, penPoint));
+        renderTextAndAdvance(dest, paddedText(op), penPoint);
+        renderDisplayWithPriority(dest, rightDisplay, priority, penPoint);
     }
+    dest.setPriority(priority);
 }
 
 void QGenRenderer::renderAssociative(Display &dest, const QGen &g,
@@ -658,17 +655,17 @@ void QGenRenderer::renderAssociative(Display &dest, const QGen &g,
     else if (g.isSumOperator() || g.isHadamardSumOperator())
         opStr = paddedText("+");
     else if (g.isUnionOperator())
-        opStr = paddedText(MathGlyphs::unionSymbol());
+        opStr = paddedText(MathGlyphs::setUnion());
     else if (g.isIntersectionOperator())
-        opStr = paddedText(MathGlyphs::intersectionSymbol());
+        opStr = paddedText(MathGlyphs::setIntersection());
     else if (g.isConjunctionOperator())
-        opStr = paddedText(MathGlyphs::logicalAndSymbol());
+        opStr = paddedText(MathGlyphs::logicalAnd());
     else if (g.isDisjunctionOperator())
-        opStr = paddedText(MathGlyphs::logicalOrSymbol());
+        opStr = paddedText(MathGlyphs::logicalOr());
     else if (g.isExclusiveOrOperator())
-        opStr = paddedText(MathGlyphs::logicalXorSymbol());
+        opStr = paddedText(MathGlyphs::logicalXor());
     else if (g.isComposeOperator() || g.isHadamardProductOperator())
-        opStr = paddedText(MathGlyphs::ringOperatorSymbol());
+        opStr = paddedText(MathGlyphs::ringOperator());
     else
         opStr = paddedText("??");
     Display display;
@@ -702,23 +699,36 @@ void QGenRenderer::renderFraction(Display &dest, const QGen &numerator, const QG
     renderDisplay(dest, denominatorDisplay, penPoint);
 }
 
-void QGenRenderer::renderPower(Display &dest, const QGen &base, const QGen &exponent, QPointF where, bool circ)
+void QGenRenderer::renderSuperscript(Display &dest, const QGen &base, const QGen &exponent,
+                                     int priority, QPointF where, bool withCircle)
 {
     QPointF penPoint(where);
     Display baseDisplay, exponentDisplay;
     baseDisplay = renderNormal(base);
     exponentDisplay = renderSmaller(exponent);
-    renderDisplayAndAdvance(dest, baseDisplay, penPoint);
+    movePenPointX(penPoint, renderDisplayWithPriority(dest, baseDisplay, priority, penPoint));
     qreal verticalOffset = qMax(0.0, baseDisplay.ascent() - fontAscent());
     movePenPointXY(penPoint, exponentDisplay.leftBearing(), -(fontXHeight() + verticalOffset));
-    if (circ)
-        movePenPointX(penPoint, renderText(dest, MathGlyphs::ringOperatorSymbol(), -1, penPoint));
+    if (withCircle)
+        movePenPointX(penPoint, renderText(dest, MathGlyphs::ringOperator(), -1, penPoint));
     renderDisplay(dest, exponentDisplay, penPoint);
+}
+
+void QGenRenderer::renderSubscript(Display &dest, const QGen &base, const QGen &subscript, int priority, QPointF where)
+{
+    QPointF penPoint(where);
+    Display baseDisplay, subscriptDisplay;
+    baseDisplay = renderNormal(base);
+    subscriptDisplay = renderSmaller(subscript);
+    movePenPointX(penPoint, renderDisplayWithPriority(dest, baseDisplay, priority, penPoint));
+    qreal verticalOffset = qMax(0.0, baseDisplay.descent() - fontDescent());
+    movePenPointXY(penPoint, subscriptDisplay.leftBearing(), fontXHeight(-1) + verticalOffset);
+    renderDisplay(dest, subscriptDisplay, penPoint);
 }
 
 void QGenRenderer::renderDisplayWithRadical(Display &dest, const Display &source, QPointF where)
 {
-    QRectF rect = textTightBoundingRect(MathGlyphs::squareRootSymbol());
+    QRectF rect = textTightBoundingRect(MathGlyphs::squareRoot());
     qreal rWidth = rect.width(), rHeight = rect.height(), rDescent = rect.y() + rHeight, rBearing = -rect.x();
     qreal radicandWidth = source.totalWidth(), radicandHeight = qMax(source.height() + linePadding(), rHeight);
     qreal fY = qMax(1.0, (radicandHeight + lineWidth() / 3) / rHeight), fX = qPow(fY, 0.2);
@@ -728,7 +738,7 @@ void QGenRenderer::renderDisplayWithRadical(Display &dest, const Display &source
     renderHorizontalLine(painter, rWidth * fX - lineWidth() / 3, radicandHeight - source.descent(), radicandWidth);
     painter.translate(where.x(), where.y() + source.descent());
     painter.scale(fX, fY);
-    painter.drawText(QPointF(rBearing, -rDescent), MathGlyphs::squareRootSymbol());
+    painter.drawText(QPointF(rBearing, -rDescent), MathGlyphs::squareRoot());
 }
 
 void QGenRenderer::renderMap(Display &dest, const QGen &g, QPointF where)

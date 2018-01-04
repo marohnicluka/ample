@@ -21,7 +21,7 @@ QGen::~QGen()
 {
 }
 
-QMap<QString, QGen::UserDefinedOperator> QGen::userDefinedOperators = QMap<QString, QGen::UserDefinedOperator>();
+QMap<QString, QGen::UserOperator> QGen::userOperators = QMap<QString, QGen::UserOperator>();
 
 QGen QGen::makeSymb(const giac::unary_function_ptr *p, const giac::gen &args) const
 {
@@ -45,42 +45,42 @@ bool QGen::isElementary() const {
             isUnaryFunction(giac::at_atanh) || isUnaryFunction(giac::at_det) || isUnaryFunction(giac::at_det_minor);
 }
 
-int QGen::argumentCount() const
+int QGen::operandCount() const
 {
     return isSymbolic() && _SYMBptr->feuille.type == giac::_VECT ? int(_SYMBptr->feuille._VECTptr->size()) : -1;
 }
 
-QGen QGen::firstArgument() const
+QGen QGen::firstOperand() const
 {
-    if (!isSymbolic() || argumentCount() < 1)
+    if (!isSymbolic() || operandCount() < 1)
         return undefined();
     return QGen(_SYMBptr->feuille._VECTptr->front(), context);
 }
 
-QGen QGen::lastArgument() const
+QGen QGen::lastOperand() const
 {
-    if (!isSymbolic() || argumentCount() < 1)
+    if (!isSymbolic() || operandCount() < 1)
         return undefined();
     return QGen(_SYMBptr->feuille._VECTptr->back(), context);
 }
 
-QGen QGen::secondArgument() const
+QGen QGen::secondOperand() const
 {
-    if (!isSymbolic() || argumentCount() < 2)
+    if (!isSymbolic() || operandCount() < 2)
         return undefined();
     return QGen(_SYMBptr->feuille._VECTptr->at(1), context);
 }
 
-QGen QGen::thirdArgument() const
+QGen QGen::thirdOperand() const
 {
-    if (!isSymbolic() || argumentCount() < 3)
+    if (!isSymbolic() || operandCount() < 3)
         return undefined();
     return QGen(_SYMBptr->feuille._VECTptr->at(2), context);
 }
 
-QGen QGen::nthArgument(int n) const
+QGen QGen::nthOperand(int n) const
 {
-    if (!isSymbolic() || argumentCount() <= qAbs(n))
+    if (!isSymbolic() || operandCount() <= qAbs(n))
         return undefined();
     giac::vecteur &vect = *_SYMBptr->feuille._VECTptr;
     return QGen(vect.at(n >= 0 ? n : int(vect.size()) + n), context);
@@ -90,7 +90,7 @@ bool QGen::isUnitApplicationOperator(bool &hasConstant) const
 {
     if (!isUnitApplicationOperator())
         return false;
-    Vector identifiers = QGen(giac::_lname(secondArgument(), context)).toVector();
+    Vector identifiers = QGen(giac::_lname(secondOperand(), context)).toVector();
     Vector::const_iterator it;
     for (it = identifiers.begin(); it != identifiers.end(); ++it)
     {
@@ -114,12 +114,12 @@ bool QGen::isFunctionApplicationOperator(QString &functionName, Vector &argument
     return true;
 }
 
-bool QGen::isMapsToOperator(Vector &variables, QGen &expression) const
+bool QGen::isMappingOperator(Vector &variables, QGen &expression) const
 {
-    if (!isMapsToOperator())
+    if (!isMappingOperator())
         return false;
-    variables = firstArgument().toVector();
-    expression = secondArgument();
+    variables = firstOperand().toVector();
+    expression = secondOperand();
     return true;
 }
 
@@ -127,8 +127,8 @@ bool QGen::isIntervalOperator(QGen &lowerBound, QGen &upperBound) const
 {
     if (!isIntervalOperator())
         return false;
-    lowerBound = firstArgument();
-    upperBound = secondArgument();
+    lowerBound = firstOperand();
+    upperBound = secondOperand();
     return true;
 }
 
@@ -189,16 +189,16 @@ int QGen::isInequation(QGen &leftHandSide, QGen &rightHandSide) const
 {
     if (!isInequation())
         return 0;
-    leftHandSide = firstArgument();
-    rightHandSide = secondArgument();
+    leftHandSide = firstOperand();
+    rightHandSide = secondOperand();
     if (isLessThanOperator())
-        return InequationType::LessThan;
+        return InequalityType::LessThan;
     if (isLessThanOrEqualOperator())
-        return InequationType::LessThanOrEqualTo;
+        return InequalityType::LessThanOrEqualTo;
     if (isGreaterThanOperator())
-        return InequationType::GreaterThan;
+        return InequalityType::GreaterThan;
     if (isGreaterThanOrEqualOperator())
-        return InequationType::GreaterThanOrEqualTo;
+        return InequalityType::GreaterThanOrEqualTo;
     return 0; // unreachable
 }
 
@@ -217,7 +217,8 @@ int QGen::operatorType(int &priority) const
     if (isMinusOperator() || isIncrementOperator() || isDecrementOperator() || isNegationOperator() ||
             isRealPartOperator() || isImaginaryPartOperator() || isTraceOperator()) {
         priority = UnaryPriority; return OperatorType::Unary; }
-    if (isComplexConjugateOperator() || isFactorialOperator() || isTranspositionOperator() || isDerivativeOperator(true)) {
+    if (isComplexConjugateOperator() || isFactorialOperator() ||
+            isTranspositionOperator() || isDerivativeOperator(true)) {
         priority = ExponentiationPriority; return OperatorType::Unary; }
     if (isReciprocalOperator()) {
         priority = DivisionPriority; return OperatorType::Unary; }
@@ -226,7 +227,7 @@ int QGen::operatorType(int &priority) const
     if (isPowerOperator() || isHadamardPowerOperator() || isFunctionalPowerOperator()) {
         priority = ExponentiationPriority; return OperatorType::Binary; }
     if (isHadamardDifferenceOperator()) {
-        priority = AdditionPriority; return OperatorType::Binary; }
+        priority = DifferencePriority; return OperatorType::Binary; }
     if (isHadamardDivisionOperator()) {
         priority = MultiplicationPriority; return OperatorType::Binary; }
     if (isCrossProductOperator()) {
@@ -241,16 +242,14 @@ int QGen::operatorType(int &priority) const
         priority = ComparisonPriority; return OperatorType::Binary; }
     if (isEquation()) {
         priority = EquationPriority; return OperatorType::Binary; }
-    if (isFunctionApplicationOperator()) {
+    if (isFunctionApplicationOperator() || isAtOperator()) {
         priority = ApplicationPriority; return OperatorType::Binary; }
-    if (isMapsToOperator()) {
+    if (isMappingOperator()) {
         priority = EquationPriority; return OperatorType::Binary; }
-    if (isWhenOperator() || isIfThenElseOperator()) {
-        priority = ConditionalPriority; return OperatorType::Ternary; }
     if (isAssignmentOperator() || isArrayAssignmentOperator()) {
-        priority = AssignmentPriority; return OperatorType::Other; }
-    if (isAtOperator()) {
-        priority = ApplicationPriority; return OperatorType::Other; }
+        priority = AssignmentPriority; return OperatorType::Binary; }
+    if (isConditionalOperator() || isIfThenElseOperator()) {
+        priority = ConditionalPriority; return OperatorType::Ternary; }
     return 0;
 }
 
@@ -278,13 +277,13 @@ bool QGen::isAssociativeOperator(Vector &arguments) const
     return true;
 }
 
-bool QGen::isBinaryOperator(QGen &firstOperand, QGen &secondOperand) const
+bool QGen::isBinaryOperator(QGen &left, QGen &right) const
 {
     int t;
     if (!isOperator(t) || t != OperatorType::Binary)
         return false;
-    firstOperand = firstArgument();
-    secondOperand = secondArgument();
+    left = firstOperand();
+    right = secondOperand();
     return true;
 }
 
@@ -322,31 +321,32 @@ bool QGen::isIndefiniteIntegral(QGen &expression, QGen &variable) const
 {
     if (!isIntegral() || unaryFunctionArgument().length() != 2)
         return false;
-    expression = firstArgument();
-    variable = secondArgument();
+    expression = firstOperand();
+    variable = secondOperand();
     return true;
 }
 
 bool QGen::isDefiniteIntegral(QGen &expression, QGen &variable, QGen &lowerBound, QGen &upperBound) const
 {
-    if (!isIntegral() || unaryFunctionArgument().length() < 3)
+    if (!isIntegral() || operandCount() < 3)
         return false;
-    Vector arguments = unaryFunctionArgument().toVector();
-    expression = arguments[0];
-    variable = arguments[1];
-    if (arguments.length() == 3)
+    expression = firstOperand();
+    variable = secondOperand();
+    if (operandCount() == 3)
     {
-        if (!arguments.back().isEquation() || !arguments.back().secondArgument().isIntervalOperator())
+        QGen last = lastOperand();
+        if (!last.isEquation() || !last.secondOperand().isIntervalOperator())
             return false;
-        QGen interval = arguments.back().secondArgument();
-        lowerBound = interval.firstArgument();
-        upperBound = interval.secondArgument();
+        QGen interval = last.secondOperand();
+        lowerBound = interval.firstOperand();
+        upperBound = interval.secondOperand();
     }
-    else
+    else if (operandCount() == 4)
     {
-        lowerBound = arguments[2];
-        upperBound = arguments[3];
+        lowerBound = thirdOperand();
+        upperBound = lastOperand();
     }
+    else return false;
     return true;
 }
 
@@ -560,14 +560,16 @@ QGen QGen::minusInfinity(const giac::context *ctx)
     return QGen(giac::symbolic(giac::at_neg, giac::_IDNT_infinity()), ctx);
 }
 
-bool QGen::defineBinaryOperator(const QString &name, const QString &symbol,
+bool QGen::defineBinaryOperator(const QString &name, OperatorPriority priority, const QString &symbol,
                                 const QGen &realFunction, bool checkProperties, const giac::context *ctx)
 {
     giac::gen binary = giac::gen(giac::_BINARY_OPERATOR).change_subtype(giac::_INT_MUPADOPERATOR);
     giac::gen args = seq(giac::string2gen(name.toStdString()), realFunction, binary);
     if (giac::is_zero(giac::user_operator(args, ctx)))
         return false;
-    UserDefinedOperator op;
+    UserOperator op;
+    op.context = ctx;
+    op.priority = priority;
     op.symbol = symbol;
     op.isRelation = false;
     if (checkProperties)
@@ -586,14 +588,16 @@ bool QGen::defineBinaryOperator(const QString &name, const QString &symbol,
     return true;
 }
 
-bool QGen::defineBinaryRelation(const QString &name, const QString &symbol,
+bool QGen::defineBinaryRelation(const QString &name, OperatorPriority priority, const QString &symbol,
                                 const QGen &booleanFunction, const giac::context *ctx)
 {
     giac::gen binary = giac::gen(giac::_BINARY_OPERATOR).change_subtype(giac::_INT_MUPADOPERATOR);
     giac::gen args = seq(giac::string2gen(name.toStdString()), booleanFunction, binary);
     if (giac::is_zero(giac::user_operator(args, ctx)))
         return false;
-    UserDefinedOperator op;
+    UserOperator op;
+    op.context = ctx;
+    op.priority = priority;
     op.symbol = symbol;
     op.isRelation = true;
     op.isAssociative = false;
@@ -601,10 +605,10 @@ bool QGen::defineBinaryRelation(const QString &name, const QString &symbol,
     return true;
 }
 
-bool QGen::findUserDefinedOperator(const QString &name, UserDefinedOperator &properties)
+bool QGen::findUserOperator(const QString &name, UserOperator &properties)
 {
-    QMap<QString, UserDefinedOperator>::const_iterator it = userDefinedOperators.constFind(name);
-    if (it == userDefinedOperators.constEnd())
+    QMap<QString, UserOperator>::const_iterator it = userOperators.constFind(name);
+    if (it == userOperators.constEnd())
         return false;
     properties = *it;
     return true;
