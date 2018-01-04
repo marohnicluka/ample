@@ -28,13 +28,6 @@ QGen QGen::makeSymb(const giac::unary_function_ptr *p, const giac::gen &args) co
     return QGen(giac::symbolic(p, args), context);
 }
 
-QString QGen::toString() const
-{
-    std::stringstream ss;
-    ss << (giac::gen)*this;
-    return QString(ss.str().data());
-}
-
 bool QGen::isNegativeConstant() const
 {
     return  (isInteger() && integerValue() < 0) ||
@@ -64,6 +57,13 @@ QGen QGen::firstArgument() const
     return QGen(_SYMBptr->feuille._VECTptr->front(), context);
 }
 
+QGen QGen::lastArgument() const
+{
+    if (!isSymbolic() || argumentCount() < 1)
+        return undefined();
+    return QGen(_SYMBptr->feuille._VECTptr->back(), context);
+}
+
 QGen QGen::secondArgument() const
 {
     if (!isSymbolic() || argumentCount() < 2)
@@ -76,6 +76,14 @@ QGen QGen::thirdArgument() const
     if (!isSymbolic() || argumentCount() < 3)
         return undefined();
     return QGen(_SYMBptr->feuille._VECTptr->at(2), context);
+}
+
+QGen QGen::nthArgument(int n) const
+{
+    if (!isSymbolic() || argumentCount() <= qAbs(n))
+        return undefined();
+    giac::vecteur &vect = *_SYMBptr->feuille._VECTptr;
+    return QGen(vect.at(n >= 0 ? n : int(vect.size()) + n), context);
 }
 
 bool QGen::isUnitApplicationOperator(bool &hasConstant) const
@@ -177,56 +185,72 @@ bool QGen::isInequation() const
             isLessThanOrEqualOperator() || isGreaterThanOrEqualOperator();
 }
 
+int QGen::isInequation(QGen &leftHandSide, QGen &rightHandSide) const
+{
+    if (!isInequation())
+        return 0;
+    leftHandSide = firstArgument();
+    rightHandSide = secondArgument();
+    if (isLessThanOperator())
+        return InequationType::LessThan;
+    if (isLessThanOrEqualOperator())
+        return InequationType::LessThanOrEqualTo;
+    if (isGreaterThanOperator())
+        return InequationType::GreaterThan;
+    if (isGreaterThanOrEqualOperator())
+        return InequationType::GreaterThanOrEqualTo;
+    return 0; // unreachable
+}
+
 int QGen::operatorType(int &priority) const
 {
     if (isSumOperator() || isHadamardSumOperator()) {
-        priority = 6; return OperatorType::Associative; }
+        priority = AdditionPriority; return OperatorType::Associative; }
     if (isProductOperator() || isAmpersandProductOperator() || isHadamardProductOperator() || isComposeOperator()) {
-        priority = 5; return OperatorType::Associative; }
+        priority = MultiplicationPriority; return OperatorType::Associative; }
     if (isConjunctionOperator() || isDisjunctionOperator() || isExclusiveOrOperator()) {
-        priority = 11; return OperatorType::Associative; }
+        priority = LogicalPriority; return OperatorType::Associative; }
     if (isBitwiseAndOperator() || isBitwiseOrOperator() || isBitwiseXorOperator()) {
-        priority = 10; return OperatorType::Associative; }
+        priority = BitwisePriority; return OperatorType::Associative; }
     if (isUnionOperator() || isIntersectionOperator()) {
-        priority = 7; return OperatorType::Associative; }
-    if (isMinusOperator() || isIncrementOperator() || isDecrementOperator() || isNegationOperator()) {
-        priority = 4; return OperatorType::Unary; }
-    if (isComplexConjugateOperator() || isFactorialOperator()) {
-        priority = 2; return OperatorType::Unary; }
+        priority = SetPriority; return OperatorType::Associative; }
+    if (isMinusOperator() || isIncrementOperator() || isDecrementOperator() || isNegationOperator() ||
+            isRealPartOperator() || isImaginaryPartOperator() || isTraceOperator()) {
+        priority = UnaryPriority; return OperatorType::Unary; }
+    if (isComplexConjugateOperator() || isFactorialOperator() || isTranspositionOperator() || isDerivativeOperator(true)) {
+        priority = ExponentiationPriority; return OperatorType::Unary; }
     if (isReciprocalOperator()) {
-        priority = 3; return OperatorType::Unary; }
-    if (isTranspositionOperator()) {
-        priority = 2; return OperatorType::Unary; }
+        priority = DivisionPriority; return OperatorType::Unary; }
     if (isUnitApplicationOperator()) {
-        priority = 5; return OperatorType::Binary; }
+        priority = MultiplicationPriority; return OperatorType::Binary; }
     if (isPowerOperator() || isHadamardPowerOperator() || isFunctionalPowerOperator()) {
-        priority = 2; return OperatorType::Binary; }
+        priority = ExponentiationPriority; return OperatorType::Binary; }
     if (isHadamardDifferenceOperator()) {
-        priority = 6; return OperatorType::Binary; }
+        priority = AdditionPriority; return OperatorType::Binary; }
     if (isHadamardDivisionOperator()) {
-        priority = 5; return OperatorType::Binary; }
+        priority = MultiplicationPriority; return OperatorType::Binary; }
     if (isCrossProductOperator()) {
-        priority = 5; return OperatorType::Binary; }
+        priority = MultiplicationPriority; return OperatorType::Binary; }
     if (isSetDifferenceOperator()) {
-        priority = 7; return OperatorType::Binary; }
+        priority = SetPriority; return OperatorType::Binary; }
     if (isIntervalOperator()) {
-        priority = 13; return OperatorType::Binary; }
+        priority = IntervalPriority; return OperatorType::Binary; }
     if (isInequation()) {
-        priority = 8; return OperatorType::Binary; }
+        priority = InequationPriority; return OperatorType::Binary; }
     if (isElementOperator() || isEqualOperator() || isNotEqualOperator()) {
-        priority = 9; return OperatorType::Binary; }
+        priority = ComparisonPriority; return OperatorType::Binary; }
     if (isEquation()) {
-        priority = 14; return OperatorType::Binary; }
+        priority = EquationPriority; return OperatorType::Binary; }
     if (isFunctionApplicationOperator()) {
-        priority = 1; return OperatorType::Binary; }
+        priority = ApplicationPriority; return OperatorType::Binary; }
     if (isMapsToOperator()) {
-        priority = 14; return OperatorType::Binary; }
+        priority = EquationPriority; return OperatorType::Binary; }
     if (isWhenOperator() || isIfThenElseOperator()) {
-        priority = 12; return OperatorType::Ternary; }
+        priority = ConditionalPriority; return OperatorType::Ternary; }
     if (isAssignmentOperator() || isArrayAssignmentOperator()) {
-        priority = 15; return OperatorType::Other; }
+        priority = AssignmentPriority; return OperatorType::Other; }
     if (isAtOperator()) {
-        priority = 1; return OperatorType::Other; }
+        priority = ApplicationPriority; return OperatorType::Other; }
     return 0;
 }
 
@@ -294,12 +318,6 @@ bool QGen::isUserOperator(QString &name) const
     return true;
 }
 
-bool QGen::isMonolithic() const
-{
-    if (!isSymbolic())
-        return isIdentifier() || isInteger() || isDouble() || (isVector() && !isSequenceVector()) || isMatrix();
-}
-
 bool QGen::isIndefiniteIntegral(QGen &expression, QGen &variable) const
 {
     if (!isIntegral() || unaryFunctionArgument().length() != 2)
@@ -354,6 +372,12 @@ QGen::Vector QGen::flattenOperands() const
         }
     }
     return operands;
+}
+
+void QGen::resizeVector(int n)
+{
+    if (isVector())
+        _VECTptr->resize(n >= 0 ? n : qMax(int(_VECTptr->size()) + n, 0));
 }
 
 QGen::Vector QGen::toVector() const

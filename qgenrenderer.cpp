@@ -17,17 +17,23 @@
 
 #include <QPainter>
 #include <QRegularExpression>
+#include <qmath.h>
 #include "qgenrenderer.h"
 
 #define FONT_SIZE_SCALING_FACTOR 1.71526586621
 
-QGenRenderer::QGenRenderer(const QString &family, int size)
+QGenRenderer::QGenRenderer(const QString &family, int fontSize)
 {
     fontFamily = family;
     for (int i = -2; i < 2; ++i)
-        fontSizes << qRound(size * pow(FONT_SIZE_SCALING_FACTOR, i));
+        fontSizes << qRound(fontSize * pow(FONT_SIZE_SCALING_FACTOR, i));
     renderFontBold = false;
     renderFontItalic = false;
+}
+
+QPicture QGenRenderer::render(const QGen &g, int alignment) const
+{
+
 }
 
 QString QGenRenderer::paddedText(const QString &text, MathPadding padding, bool padLeft, bool padRight)
@@ -114,95 +120,82 @@ QString QGenRenderer::identifierStringToUnicode(const QString &text, bool bold, 
     return symbol;
 }
 
-QFont QGenRenderer::makeFont(int fontSizeLevel)
+const QFont &QGenRenderer::getFont(int fontSizeLevel)
 {
     int level = 2 + (int)qMin(qMax(fontSizeLevel, -2), 1);
     QFont::Weight weight = renderFontBold ? QFont::Bold : QFont::Normal;
-    return QFont(fontFamily, fontSizes.at(level), weight, renderFontItalic);
+    int pointSize = fontSizes.at(level);
+    for (QList<QFont>::const_iterator it = fonts.begin(); it != fonts.end(); ++it)
+    {
+        if (it->pointSize() == pointSize && it->weight() == weight && it->italic() == renderFontItalic)
+            return *it;
+    }
+    fonts.append(QFont(fontFamily, pointSize, weight, renderFontItalic));
+    return fonts.back();
 }
 
-QGenRenderer::Display QGenRenderer::render(const QGen &g, int sizeLevel,
-                                           BracketType leftBracketType, BracketType rightBracketType)
+void QGenRenderer::render(Display &dest, const QGen &g, int sizeLevel)
 {
-    Display display;
     fontSizeLevelStack.push(sizeLevel);
     if (g.isString())
-        renderText(&display, quotedText(g.stringValue()));
+        renderText(dest, quotedText(g.stringValue()));
     else if (g.isConstant())
-        renderNumber(&display, g);
+        renderNumber(dest, g);
     else if (g.isIdentifier())
-        renderIdentifier(&display, g);
+        renderIdentifier(dest, g);
     else if (g.isFunction())
-        renderFunction(&display, g);
+        renderFunction(dest, g);
     else if (g.isModular())
-        renderModular(&display, g);
+        renderModular(dest, g);
     else if (g.isMap())
-        renderMap(&display, g);
+        renderMap(dest, g);
     else if (g.isVector())
-        renderVector(&display, g.toVector());
+        renderVector(dest, g.toVector());
     else if (g.isSymbolic())
-        renderSymbolic(&display, g);
+        renderSymbolic(dest, g);
     else
-        renderText(&display, g.toString());
+        renderText(dest, g.toString());
     fontSizeLevelStack.pop();
+}
+
+QGenRenderer::Display QGenRenderer::renderNormal(const QGen &g)
+{
+    Display display;
+    render(display, g, fontSizeLevel());
     return display;
 }
 
-QPicture QGenRenderer::render(const QGen &g)
+QGenRenderer::Display QGenRenderer::renderSmaller(const QGen &g)
 {
-    return render(g, 0, None, None);
+    Display display;
+    render(display, g, smallerFontSizeLevel());
+    return display;
 }
 
-QGenRenderer::Display QGenRenderer::renderNormal(const QGen &g, bool parenthesize)
+QGenRenderer::Display QGenRenderer::renderLarger(const QGen &g)
 {
-    BracketType leftBracketType = parenthesize ? LeftParenthesis : None;
-    BracketType rightBracketType = parenthesize ? RightParenthesis : None;
-    return render(g, fontSizeLevel(), leftBracketType, rightBracketType);
+    Display display;
+    render(display, g, largerFontSizeLevel());
+    return display;
 }
 
-QGenRenderer::Display QGenRenderer::renderSmaller(const QGen &g, bool parenthesize)
+void QGenRenderer::renderDisplay(Display &dest, const Display &source, QPointF where)
 {
-    BracketType leftBracketType = parenthesize ? LeftParenthesis : None;
-    BracketType rightBracketType = parenthesize ? RightParenthesis : None;
-    return render(g, smallerFontSizeLevel(), leftBracketType, rightBracketType);
+    QPainter painter(&dest);
+    painter.drawPicture(where, source);
 }
 
-QGenRenderer::Display QGenRenderer::renderLarger(const QGen &g, bool parenthesize)
+void QGenRenderer::renderDisplayAndAdvance(Display &dest, const Display &source, QPointF &penPoint)
 {
-    BracketType leftBracketType = parenthesize ? LeftParenthesis : None;
-    BracketType rightBracketType = parenthesize ? RightParenthesis : None;
-    return render(g, largerFontSizeLevel(), leftBracketType, rightBracketType);
+    renderDisplay(dest, source, penPoint);
+    movePenPointX(penPoint, source.advance());
 }
 
-void QGenRenderer::renderDisplayed(QPaintDevice *device, const Display &displayed, QPointF where)
-{
-    QPainter painter(device);
-    painter.drawPicture(where, displayed);
-}
-
-void QGenRenderer::renderDisplayedAndAdvance(QPaintDevice *device, const Display &displayed, QPointF &penPoint)
-{
-    renderDisplayed(device, displayed, penPoint);
-    movePenPointX(penPoint, displayed.advance());
-}
-
-void QGenRenderer::renderLine(QPaintDevice *device, QPointF start, QPointF end)
-{
-    QPainter painter(device);
-    painter.drawLine(start, end);
-}
-
-void QGenRenderer::renderHLine(QPaintDevice *device, QPointF start, qreal length)
-{
-    QPointF end(start.x() + length, start.y());
-    renderLine(device, start, end);
-}
-
-qreal QGenRenderer::renderText(QPaintDevice *device, const QString &text,
+qreal QGenRenderer::renderText(Display &dest, const QString &text,
                               int relativeFontSizeLevel, QPointF where, QRectF *boundingRect)
 {
-    QPainter painter(device);
-    QFont font = makeFont(fontSizeLevel() + relativeFontSizeLevel);
+    QPainter painter(&dest);
+    QFont font = getFont(fontSizeLevel() + relativeFontSizeLevel);
     QFontMetricsF fontMetrics(font);
     painter.setFont(font);
     painter.drawText(where, text);
@@ -214,79 +207,91 @@ qreal QGenRenderer::renderText(QPaintDevice *device, const QString &text,
     return textWidth(text);
 }
 
-void QGenRenderer::renderTextAndAdvance(QPaintDevice *device, const QString &text, QPointF &penPoint)
+void QGenRenderer::renderTextAndAdvance(Display &dest, const QString &text, QPointF &penPoint)
 {
-    movePenPointX(penPoint, renderText(device, text, 0, penPoint));
+    movePenPointX(penPoint, renderText(dest, text, 0, penPoint));
 }
 
 qreal QGenRenderer::textWidth(const QString &text, int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
     return fontMetrics.width(text);
 }
 
 QRectF QGenRenderer::textTightBoundingRect(const QString &text, int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
     return fontMetrics.tightBoundingRect(text);
 }
 
 qreal QGenRenderer::fontHeight(int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
     return fontMetrics.height();
 }
 
 qreal QGenRenderer::fontAscent(int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
     return fontMetrics.ascent();
 }
 
 qreal QGenRenderer::fontDescent(int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
     return fontMetrics.descent();
+}
+
+qreal QGenRenderer::fontXHeight(int relativeFontSizeLevel)
+{
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
+    return fontMetrics.xHeight();
 }
 
 qreal QGenRenderer::fontMidLine(int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
-    return fontMetrics.xHeight();
-}
-
-qreal QGenRenderer::fontCenter(int relativeFontSizeLevel)
-{
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
-    return fontMetrics.strikeOutPos();
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
+    return (fontMetrics.xHeight() / 2 + fontMetrics.strikeOutPos()) / 2;
 }
 
 qreal QGenRenderer::fontLeading(int relativeFontSizeLevel)
 {
-    QFontMetricsF fontMetrics(makeFont(fontSizeLevel() + relativeFontSizeLevel));
+    QFontMetricsF fontMetrics(getFont(fontSizeLevel() + relativeFontSizeLevel));
     return fontMetrics.leading();
 }
 
-void QGenRenderer::renderNumber(QPaintDevice *device, const QGen &g, QPointF where)
+qreal QGenRenderer::lineWidth(int relativeFontSizeLevel)
+{
+    return textTightBoundingRect(MathGlyphs::horizontalLineExtension(), relativeFontSizeLevel).height();
+}
+
+void QGenRenderer::renderNumber(Display &dest, const QGen &g, QPointF where)
 {
     QPointF penPoint(where);
     QGen gAbs = (g.isNegativeConstant() ? -g : g), numerator, denominator, realPart, imaginaryPart;
     if (g.isNegativeConstant())
-        renderTextAndAdvance(device, MathGlyphs::minusSignSymbol(), penPoint);
-    if (gAbs.isFraction(numerator, denominator))
-        renderFraction(device, numerator, denominator, penPoint);
+    {
+        renderTextAndAdvance(dest, MathGlyphs::minusSignSymbol(), penPoint);
+        dest.setPriority(QGen::MultiplicationPriority);
+    }
+    if (gAbs.isFraction(numerator, denominator)) {
+        renderFraction(dest, numerator, denominator, penPoint);
+        dest.setPriority(QGen::DivisionPriority);
+        dest.setGrouped(true);
+    }
     else if (gAbs.isComplex(realPart, imaginaryPart))
     {
         Display realPartDisplay = renderNormal(realPart);
         QGen imAbs = (imaginaryPart.isNegativeConstant() ? -imaginaryPart : imaginaryPart);
         Display imAbsDisplay = renderNormal(imAbs);
-        renderDisplayedAndAdvance(device, realPartDisplay, penPoint);
+        renderDisplayAndAdvance(dest, realPartDisplay, penPoint);
         QChar operatorChar = imaginaryPart.isNegativeConstant() ? MathGlyphs::minusSignSymbol() : '+';
-        renderTextAndAdvance(device, paddedText(operatorChar), penPoint);
-        renderDisplayedAndAdvance(device, imAbsDisplay, penPoint);
+        renderTextAndAdvance(dest, paddedText(operatorChar), penPoint);
+        renderDisplayAndAdvance(dest, imAbsDisplay, penPoint);
         QString imaginaryUnit("i");
-        imaginaryUnit.prepend(MathGlyphs::invisibleTimesSpace());
-        renderText(device, imaginaryUnit, 0, penPoint);
+        imaginaryUnit.prepend(MathGlyphs::thinSpace());
+        renderText(dest, imaginaryUnit, 0, penPoint);
+        dest.setPriority(QGen::AdditionPriority);
     }
     else
     {
@@ -305,39 +310,50 @@ void QGenRenderer::renderNumber(QPaintDevice *device, const QGen &g, QPointF whe
             if (hasNegativeExponent)
                 exponentDigits.prepend(MathGlyphs::superscriptMinusSignSymbol());
             text.append("10" + exponentDigits);
+            dest.setPriority(QGen::MultiplicationPriority);
         }
-        renderText(device, text, 0, penPoint);
+        renderText(dest, text, 0, penPoint);
     }
 }
 
-void QGenRenderer::renderIdentifier(QPaintDevice *device, const QGen &g, QPointF where)
+void QGenRenderer::renderIdentifier(Display &dest, const QGen &g, QPointF where)
 {
     Q_ASSERT(g.isIdentifier());
-    QString text, symbol;
+    QString text, symbol, index;
     if (g.isInfinityIdentifier())
         symbol = QString(MathGlyphs::infinitySymbol());
     else if (g.isUndefIdentifier())
         symbol = "undefined";
     else if ((text = g.toString()).startsWith("_"))
-        renderLeadingUnderscoreIdentifier(device, g, where);
+        renderLeadingUnderscoreIdentifier(dest, g, where);
     else
     {
         bool italic = !(g.isPi() || g.isEulerNumber() || g.isEulerMascheroniConstant() || g.isImaginaryUnit());
         bool bold = false;
-        if (g.isAutoGeneratedIdentifier() || g.isDoubleLetterIdentifier())
-        {
-            bold = true;
-            italic = g.isAutoGeneratedIdentifier();
-            text = text.mid(1);
-        }
+        QRegularExpressionMatch rxMatch;
         if (g.isEulerMascheroniConstant())
             text = "gamma";
+        else if (g.isPlaceholderIdentifier() || g.isDoubleLetterIdentifier())
+        {
+            bold = true;
+            if (italic = g.isPlaceholderIdentifier())
+                text.chop(1);
+            text = text.mid(1).trimmed();
+        }
+        else if ((rxMatch = QRegularExpression("_[0-9]+$").match(text)).hasMatch())
+        {
+            int i = rxMatch.capturedStart();
+            index = text.mid(i + 1);
+            text = text.left(i);
+        }
         symbol = identifierStringToUnicode(text, bold, italic);
+        if (index.length() > 0)
+            symbol.append(MathGlyphs::digitsToSubscript(index));
     }
-    renderText(device, symbol, 0, where);
+    renderText(dest, symbol, 0, where);
 }
 
-void QGenRenderer::renderLeadingUnderscoreIdentifier(QPaintDevice *device, const QGen &g, QPointF where)
+void QGenRenderer::renderLeadingUnderscoreIdentifier(Display &dest, const QGen &g, QPointF where)
 {
     QString text = g.toString(), subscript;
     bool italic = true;
@@ -364,12 +380,18 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(QPaintDevice *device, const
         else if (text == "me")
             text = QString("m") + MathGlyphs::subscriptSmallLetterE();
         else if (text == "qme")
+        {
             text = QString("q/m") + MathGlyphs::subscriptSmallLetterE();
+            dest.setPriority(QGen::MultiplicationPriority);
+        }
         else if (text == "mp")
             text = QString("m") + MathGlyphs::subscriptSmallLetterP();
         else if (text == "mpme")
+        {
             text = QString("m") + MathGlyphs::subscriptSmallLetterP() +
                     QString("/m") + MathGlyphs::subscriptSmallLetterE();
+            dest.setPriority(QGen::MultiplicationPriority);
+        }
         else if (text == "Rinfinity")
         {
             text = "R";
@@ -383,14 +405,23 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(QPaintDevice *device, const
         if (text == "lambdac")
             text = "lambda";
         else if (text == "angl")
+        {
             text = QString("180") + MathGlyphs::degreeSymbol();
+            dest.setPriority(QGen::MultiplicationPriority);
+        }
         else if (text == "twopi")
-            text = QString("2") + QString(MathGlyphs::invisibleTimesSpace()) +
+        {
+            text = QString("2") + QString(MathGlyphs::thinSpace()) +
                     QString(MathGlyphs::smallLetterPi()) + MathGlyphs::thickSpace() + QString("rad");
+            dest.setPriority(QGen::MultiplicationPriority);
+        }
         else if (text == "c3")
             text = "b";
         else if (text == "kq")
+        {
             text = "k/q";
+            dest.setPriority(QGen::MultiplicationPriority);
+        }
         else if (text == "epsilon0q")
             text = MathGlyphs::smallLetterEpsilon() + MathGlyphs::digitsToSubscript("0") + "/q";
         else if (text == "qepsilon0")
@@ -425,54 +456,60 @@ void QGenRenderer::renderLeadingUnderscoreIdentifier(QPaintDevice *device, const
     }
     QPointF penPoint(where);
     QString symbol = identifierStringToUnicode(text, false, italic);
-    renderTextAndAdvance(device, symbol, penPoint);
+    renderTextAndAdvance(dest, symbol, penPoint);
     setRenderingItalic(false);
     if (subscript.length() > 0)
     {
-        movePenPointY(penPoint, fontMidLine(-1));
-        renderText(device, subscript, -1, penPoint);
+        movePenPointY(penPoint, fontXHeight(-1));
+        renderText(dest, subscript, -1, penPoint);
     }
 }
 
-void QGenRenderer::renderFunction(QPaintDevice *device, const QGen &g, int exponent, QPointF where)
+void QGenRenderer::renderFunction(Display &dest, const QGen &g, QPointF where)
 {
     QPointF penPoint(where);
-    QGen args = g.unaryFunctionArgument();
-    bool noParens = g.isElementary() &&
-            (args.isConstant() || args.isIdentifier() || args.isAbsoluteValue() || args.isRationalExpression());
-    QString symbol = g.unaryFunctionName();
-    QString digits("");
-    if (symbol.length() == 1)
-        symbol = MathGlyphs::letterToMath(*symbol.begin(), MathGlyphs::Serif, false, true);
-    if (exponent > 0)
-        digits = MathGlyphs::digitsToSuperscript(QString::number(exponent));
-    symbol += digits;
-    symbol.append(MathGlyphs::functionApplicationSpace());
-    renderTextAndAdvance(device, symbol, penPoint);
-    Display argsDisplay = renderNormal(args, !noParens);
-    renderDisplayed(device, argsDisplay, penPoint);
+    int n = 0;
+    while (n < g.argumentCount() && !g.nthArgument(n).isZero())
+        n++;
+    QGen expression = g.lastArgument();
+    QGen arguments = g.unaryFunctionArgument();
+    arguments.resizeVector(n);
+    if (arguments.length() == 1)
+        arguments = g.firstArgument();
+    Display argumentsDisplay, expressionDisplay;
+    argumentsDisplay = renderNormal(arguments);
+    expressionDisplay = renderNormal(expression);
+    int priority = QGen::EquationPriority;
+    movePenPointX(penPoint, renderDisplayWithPriority(dest, argumentsDisplay, priority, penPoint));
+    renderTextAndAdvance(dest, paddedText(MathGlyphs::rightwardsArrowFromBar()), penPoint);
+    renderDisplayWithPriority(dest, expressionDisplay, priority, penPoint);
+    dest.setPriority(priority);
 }
 
-void QGenRenderer::renderModular(QPaintDevice *device, const QGen &g, QPointF where)
+void QGenRenderer::renderModular(Display &dest, const QGen &g, QPointF where)
 {
     QGen value, modulus;
     Q_ASSERT(g.isModular(value, modulus));
-    Display valueDisplay = renderNormal(value);
-    Display modulusDisplay = renderNormal(modulus);
-    QPointF penPoint(where);
-    renderDisplayedAndAdvance(device, valueDisplay, penPoint);
-    renderTextAndAdvance(device, " (mod ", penPoint);
-    renderDisplayedAndAdvance(device, modulusDisplay, penPoint);
-    renderText(device, ")", 0, penPoint);
+    Display valueDisplay = renderNormal(value), modulusDisplay = renderNormal(modulus), display;
+    QPointF penPoint(0, 0);
+    renderTextAndAdvance(display, "mod ", penPoint);
+    renderDisplayAndAdvance(display, modulusDisplay, penPoint);
+    penPoint = where;
+    int priority = QGen::ModularPriority;
+    qreal advance = renderDisplayWithPriority(dest, valueDisplay, priority, penPoint) + textWidth(" ");
+    movePenPointX(penPoint, advance);
+    renderDisplayWithParentheses(dest, display, penPoint);
+    dest.setPriority(priority);
 }
 
-void QGenRenderer::renderUnaryOperation(QPaintDevice *device, const QGen &g, QPointF where)
+void QGenRenderer::renderUnary(Display &dest, const QGen &g, QPointF where)
 {
     QPointF penPoint(where);
     QString prefix;
-    QGen arg = g.unaryFunctionArgument();
-    Display argDisplay;
-    if (g.isMinusOperator() || g.isNegationOperator() || g.isIncrementOperator() || g.isDecrementOperator())
+    QGen argument = g.unaryFunctionArgument();
+    Display argumentDisplay;
+    int priority = g.operatorPriority();
+    if (priority == QGen::UnaryPriority)
     {
         if (g.isMinusOperator())
             prefix = MathGlyphs::minusSignSymbol();
@@ -482,36 +519,35 @@ void QGenRenderer::renderUnaryOperation(QPaintDevice *device, const QGen &g, QPo
             prefix = "++";
         else if (g.isDecrementOperator())
             prefix = "--";
-        renderTextAndAdvance(device, prefix, penPoint);
-        argDisplay = renderNormal(arg);
-        renderDisplayed(device, argDisplay, penPoint);
+        else
+        {
+            if (g.isRealPartOperator())
+                prefix = MathGlyphs::letterToMath('R', MathGlyphs::Fraktur, false, false);
+            else if (g.isImaginaryPartOperator())
+                prefix = MathGlyphs::letterToMath('I', MathGlyphs::Fraktur, false, false);
+            else if (g.isTraceOperator())
+                prefix = "tr";
+            else Q_ASSERT(false); // non reachable
+            prefix.append(MathGlyphs::functionApplicationSpace());
+        }
+        renderTextAndAdvance(dest, prefix, penPoint);
+        argumentDisplay = renderNormal(argument);
+        renderDisplayWithPriority(dest, argumentDisplay, priority, penPoint);
     }
-    else if (g.isFactorialOperator())
+    else if (g.isReciprocalOperator())
     {
-        argDisplay = renderNormal(arg, !arg.isIdentifier() && !arg.isInteger());
-        renderDisplayedAndAdvance(device, argDisplay, penPoint);
-        renderText(device, "!", 0, penPoint);
-    }
-    else if (g.isTranspositionOperator())
-    {
-        argDisplay = renderNormal(arg, !arg.isIdentifier());
-        renderDisplayedAndAdvance(device, argDisplay, penPoint);
-        Display operatorDisplay;
-        renderText(&operatorDisplay, "T", -1, penPoint);
-        movePenPointY(penPoint, -fontMidLine());
-        renderDisplayed(device, operatorDisplay, penPoint);
+
     }
     else if (g.isDerivativeOperator(true))
     {
         int degree = 1;
-        QGen arg = g.unaryFunctionArgument();
-        while (arg.isDerivativeOperator(true))
+        while (argument.isDerivativeOperator(true))
         {
             ++degree;
-            arg = g.unaryFunctionArgument();
+            argument = g.unaryFunctionArgument();
         }
-        argDisplay = renderNormal(arg, !arg.isIdentifier());
-        renderDisplayedAndAdvance(device, argDisplay, penPoint);
+        argumentDisplay = renderNormal(argument);
+        movePenPointX(penPoint, renderDisplayWithPriority(dest, argumentDisplay, priority, penPoint));
         QString suffix;
         switch (degree)
         {
@@ -529,18 +565,39 @@ void QGenRenderer::renderUnaryOperation(QPaintDevice *device, const QGen &g, QPo
             suffix.prepend(MathGlyphs::superscriptLeftParenthesis());
             suffix.append(MathGlyphs::superscriptRightParenthesis());
         }
-        renderText(device, suffix, 0, penPoint);
+        movePenPointY(penPoint, -qMax(0.0, argumentDisplay.ascent() - fontAscent()));
+        renderText(dest, suffix, 0, penPoint);
+    }
+    else if (priority == QGen::ExponentiationPriority)
+    {
+        argumentDisplay = renderNormal(argument);
+        Display operatorDisplay;
+        if (g.isTranspositionOperator() || g.isFactorialOperator())
+        {
+            movePenPointX(penPoint, renderDisplayWithPriority(dest, argumentDisplay, priority, penPoint));
+            if (g.isTranspositionOperator())
+            {
+                renderText(operatorDisplay, "T", -1, penPoint);
+                movePenPointY(penPoint, -(fontXHeight() + qMax(0.0, argumentDisplay.ascent() - fontAscent())));
+                renderDisplay(dest, operatorDisplay, penPoint);
+            }
+            else if (g.isFactorialOperator())
+                renderText(dest, "!", 0, penPoint);
+        }
+        else if (g.isComplexConjugateOperator())
+            renderDisplayWithAccent(dest, argumentDisplay, AccentType::Bar, penPoint);
+        else Q_ASSERT(false); // not reachable
     }
 }
 
-void QGenRenderer::renderBinaryOperation(QPaintDevice *device, const QGen &g, QPointF where)
+void QGenRenderer::renderBinary(Display &dest, const QGen &g, QPointF where)
 {
     QPointF penPoint(where);
     QGen::Vector args = g.unaryFunctionArgument().toVector();
     if (g.isPowerOperator() || g.isHadamardPowerOperator() || g.isFunctionalPowerOperator())
     {
         QGen base = args.front(), exponent = args.back();
-        renderPower(device, base, exponent, penPoint, g.isHadamardPowerOperator() || g.isFunctionalPowerOperator());
+        renderPower(dest, base, exponent, penPoint, g.isHadamardPowerOperator() || g.isFunctionalPowerOperator());
     }
     else
     {
@@ -549,8 +606,8 @@ void QGenRenderer::renderBinaryOperation(QPaintDevice *device, const QGen &g, QP
                 g.isEqualOperator() || g.isInequation() || g.isAssignmentOperator();
         bool noRightParens = hasTopPriority || !rightOperand.isOperator();
         bool noLeftParens = hasTopPriority || !leftOperand.isOperator();
-        Display leftOperandDisplay = renderNormal(leftOperand, !noLeftParens);
-        Display rightOperandDisplay = renderNormal(rightOperand, !noRightParens);
+        Display leftOperandDisplay = renderNormal(leftOperand);
+        Display rightOperandDisplay = renderNormal(rightOperand);
         QString opStr;
         if (g.isEquation())
             opStr = paddedText("=");
@@ -578,13 +635,13 @@ void QGenRenderer::renderBinaryOperation(QPaintDevice *device, const QGen &g, QP
             opStr = paddedText(MathGlyphs::minusSignSymbol());
         else
             opStr = paddedText("??");
-        renderDisplayedAndAdvance(device, leftOperandDisplay, penPoint);
-        renderTextAndAdvance(device, opStr, penPoint);
-        renderDisplayed(device, rightOperandDisplay, penPoint);
+        renderDisplayAndAdvance(dest, leftOperandDisplay, penPoint);
+        renderTextAndAdvance(dest, opStr, penPoint);
+        renderDisplay(dest, rightOperandDisplay, penPoint);
     }
 }
 
-void QGenRenderer::renderAssociativeOperation(QPaintDevice *device, const QGen &g,
+void QGenRenderer::renderAssociative(Display &dest, const QGen &g,
                                               const QGen::Vector operands, QPointF where)
 {
     QPointF penPoint(where);
@@ -594,7 +651,7 @@ void QGenRenderer::renderAssociativeOperation(QPaintDevice *device, const QGen &
         QGen numerator, denominator;
         if (g.isRationalExpression(numerator, denominator))
         {
-            renderFraction(device, numerator, denominator, where);
+            renderFraction(dest, numerator, denominator, where);
             return;
         }
     }
@@ -620,101 +677,403 @@ void QGenRenderer::renderAssociativeOperation(QPaintDevice *device, const QGen &
         QGen operand = operands.at(i);
         bool parenthesize = true;
 
-        display = renderNormal(operand, parenthesize);
-        renderDisplayedAndAdvance(device, display, penPoint);
+        display = renderNormal(operand);
+        renderDisplayAndAdvance(dest, display, penPoint);
         if (i < operands.length() - 1)
-            renderTextAndAdvance(device, opStr, penPoint);
+            renderTextAndAdvance(dest, opStr, penPoint);
     }
 }
 
-void QGenRenderer::renderFraction(QPaintDevice *device, const QGen &numerator, const QGen &denominator, QPointF where)
+void QGenRenderer::renderFraction(Display &dest, const QGen &numerator, const QGen &denominator, QPointF where)
 {
     QPointF penPoint(where);
     Display numeratorDisplay = renderNormal(numerator);
     Display denominatorDisplay = renderNormal(denominator);
     qreal width = qMax(numeratorDisplay.width(), denominatorDisplay.width());
     qreal padding = fontLeading() + 0.5;
-    movePenPointY(penPoint, -fontCenter() + 0.5);
-    renderHLine(device, penPoint, width);
+    movePenPointY(penPoint, -fontMidLine() + 0.5);
+    renderHorizontalLine(dest, penPoint, width);
     QPointF numeratorPenPoint(penPoint), denominatorPenPoint(penPoint);
     movePenPointX(numeratorPenPoint, numeratorDisplay.leftBearing() + (width - numeratorDisplay.width()) / 2.0);
     movePenPointY(numeratorPenPoint, -(padding + numeratorDisplay.descent()));
-    renderDisplayed(device, numeratorDisplay, penPoint);
+    renderDisplay(dest, numeratorDisplay, penPoint);
     movePenPointX(denominatorPenPoint, denominatorDisplay.leftBearing() + (width - denominatorDisplay.width()) / 2.0);
     movePenPointY(denominatorPenPoint, padding + denominatorDisplay.ascent());
-    renderDisplayed(device, denominatorDisplay, penPoint);
+    renderDisplay(dest, denominatorDisplay, penPoint);
 }
 
-void QGenRenderer::renderPower(QPaintDevice *device, const QGen &base, const QGen &exponent, QPointF where, bool circ)
+void QGenRenderer::renderPower(Display &dest, const QGen &base, const QGen &exponent, QPointF where, bool circ)
 {
     QPointF penPoint(where);
     Display baseDisplay, exponentDisplay;
-    baseDisplay = renderNormal(base, !base.isOperator());
+    baseDisplay = renderNormal(base);
     exponentDisplay = renderSmaller(exponent);
-    renderDisplayedAndAdvance(device, baseDisplay, penPoint);
+    renderDisplayAndAdvance(dest, baseDisplay, penPoint);
     qreal verticalOffset = qMax(0.0, baseDisplay.ascent() - fontAscent());
-    movePenPointXY(penPoint, exponentDisplay.leftBearing(), -(fontMidLine() + verticalOffset));
+    movePenPointXY(penPoint, exponentDisplay.leftBearing(), -(fontXHeight() + verticalOffset));
     if (circ)
-        movePenPointX(penPoint, renderText(device, MathGlyphs::ringOperatorSymbol(), -1, penPoint));
-    renderDisplayed(device, exponentDisplay, penPoint);
+        movePenPointX(penPoint, renderText(dest, MathGlyphs::ringOperatorSymbol(), -1, penPoint));
+    renderDisplay(dest, exponentDisplay, penPoint);
 }
 
-void QGenRenderer::renderRadical(QPaintDevice *device, const QGen &argument, int degree, QPointF where)
+void QGenRenderer::renderDisplayWithRadical(Display &dest, const Display &source, QPointF where)
 {
-    Q_ASSERT(degree > 0);
-    QPointF penPoint(where);
-    Display argumentDisplay = renderNormal(argument);
-    bool isTall = argumentDisplay.ascent() > fontAscent();
-    if (degree == 2 || (!isTall && degree < 5))
+    QRectF rect = textTightBoundingRect(MathGlyphs::squareRootSymbol());
+    qreal rWidth = rect.width(), rHeight = rect.height(), rDescent = rect.y() + rHeight, rBearing = -rect.x();
+    qreal radicandWidth = source.totalWidth(), radicandHeight = qMax(source.height() + linePadding(), rHeight);
+    qreal fY = qMax(1.0, (radicandHeight + lineWidth() / 3) / rHeight), fX = qPow(fY, 0.2);
+    renderDisplay(dest, source, QPointF(where.x() + rWidth * fX + source.leftBearing(), where.y()));
+    QPainter painter(&dest);
+    painter.setFont(getFont(fontSizeLevel()));
+    renderHorizontalLine(painter, rWidth * fX - lineWidth() / 3, radicandHeight - source.descent(), radicandWidth);
+    painter.translate(where.x(), where.y() + source.descent());
+    painter.scale(fX, fY);
+    painter.drawText(QPointF(rBearing, -rDescent), MathGlyphs::squareRootSymbol());
+}
+
+void QGenRenderer::renderMap(Display &dest, const QGen &g, QPointF where)
+{
+
+}
+
+void QGenRenderer::renderVector(Display &dest, const QGen::Vector &v, QPointF where)
+{
+
+}
+
+void QGenRenderer::renderSymbolic(Display &dest, const QGen &g, QPointF where)
+{
+
+}
+
+void QGenRenderer::renderBracketExtensionFill(QPainter &painter, const QChar &extension,
+                                              qreal x, qreal yLower, qreal yUpper)
+{
+    painter.save();
+    QRectF rect = textTightBoundingRect(extension);
+    qreal offset = rect.y() + rect.height(), y = yLower, skip = rect.height() - 2;
+    int n = qFloor(qAbs(yUpper - yLower) / skip);
+    for (int i = 0; i < n; ++i)
     {
-        if (isTall)
-        {
-            QPointF lowerPoint(penPoint);
-            renderTextAndAdvance(device, MathGlyphs::radicalSymbolBottom(), penPoint);
-            renderDisplayed(device, argumentDisplay, penPoint);
-            QRectF rect = textTightBoundingRect(MathGlyphs::radicalSymbolBottom());
-            QPointF topRightCorner(rect.width() + rect.x(), rect.y() - rect.height());
-            lowerPoint += topRightCorner;
-            QPointF upperPoint(lowerPoint.x(), argumentDisplay.ascent() + topRightCorner.y());
-            QPointF rightPoint(upperPoint.x() + argumentDisplay.advance(), upperPoint.y());
-            renderLine(device, lowerPoint, upperPoint);
-            renderLine(device, upperPoint, rightPoint);
-        }
-        else
-        {
-            QChar rootSymbol;
-            switch (degree)
-            {
-            case 2:
-                rootSymbol = MathGlyphs::squareRootSymbol();
-                break;
-            case 3:
-                rootSymbol = MathGlyphs::cubeRootSymbol();
-                break;
-            case 4:
-                rootSymbol = MathGlyphs::fourthRootSymbol();
-                break;
-            }
-            renderTextAndAdvance(device, rootSymbol, penPoint);
-            renderDisplayed(device, argumentDisplay, penPoint);
-            movePenPointY(penPoint, -fontAscent());
-            renderHLine(device, penPoint, argumentDisplay.advance());
-        }
+        painter.drawText(QPointF(x, y - offset), extension);
+        y -= skip;
     }
-    else renderPower(device, argument, QGen::fraction(1, degree, argument.context), penPoint);
+    qreal f = (y - yUpper + 1)  / skip;
+    if (f > 0)
+    {
+        painter.scale(1.0, f);
+        painter.drawText(QPointF(x, y / f - offset), extension);
+    }
+    painter.restore();
 }
 
-void QGenRenderer::renderMap(QPaintDevice *device, const QGen &g, QPointF where)
+qreal QGenRenderer::renderSingleBracket(QPainter &painter, qreal x, qreal halfHeight, QChar bracket, bool scaleX)
 {
-
+    QRectF rect = textTightBoundingRect(bracket);
+    qreal f = qMax(1.0, halfHeight / -(1 + fontMidLine() + rect.y()));
+    if (f > 0)
+    {
+        painter.save();
+        painter.scale(scaleX ? qPow(f, 0.2) : 1.0, f);
+        painter.drawText(QPointF(x, fontMidLine() * (f - 1) / f), bracket);
+        painter.restore();
+    }
+    return textWidth(bracket);
 }
 
-void QGenRenderer::renderVector(QPaintDevice *device, const QGen::Vector &v, QPointF where)
+qreal QGenRenderer::renderSingleFillBracket(QPainter &painter, qreal x, qreal halfHeight,
+                                            QChar upperPart, QChar lowerPart, QChar extension, QChar singleBracket)
 {
-
+    QRectF rect = textTightBoundingRect(upperPart);
+    qreal upperPartHeight = rect.height() - 2, upperPartDescent = rect.y() + rect.height();
+    if (halfHeight < upperPartHeight)
+        return renderSingleBracket(painter, x, halfHeight, singleBracket);
+    qreal yLower = 0.5 - fontMidLine() + halfHeight;
+    qreal yUpper = 0.5 - fontMidLine() - halfHeight;
+    rect = textTightBoundingRect(lowerPart);
+    qreal lowerPartHeight = rect.height() - 2, lowerPartDescent = rect.y() + rect.height();
+    painter.drawText(QPointF(x, yUpper + upperPartHeight - upperPartDescent), upperPart);
+    painter.drawText(QPointF(x, yLower - lowerPartDescent), lowerPart);
+    renderBracketExtensionFill(painter, extension, x, yLower - lowerPartHeight, yUpper + upperPartHeight);
+    return textWidth(upperPart);
 }
 
-void QGenRenderer::renderSymbolic(QPaintDevice *device, const QGen &g, QPointF where)
+qreal QGenRenderer::renderCurlyBracket(QPainter &painter, qreal x, qreal halfHeight, bool left)
 {
+    QChar upperPart = left ? MathGlyphs::leftCurlyBracketUpperHook() : MathGlyphs::rightCurlyBracketUpperHook();
+    QChar middlePiece = left ? MathGlyphs::leftCurlyBracketMiddlePiece() : MathGlyphs::rightCurlyBracketMiddlePiece();
+    QChar lowerPart = left ? MathGlyphs::leftCurlyBracketLowerHook() : MathGlyphs::rightCurlyBracketLowerHook();
+    QChar extension = left ? MathGlyphs::leftCurlyBracketExtension() : MathGlyphs::rightCurlyBracketExtension();
+    QChar upperHalf = left ? MathGlyphs::upperLeftCurlyBracketSection() : MathGlyphs::lowerLeftCurlyBracketSection();
+    QChar lowerHalf = left ? MathGlyphs::lowerLeftCurlyBracketSection() : MathGlyphs::upperLeftCurlyBracketSection();
+    QChar singleBracket = left ? '{' : '}';
+    QRectF rect = textTightBoundingRect(upperPart);
+    qreal upperPartHeight = rect.height() - 2, upperPartDescent = rect.y() + rect.height();
+    rect = textTightBoundingRect(lowerPart);
+    qreal lowerPartHeight = rect.height() - 2, lowerPartDescent = rect.y() + rect.height();
+    rect = textTightBoundingRect(middlePiece);
+    qreal middlePieceHeight = rect.height() - 2, middlePieceDescent = rect.y() + rect.height();
+    rect = textTightBoundingRect(upperHalf);
+    qreal halfBraceHeight = rect.height() - 2, halfBraceDescent = rect.y() + rect.height();
+    qreal offset = fontXHeight() - fontMidLine();
+    if (halfHeight >= fontXHeight() + middlePieceDescent + lowerPartHeight)
+    {
+        qreal upperPartY = 0.5 - halfHeight + upperPartHeight - fontMidLine();
+        qreal lowerPartY = 0.5 + halfHeight - lowerPartHeight - fontMidLine();
+        qreal y = 2 * offset;
+        painter.drawText(QPointF(x, y - middlePieceDescent), middlePiece);
+        painter.drawText(QPointF(x, upperPartY - upperPartDescent - 0.5), upperPart);
+        painter.drawText(QPointF(x, lowerPartY + lowerPartHeight - lowerPartDescent), lowerPart);
+        renderBracketExtensionFill(painter, extension, x, y - middlePieceHeight + 1, upperPartY);
+        renderBracketExtensionFill(painter, extension, x, lowerPartY + 1, y);
+        return textWidth(upperPart);
+    }
+    if (halfHeight >= halfBraceHeight)
+    {
+        qreal f = halfHeight / halfBraceHeight;
+        painter.translate(x, 0.5 - fontMidLine());
+        painter.scale(1.0, f);
+        painter.drawText(QPointF(0.0, -halfBraceDescent - 0.5), upperHalf);
+        painter.drawText(QPointF(0.0, halfBraceHeight - halfBraceDescent), lowerHalf);
+        return textWidth(upperHalf);
+    }
+    return renderSingleBracket(painter, x, halfHeight, singleBracket);
+}
 
+qreal QGenRenderer::renderDisplayWithBrackets(Display &dest, const Display &source,
+                                              BracketType leftBracketType, BracketType rightBracketType, QPointF where)
+{
+    qreal x = 0.0, halfHeight = qMax(source.ascent() - fontMidLine(), source.descent() + fontMidLine());
+    QPainter painter(&dest);
+    painter.setFont(getFont(fontSizeLevel()));
+    painter.translate(where);
+    switch (leftBracketType)
+    {
+    case Parenthesis:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::leftParenthesisUpperHook(),
+                                     MathGlyphs::leftParenthesisLowerHook(),
+                                     MathGlyphs::leftParenthesisExtension(),
+                                     '(');
+        break;
+    case WhiteParenthesis:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::leftWhiteParenthesis(), true);
+        break;
+    case SquareBracket:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::leftSquareBracketUpperCorner(),
+                                     MathGlyphs::leftSquareBracketLowerCorner(),
+                                     MathGlyphs::leftSquareBracketExtension(),
+                                     '[');
+        break;
+    case WhiteSquareBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::leftWhiteSquareBracket());
+        break;
+    case CurlyBracket:
+        x += renderCurlyBracket(painter, x, halfHeight, true);
+        break;
+    case WhiteCurlyBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::leftWhiteCurlyBracket(), true);
+        break;
+    case FloorBracket:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::leftSquareBracketExtension(),
+                                     MathGlyphs::leftSquareBracketLowerCorner(),
+                                     MathGlyphs::leftSquareBracketExtension(),
+                                     MathGlyphs::leftFloorBracket());
+        break;
+    case CeilingBracket:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::leftSquareBracketUpperCorner(),
+                                     MathGlyphs::leftSquareBracketExtension(),
+                                     MathGlyphs::leftSquareBracketExtension(),
+                                     MathGlyphs::leftCeilingBracket());
+        break;
+    case AngleBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::leftAngleBracket(), true);
+        break;
+    case StraightBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::straightBracket());
+        break;
+    case DoubleStraightBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::doubleStraightBracket());
+        break;
+    default:
+        break;
+    }
+    renderDisplay(dest, source, QPointF(x, 0.0));
+    x += source.advance();
+    switch (rightBracketType)
+    {
+    case Parenthesis:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::rightParenthesisUpperHook(),
+                                     MathGlyphs::rightParenthesisLowerHook(),
+                                     MathGlyphs::rightParenthesisExtension(),
+                                     ')');
+        break;
+    case WhiteParenthesis:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::rightWhiteParenthesis(), true);
+        break;
+    case SquareBracket:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::rightSquareBracketUpperCorner(),
+                                     MathGlyphs::rightSquareBracketLowerCorner(),
+                                     MathGlyphs::rightSquareBracketExtension(),
+                                     ']');
+        break;
+    case WhiteSquareBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::rightWhiteSquareBracket());
+        break;
+    case CurlyBracket:
+        x += renderCurlyBracket(painter, x, halfHeight, false);
+        break;
+    case WhiteCurlyBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::rightWhiteCurlyBracket(), true);
+        break;
+    case FloorBracket:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::rightSquareBracketExtension(),
+                                     MathGlyphs::rightSquareBracketLowerCorner(),
+                                     MathGlyphs::rightSquareBracketExtension(),
+                                     MathGlyphs::rightFloorBracket());
+        break;
+    case CeilingBracket:
+        x += renderSingleFillBracket(painter, x, halfHeight,
+                                     MathGlyphs::rightSquareBracketUpperCorner(),
+                                     MathGlyphs::rightSquareBracketExtension(),
+                                     MathGlyphs::rightSquareBracketExtension(),
+                                     MathGlyphs::rightCeilingBracket());
+        break;
+    case AngleBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::rightAngleBracket(), true);
+        break;
+    case StraightBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::straightBracket());
+        break;
+    case DoubleStraightBracket:
+        x += renderSingleBracket(painter, x, halfHeight, MathGlyphs::doubleStraightBracket());
+        break;
+    default:
+        break;
+    }
+    return x;
+}
+
+qreal QGenRenderer::renderDisplayWithParentheses(Display &dest, const Display &source, QPointF where)
+{
+    return renderDisplayWithBrackets(dest, source, BracketType::Parenthesis, BracketType::Parenthesis, where);
+}
+
+qreal QGenRenderer::renderDisplayWithPriority(Display &dest, const Display &source, int priority, QPointF where)
+{
+    QPointF penPoint(where);
+    if (source.priority() < priority)
+    {
+        renderDisplayAndAdvance(dest, source, penPoint);
+        return penPoint.x() - where.x();
+    }
+    return renderDisplayWithParentheses(dest, source, penPoint);
+}
+
+qreal QGenRenderer::renderDisplayWithSquareBrackets(Display &dest, const Display &source, QPointF where)
+{
+    return renderDisplayWithBrackets(dest, source, BracketType::SquareBracket, BracketType::SquareBracket, where);
+}
+
+qreal QGenRenderer::renderDisplayWithCurlyBrackets(Display &dest, const Display &source, QPointF where)
+{
+    return renderDisplayWithBrackets(dest, source, BracketType::CurlyBracket, BracketType::CurlyBracket, where);
+}
+
+void QGenRenderer::renderHorizontalLine(QPainter &painter, qreal x, qreal y, qreal length, qreal widthFactor)
+{
+    QRectF rect = textTightBoundingRect(MathGlyphs::horizontalLineExtension());
+    qreal xOffset = rect.x() + 0.5, yOffset = rect.y() + rect.height() / 2, baseWidth = rect.width() - 1;
+    int n = qRound(length / baseWidth);
+    for (int i = 0; i < n; ++i)
+        painter.drawText(QPointF(x + i * baseWidth - xOffset, y - yOffset), MathGlyphs::horizontalLineExtension());
+    qreal f = length / baseWidth - n;
+    if (f > 0)
+    {
+        painter.save();
+        painter.translate(x + n * baseWidth, y);
+        painter.scale(f, widthFactor);
+        painter.drawText(QPointF(-xOffset, -yOffset), MathGlyphs::horizontalLineExtension());
+        painter.restore();
+    }
+}
+
+void QGenRenderer::renderHorizontalLine(Display &dest, QPointF where, qreal length, qreal widthFactor)
+{
+    QPainter painter(&dest);
+    painter.setFont(getFont(fontSizeLevel()));
+    renderHorizontalLine(painter, where.x(), where.y(), length, widthFactor);
+}
+
+qreal QGenRenderer::linePadding(int relativeSizeLevel)
+{
+    return textWidth(MathGlyphs::thinSpace(), relativeSizeLevel);
+}
+
+void QGenRenderer::renderDisplayWithAccent(Display &dest, const Display &source,
+                                           AccentType accentType, QPointF where)
+{
+    renderDisplay(dest, source, QPointF(where.x() + source.leftBearing(), where.y()));
+    QChar accent;
+    bool stretchable = false;
+    switch (accentType)
+    {
+    case Hat:
+        accent = MathGlyphs::hatAccent();
+        stretchable = true;
+        break;
+    case Check:
+        accent = MathGlyphs::checkAccent();
+        stretchable = true;
+        break;
+    case Tilde:
+        accent = MathGlyphs::tildeAccent();
+        stretchable = true;
+        break;
+    case Bar:
+        accent = MathGlyphs::barAccent();
+        stretchable = true;
+        break;
+    case Vec:
+        accent = MathGlyphs::vecAccent();
+        stretchable = true;
+        break;
+    case Acute:
+        accent = MathGlyphs::acuteAccent();
+        break;
+    case Grave:
+        accent = MathGlyphs::graveAccent();
+        break;
+    case Dot:
+        accent = MathGlyphs::dotAccent();
+        break;
+    case DoubleDot:
+        accent = MathGlyphs::doubleDotAccent();
+        break;
+    case TripleDot:
+        accent = MathGlyphs::tripleDotAccent();
+        break;
+    }
+    QRectF rect = textTightBoundingRect(accent);
+    qreal xOffset = rect.x() + 0.5, yOffset = rect.y() + rect.height(), accentWidth = rect.width() - 1;
+    QPainter painter(&dest);
+    painter.setFont(getFont(fontSizeLevel()));
+    painter.translate(where.x(), where.y() - source.ascent() - linePadding());
+    if (stretchable)
+    {
+        qreal f = source.totalWidth() / accentWidth;
+        painter.scale(f, 1.0);
+        painter.drawText(QPointF(-xOffset, -yOffset), accent);
+    }
+    else
+    {
+        qreal w = source.totalWidth() - source.leftBearing();
+        painter.drawText((w - accentWidth) / 2 - xOffset + source.leftBearing(), -yOffset, accent);
+    }
 }

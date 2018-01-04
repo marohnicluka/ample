@@ -30,46 +30,37 @@ class QGenRenderer
 {
     class Display : public QPicture
     {
+        bool m_grouped;
+        int m_priority;
+
     public:
-        Display() : QPicture() { }
-        Display(const QPicture &picture) : QPicture(picture) { }
-        Display(const Display &display) : QPicture(display) { }
+        Display() : QPicture() { m_grouped = false; m_priority = 0; }
+        Display(const QPicture &picture) : QPicture(picture) { m_grouped = false; m_priority = 0; }
+        Display(const Display &display) : QPicture(display) { m_grouped = false; m_priority = 0; }
+        int priority() const { return m_priority; }
+        bool isGrouped() const { return m_grouped; }
+        void setPriority(int value) { m_priority = value; }
+        void setGrouped(bool yes) { m_grouped = yes; }
         int leftBearing() const { return -boundingRect().x(); }
         int advance() const { return boundingRect().width() - leftBearing(); }
         int ascent() const { return -boundingRect().y(); }
-        int descent() const { return boundingRect().height() - ascent() - 1; }
+        int descent() const { return boundingRect().height() - ascent(); }
         int totalWidth() const { return boundingRect().width(); }
         int totalHeight() const { return boundingRect().height(); }
     };
 
     enum BracketType
     {
-        None,
-        LeftParenthesis,
-        RightParenthesis,
-        LeftSquareBracket,
-        RightSquareBracket,
-        LeftCurlyBracket,
-        RightCurlyBracket,
-        LeftFloorBracket,
-        RightFloorBracket,
-        LeftCeilBracket,
-        RightCeilBracket,
-        LeftAbsoluteValueBracket,
-        RightAbsoluteValueBracket,
-        LeftDoubleAbsoluteValueBracket,
-        RightDoubleAbsoluteValueBracket
+        None, Parenthesis, WhiteParenthesis, SquareBracket, WhiteSquareBracket, CurlyBracket, WhiteCurlyBracket,
+        FloorBracket, CeilingBracket, AngleBracket, StraightBracket, DoubleStraightBracket
     };
 
-    enum MathPadding
-    {
-        Hair,
-        Thin,
-        Medium,
-        Thick
-    };
+    enum AccentType { Hat, Check, Tilde, Acute, Grave, Dot, DoubleDot, TripleDot, Bar, Vec };
+
+    enum MathPadding { Hair, Thin, Medium, Thick };
 
     QList<int> fontSizes;
+    QList<QFont> fonts;
     QString fontFamily;
     QStack<int> fontSizeLevelStack;
     bool renderFontItalic;
@@ -88,35 +79,50 @@ class QGenRenderer
     static QString numberToSubscriptText(int integer, bool parens = false);
     static QString identifierStringToUnicode(const QString &text, bool bold, bool italic);
 
-    Display render(const QGen &g, int sizeLevel, BracketType leftBracketType, BracketType rightBracketType);
-    Display renderNormal(const QGen &g, bool parenthesize = false);
-    Display renderSmaller(const QGen &g, bool parenthesize = false);
-    Display renderLarger(const QGen &g, bool parenthesize = false);
+    void render(Display &dest, const QGen &g, int sizeLevel = 0);
+    Display renderNormal(const QGen &g);
+    Display renderSmaller(const QGen &g);
+    Display renderLarger(const QGen &g);
 
-    void renderLine(QPaintDevice *device, QPointF start, QPointF end);
-    void renderHLine(QPaintDevice *device, QPointF start, qreal length);
-    qreal renderText(QPaintDevice *device, const QString &text, int relativeFontSizeLevel = 0,
+    void renderHorizontalLine(QPainter &painter, qreal x, qreal y, qreal length, qreal widthFactor = 1.0);
+    void renderHorizontalLine(Display &dest, QPointF where, qreal length, qreal widthFactor = 1.0);
+    qreal renderText(Display &dest, const QString &text, int relativeFontSizeLevel = 0,
                     QPointF where = QPointF(0, 0), QRectF *boundingRect = Q_NULLPTR);
-    void renderTextAndAdvance(QPaintDevice *device, const QString &text, QPointF &penPoint);
-    void renderDisplayed(QPaintDevice *device, const Display &displayed, QPointF where = QPointF(0, 0));
-    void renderDisplayedAndAdvance(QPaintDevice *device, const Display &displayed, QPointF &penPoint);
-    void renderNumber(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderIdentifier(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderLeadingUnderscoreIdentifier(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderFunction(QPaintDevice *device, const QGen &g, int exponent = 0, QPointF where = QPointF(0, 0));
-    void renderVector(QPaintDevice *device, const QGen::Vector &v, QPointF where = QPointF(0, 0));
-    void renderModular(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderMap(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderSymbolic(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderUnaryOperation(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderBinaryOperation(QPaintDevice *device, const QGen &g, QPointF where = QPointF(0, 0));
-    void renderAssociativeOperation(QPaintDevice *device, const QGen &g, const QGen::Vector operands,
+    void renderTextAndAdvance(Display &dest, const QString &text, QPointF &penPoint);
+    void renderBracketExtensionFill(QPainter &painter, const QChar &extension,
+                                    qreal x, qreal yLower, qreal yUpper);
+    qreal renderSingleBracket(QPainter &painter, qreal x, qreal halfHeight, QChar bracket, bool scaleX = false);
+    qreal renderSingleFillBracket(QPainter &painter, qreal x, qreal halfHeight,
+                                  QChar upperPart, QChar lowerPart, QChar extension, QChar singleBracket);
+    qreal renderCurlyBracket(QPainter &painter, qreal x, qreal halfHeight, bool left);
+    void renderDisplay(Display &dest, const Display &source, QPointF where = QPointF(0, 0));
+    void renderDisplayWithRadical(Display &dest, const Display &source, QPointF where = QPointF(0, 0));
+    void renderDisplayWithAccent(Display &dest, const Display &source, AccentType accentType,
+                                 QPointF where = QPointF(0, 0));
+    qreal renderDisplayWithBrackets(Display &dest, const Display &source,
+                                    BracketType leftBracketType, BracketType rightBracketType,
                                     QPointF where = QPointF(0, 0));
-    void renderFraction(QPaintDevice *device, const QGen &numerator, const QGen &denominator,
+    qreal renderDisplayWithParentheses(Display &dest, const Display &source, QPointF where = QPointF(0, 0));
+    qreal renderDisplayWithPriority(Display &dest, const Display &source, int priority, QPointF where = QPointF(0, 0));
+    qreal renderDisplayWithSquareBrackets(Display &dest, const Display &source, QPointF where = QPointF(0, 0));
+    qreal renderDisplayWithCurlyBrackets(Display &dest, const Display &source, QPointF where = QPointF(0, 0));
+    void renderDisplayAndAdvance(Display &dest, const Display &source, QPointF &penPoint);
+    void renderNumber(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderIdentifier(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderLeadingUnderscoreIdentifier(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderFunction(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderVector(Display &dest, const QGen::Vector &v, QPointF where = QPointF(0, 0));
+    void renderModular(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderMap(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderSymbolic(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderUnary(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderBinary(Display &dest, const QGen &g, QPointF where = QPointF(0, 0));
+    void renderAssociative(Display &dest, const QGen &g, const QGen::Vector operands,
+                           QPointF where = QPointF(0, 0));
+    void renderFraction(Display &dest, const QGen &numerator, const QGen &denominator,
                         QPointF where = QPointF(0, 0));
-    void renderPower(QPaintDevice *device, const QGen &base, const QGen &exponent,
+    void renderPower(Display &dest, const QGen &base, const QGen &exponent,
                      QPointF where = QPointF(0, 0), bool circ = false);
-    void renderRadical(QPaintDevice *device, const QGen &argument, int degree, QPointF where = QPointF(0, 0));
 
     void movePenPointX(QPointF &penPoint, qreal offset) { penPoint.setX(penPoint.x() + offset); }
     void movePenPointY(QPointF &penPoint, qreal offset) { penPoint.setY(penPoint.y() + offset); }
@@ -126,19 +132,27 @@ class QGenRenderer
         movePenPointY(penPoint, offsetY);
     }
 
-    QFont makeFont(int fontSizeLevel);
+    const QFont &getFont(int fontSizeLevel);
     qreal textWidth(const QString &text, int relativeFontSizeLevel = 0);
     QRectF textTightBoundingRect(const QString &text, int relativeFontSizeLevel = 0);
     qreal fontHeight(int relativeFontSizeLevel = 0);
     qreal fontAscent(int relativeFontSizeLevel = 0);
     qreal fontDescent(int relativeFontSizeLevel = 0);
+    qreal fontXHeight(int relativeFontSizeLevel = 0);
     qreal fontMidLine(int relativeFontSizeLevel = 0);
-    qreal fontCenter(int relativeFontSizeLevel = 0);
     qreal fontLeading(int relativeFontSizeLevel = 0);
+    qreal lineWidth(int relativeFontSizeLevel = 0);
+    qreal linePadding(int relativeSizeLevel = 0);
 
 public:
-    QGenRenderer(const QString &family, int size);
-    QPicture render(const QGen &g);
+    enum Alignment {
+        AlignLeft, AlignRight, AlignTop, AlignBottom,
+        AlignBaseline, AlignHCenter, AlignVCenter, AlignCenter
+    };
+
+    QGenRenderer(const QString &family, int fontSize);
+
+    QPicture render(const QGen &g, int alignment = AlignLeft | AlignBaseline) const;
 };
 
 #endif // QGENRENDERER_H

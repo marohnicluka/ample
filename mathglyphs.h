@@ -137,26 +137,28 @@ public:
     static QChar subscriptSmallLetterT()                { return QChar(0x209c); }
 
     // accents
-    static QChar hatAccentSymbol()                      { return QChar(0x0302); }
-    static QChar checkAccentSymbol()                    { return QChar(0x030c); }
-    static QChar tildeAccentSymbol()                    { return QChar(0x0303); }
-    static QChar acuteAccentSymbol()                    { return QChar(0x0301); }
-    static QChar graveAccentSymbol()                    { return QChar(0x0300); }
-    static QChar dotAccentSymbol()                      { return QChar(0x0307); }
-    static QChar doubleDotAccentSymbol()                { return QChar(0x0308); }
-    static QChar tripleDotAccentSymbol()                { return QChar(0x20db); }
-    static QChar barAccentSymbol()                      { return QChar(0x0304); }
-    static QChar vecAccentSymbol()                      { return QChar(0x20d7); }
+    static QChar hatAccent()                            { return QChar(0x0302); }
+    static QChar checkAccent()                          { return QChar(0x030c); }
+    static QChar tildeAccent()                          { return QChar(0x0303); }
+    static QChar acuteAccent()                          { return QChar(0x0301); }
+    static QChar graveAccent()                          { return QChar(0x0300); }
+    static QChar dotAccent()                            { return QChar(0x0307); }
+    static QChar doubleDotAccent()                      { return QChar(0x0308); }
+    static QChar tripleDotAccent()                      { return QChar(0x20db); }
+    static QChar barAccent()                            { return QChar(0x0304); }
+    static QChar vecAccent()                            { return QChar(0x20d7); }
+
+    // composite symbols
+    static QChar topHalfIntegral()                      { return QChar(0x2320); }
+    static QChar bottomHalfIntegral()                   { return QChar(0x2321); }
+    static QChar summationTop()                         { return QChar(0x23b2); }
+    static QChar summationBottom()                      { return QChar(0x23b3); }
 
     // brackets
     static QChar leftCeilingBracket()                   { return QChar(0x2308); }
     static QChar rightCeilingBracket()                  { return QChar(0x2309); }
     static QChar leftFloorBracket()                     { return QChar(0x230a); }
     static QChar rightFloorBracket()                    { return QChar(0x230b); }
-    static QChar topHalfIntegral()                      { return QChar(0x2320); }
-    static QChar bottomHalfIntegral()                   { return QChar(0x2321); }
-    static QChar summationTop()                         { return QChar(0x23b2); }
-    static QChar summationBottom()                      { return QChar(0x23b3); }
     static QChar leftParenthesisUpperHook()             { return QChar(0x239b); }
     static QChar leftParenthesisExtension()             { return QChar(0x239c); }
     static QChar leftParenthesisLowerHook()             { return QChar(0x239d); }
@@ -177,23 +179,25 @@ public:
     static QChar rightCurlyBracketMiddlePiece()         { return QChar(0x23ac); }
     static QChar rightCurlyBracketLowerHook()           { return QChar(0x23ad); }
     static QChar rightCurlyBracketExtension()           { return QChar(0x23ae); }
+    static QChar leftAngleBracket()                     { return QChar(0x27e8); }
+    static QChar rightAngleBracket()                    { return QChar(0x27e9); }
     static QChar horizontalLineExtension()              { return QChar(0x23af); }
     static QChar verticalLineExtension()                { return QChar(0x23d0); }
     static QChar upperLeftCurlyBracketSection()         { return QChar(0x23b0); }
     static QChar lowerLeftCurlyBracketSection()         { return QChar(0x23b1); }
     static QChar radicalSymbolBottom()                  { return QChar(0x23b7); }
+    static QChar leftWhiteParenthesis()                 { return QChar(0x2985); }
+    static QChar rightWhiteParenthesis()                { return QChar(0x2986); }
     static QChar leftWhiteSquareBracket()               { return QChar(0x27e6); }
     static QChar rightWhiteSquareBracket()              { return QChar(0x27e7); }
-    static QChar leftAngleBracket()                     { return QChar(0x27e8); }
-    static QChar rightAngleBracket()                    { return QChar(0x27e9); }
     static QChar leftWhiteCurlyBracket()                { return QChar(0x2983); }
     static QChar rightWhiteCurlyBracket()               { return QChar(0x2984); }
     static QChar superscriptLeftParenthesis()           { return QChar(0x207d); }
     static QChar superscriptRightParenthesis()          { return QChar(0x207e); }
     static QChar subscriptLeftParenthesis()             { return QChar(0x208d); }
     static QChar subscriptRightParenthesis()            { return QChar(0x208e); }
-    static QChar absoluteValueBracket()                 { return QChar(0x007c); }
-    static QChar doubleAbsoluteValueBracket()           { return QChar(0x2016); }
+    static QChar straightBracket()                      { return QChar(0x007c); }
+    static QChar doubleStraightBracket()                { return QChar(0x2016); }
 };
 
 #endif // GLYPHS_H
