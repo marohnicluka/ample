@@ -228,9 +228,9 @@ public:
     static QChar doesNotPrecedeOrEqual()                    { return QChar(0x22e0); }
     static QChar doesNotSucceedOrEqual()                    { return QChar(0x22e1); }
     static QChar notSquareImageOfOrEqualTo()                { return QChar(0x22e2); }
-    static QChar notSquareImageOriginalOrEqualTo()          { return QChar(0x22e3); }
+    static QChar notSquareOriginalOrEqualTo()               { return QChar(0x22e3); }
     static QChar squareImageOfAndNotEqualTo()               { return QChar(0x22e4); }
-    static QChar squareImageOfAndNotEqualTo()               { return QChar(0x22e5); }
+    static QChar squareOriginalOfAndNotEqualTo()            { return QChar(0x22e5); }
     static QChar lessThanButNotEquivalentTo()               { return QChar(0x22e6); }
     static QChar greaterThanButNotEquivalentTo()            { return QChar(0x22e7); }
     static QChar precedesButNotEquivalentTo()               { return QChar(0x22e8); }

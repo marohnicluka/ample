@@ -78,9 +78,14 @@ MainWindow::MainWindow(QWidget *parent) :
     fontChooserLayout->setMargin(0);
     ui->textToolBar->insertWidget(ui->actionTextBold, fontChooser);
 
-    setCentralWidget(new MathDisplayWidget(this));
-
     loadFonts();
+
+    session = new Session(this);
+    connect(session, SIGNAL(processingStarted()), this, SLOT(giacProcessingStarted()));
+    connect(session, SIGNAL(processingFinished(const gen &,const QStringList &)),
+            this, SLOT(giacProcessingFinished(const gen &,const QStringList &)));
+    //ui->messagesTextEdit->setFont(QFont("FreeSerif", 13));
+    ui->messagesTextEdit->setText("Draws in the rectangle [<i>x</i><sub>min</sub>,<i>x</i><sub>max</sub>]&times;[<i>y</i><sub>min</sub>,<i>y</i><sub>max</sub>], the lines of the network built with the lines <i>y</i>=<i>n</i>&sdot;<i>u<sub>y</sub></i> and in the axes <i>Oxy</i> of angle <i>t</i>&ne;0 with the lines <i>x</i>=<i>n</i>&sdot;<i>u<sub>x</sub></i> and <i>u<sub>x</sub>y</i>+<i>u<sub>y</sub>x</i>=n&sdot;<i>u<sub>x</sub>u<sub>y</sub></i>.");
 }
 
 MainWindow::~MainWindow()
@@ -130,4 +135,38 @@ void MainWindow::clipboardDataChanged()
 void MainWindow::copyAvailableChanged(bool yes) {
     ui->actionCopy->setEnabled(yes);
     ui->actionCut->setEnabled(yes);
+}
+
+void MainWindow::giacProcessingStarted()
+{
+    ui->messagesTextEdit->setText("Processing...");
+    ui->outputLineEdit->clear();
+}
+
+gen strToGiac(const QString &str)
+{
+    std::stringstream ss;
+    gen g;
+    ss << str.toStdString();
+    ss >> g;
+    return g;
+}
+
+QString giacToStr(const gen &g)
+{
+    std::stringstream ss;
+    ss << g;
+    return ss.str().data();
+}
+
+void MainWindow::giacProcessingFinished(const gen &g, const QStringList &messages)
+{
+    ui->outputLineEdit->setText(giacToStr(g));
+    ui->messagesTextEdit->setText(messages.join('\n'));
+}
+
+void MainWindow::on_evaluateButton_clicked()
+{
+    QString command = ui->inputLineEdit->text();
+    session->evaluate(strToGiac(command));
 }

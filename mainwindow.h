@@ -26,6 +26,8 @@
 #include <QGridLayout>
 #include "texteditor.h"
 #include "mathdisplaywidget.h"
+#include "session.h"
+#include <sstream>
 
 namespace Ui {
 
@@ -41,6 +43,7 @@ public:
     ~MainWindow();
 
 private:
+    Session *session;
     Ui::MainWindow *ui;
     QFontComboBox *fontFamilyChooser;
     QSpinBox *fontSizeChooser;
@@ -57,9 +60,12 @@ private:
     void loadFonts();
 
 private slots:
+    void giacProcessingStarted();
+    void giacProcessingFinished(const gen &g, const QStringList &messages);
     void textAlignChanged(QAction* action);
     void clipboardDataChanged();
     void copyAvailableChanged(bool yes);
+    void on_evaluateButton_clicked();
 };
 
 #endif // MAINWINDOW_H

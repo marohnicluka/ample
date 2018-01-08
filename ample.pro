@@ -33,8 +33,8 @@ SOURCES += \
     worksheet.cpp \
     qgen.cpp \
     mathglyphs.cpp \
-    qgenrenderer.cpp \
-    mathdisplaywidget.cpp
+    mathdisplaywidget.cpp \
+    session.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,8 +44,8 @@ HEADERS += \
     worksheet.h \
     qgen.h \
     mathglyphs.h \
-    qgenrenderer.h \
-    mathdisplaywidget.h
+    mathdisplaywidget.h \
+    session.h
 
 FORMS += \
         mainwindow.ui

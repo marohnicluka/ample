@@ -178,7 +178,7 @@ void drawRadical(QPainter &painter, qreal x, qreal y, qreal h)
     qreal radicalDescent = rect.y() + rect.height();
     qreal radicalLeftBearing = -rect.x();
     rect = fontMetrics.tightBoundingRect(MathGlyphs::horizontalLineExtension());
-    qreal fY = qMax(1.0, (h + rect.height() / 3) / radicalHeight), fX = qPow(fY, 0.2);
+    qreal fY = qMax(1.0, (h + rect.height() / 3) / radicalHeight), fX = 1.0;
     painter.save();
     painter.translate(x, y);
     drawHLine(painter, radicalWidth * fX - rect.height() / 3, -qMax(h, radicalHeight), 50 + fX);
@@ -195,7 +195,7 @@ void MathDisplayWidget::paintEvent(QPaintEvent *)
     qreal centerLine = (fontMetrics.xHeight() / 2 + fontMetrics.strikeOutPos()) / 2;
     painter.setFont(font);
     drawRadical(painter, width() / 2, height() / 2,
-                2 * fontMetrics.tightBoundingRect(MathGlyphs::squareRoot()).height());
+                7 * fontMetrics.tightBoundingRect(MathGlyphs::squareRoot()).height());
     //painter.drawLine(QPointF(0, height() / 2 - centerLine), QPointF(width() / 2, height() / 2 - centerLine));
     drawSummationSymbol(painter, QPointF(width() / 3, height() / 2));
     painter.drawText(width() / 3 + 25, height() / 2, "⎷");
