@@ -84,8 +84,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(session, SIGNAL(processingStarted()), this, SLOT(giacProcessingStarted()));
     connect(session, SIGNAL(processingFinished(const gen &,const QStringList &)),
             this, SLOT(giacProcessingFinished(const gen &,const QStringList &)));
-    //ui->messagesTextEdit->setFont(QFont("FreeSerif", 13));
-    ui->messagesTextEdit->setText("Draws in the rectangle [<i>x</i><sub>min</sub>,<i>x</i><sub>max</sub>]&times;[<i>y</i><sub>min</sub>,<i>y</i><sub>max</sub>], the lines of the network built with the lines <i>y</i>=<i>n</i>&sdot;<i>u<sub>y</sub></i> and in the axes <i>Oxy</i> of angle <i>t</i>&ne;0 with the lines <i>x</i>=<i>n</i>&sdot;<i>u<sub>x</sub></i> and <i>u<sub>x</sub>y</i>+<i>u<sub>y</sub>x</i>=n&sdot;<i>u<sub>x</sub>u<sub>y</sub></i>.");
+    ui->messagesTextBrowser->setFont(QFont("FreeSerif", 12));
+    ui->messagesTextBrowser->setText(QString("<html><style>radicand{text-decoration:overline;}</style>") +
+                                     "<body><a href=\"https://en.wikipedia.org/wiki/Photon_energy\">Photon wavelength</a> <i>c</i>&sdot;<i>h</i>&sdot;<i>E</i><sup>&minus;1</sup> for <i>E</i> = 1 J.</body></html>");
 }
 
 MainWindow::~MainWindow()
@@ -139,7 +140,7 @@ void MainWindow::copyAvailableChanged(bool yes) {
 
 void MainWindow::giacProcessingStarted()
 {
-    ui->messagesTextEdit->setText("Processing...");
+    ui->messagesTextBrowser->setText("Processing...");
     ui->outputLineEdit->clear();
 }
 
@@ -162,7 +163,7 @@ QString giacToStr(const gen &g)
 void MainWindow::giacProcessingFinished(const gen &g, const QStringList &messages)
 {
     ui->outputLineEdit->setText(giacToStr(g));
-    ui->messagesTextEdit->setText(messages.join('\n'));
+    ui->messagesTextBrowser->setText(messages.join('\n'));
 }
 
 void MainWindow::on_evaluateButton_clicked()
