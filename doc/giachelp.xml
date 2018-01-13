@@ -231,7 +231,7 @@
   <entry type="command">
     <name>frobenius_norm</name>
     <parameters>Mtrx(A)</parameters>
-    <description lang="en">Frobenius norm (<b>&sum;</b>|<i>a</i><sub><i>ij</i></sub>|&sup2;)<sup>&minus;1/2</sup> of a matrix <b>A</b>.</description>
+    <description lang="en">Frobenius norm (<b>&sum;</b>|<i>a</i><sub><i>ij</i></sub>|&sup2;)<sup>&minus;1/2</sup> of the matrix <b>A</b>.</description>
     <description lang="fr">Norme de Frobenius(<b>&sum;</b>|<i>a</i><sub><i>ij</i></sub>|&sup2;)<sup>&minus;1/2</sup> d'une matrice <b>A</b>.</description>
     <description lang="de"></description>
     <description lang="es"></description>
@@ -1998,7 +1998,7 @@
   <entry type="command">
     <name>ismith</name>
     <parameters>Mtrx(A)</parameters>
-    <description lang="en">Smith normal form of a matrix <b>A</b> with rational coefficients: returns <b>U</b>, <b>B</b>, <b>V</b> such that <b>U</b> and <b>V</b> are invertible in ℤ, <b>B</b> is diagonal, <b>B</b><sub><i>ii</i></sub> divide <b>B</b><sub><i>i</i>+1,<i>i</i>+1</sub> and <b>B</b>=<b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>.</description>
+    <description lang="en">Smith normal form of the matrix <b>A</b> with rational coefficients: returns <b>U</b>, <b>B</b>, <b>V</b> such that <b>U</b> and <b>V</b> are invertible in ℤ, <b>B</b> is diagonal, <b>B</b><sub><i>ii</i></sub> divide <b>B</b><sub><i>i</i>+1,<i>i</i>+1</sub> and <b>B</b>=<b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>.</description>
     <description lang="fr">Calcule la forme normale de Smith d'une matrice <b>A</b> à coefficients entiers : renvoie <b>U</b>, <b>B</b>, <b>V</b> tels que <b>U</b> et <b>V</b> inversibles dans ℤ, <b>B</b> diagonale, <b>B</b><sub><i>ii</i></sub> divise <b>B</b><sub><i>i</i>+1,<i>i</i>+1</sub> et <b>B</b>=<b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>.</description>
     <description lang="de"></description>
     <description lang="es">Calcula la forma normal de Smith de una matriz <b>A</b> a coeficientes enteros: devuelve <b>U</b>, <b>B</b>, <b>V</b> tales que <b>U</b> y <b>V</b> invertibles en ℤ, <b>B</b> diagonal, <b>B</b><sub><i>ii</i></sub> divide <b>B</b><sub><i>i</i>+1,<i>i</i>+1</sub> y <b>B</b>=<b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>.</description>
@@ -10200,7 +10200,7 @@
     <description lang="es">Devuelve la densidad de probabilidad de la ley de Fisher-Snedecor en <i>x</i><sub>0</sub> (<i>n</i> y <i>m</i> son los grados de libertad).</description>
     <description lang="el">Επιστρέφει την πυκνότητα της πιθανότητας της κατανομής Fisher-Snedecor ως προς <i>x</i><sub>0</sub> (<i>n</i> και <i>m</i> είναι οι αριθμοί των βαθμών ελευθερίας).</description>
     <description lang="zh">Fisher（或 Fisher-Snedecor）概率密度函数。  给定分子 <i>n</i> 及分母 <i>m</i> 的自由度时，计算 <i>x</i><sub>0</sub> 值的概率密度。</description>
-    <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s Fisher-Snedecorovom razdiobom u točki <i>x</i><sub>0</sub> (<i>n</i> i <i>m</i> su brojevi stupnjeva slobode).</description>
+    <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s Fisher-Snedecor razdiobom u točki <i>x</i><sub>0</sub> (<i>n</i> i <i>m</i> su brojevi stupnjeva slobode).</description>
     <related>fisher_cdf</related>
     <related>fisher_icdf</related>
     <related>randvector</related>
@@ -10219,7 +10219,7 @@
     <description lang="es">Devuelve la probabilidad que una variable aleatoria según ley Fisher-Snedecor sea menor que <i>x</i><sub>0</sub> (<i>n</i> y <i>m</i> son los grados de libertad).</description>
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαίας μεταβλητής Fisher-Snedecor να είναι μικρότερη του <i>x</i><sub>0</sub> (<i>n</i> και <i>m</i> είναι οι αριθμοί των βαθμών ελευθερίας).</description>
     <description lang="zh">累积 Fisher 分布函数。  返回 Fisher 概率密度函数在 <i>x</i><sub>0</sub> 点的下限尾部概率，其中给定了分子 <i>n</i> 及分母 <i>m</i> 的自由度。</description>
-    <description lang="hr">Vjerojatnost da slučajna varijabla s Fisher-Snedecorovom razdiobom ima vrijednost manju od <i>x</i><sub>0</sub> (<i>n</i> i <i>m</i> su brojevi stupnjeva slobode).</description>
+    <description lang="hr">Vjerojatnost da slučajna varijabla s Fisher-Snedecor razdiobom ima vrijednost manju od <i>x</i><sub>0</sub> (<i>n</i> i <i>m</i> su brojevi stupnjeva slobode).</description>
     <related>UTPF</related>
     <related>fisher_icdf</related>
     <related>fisherd</related>
@@ -10235,7 +10235,7 @@
     <description lang="es">Devuelve <i>h</i> tal que la probabilidad que una variable aleatoria según ley Fisher-Snedecor sea menor que <i>h</i> es <i>p</i> (<i>n</i> y <i>m</i> son los grados de libertad y 0&le;<i>p</i>&le;1).</description>
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια τυχαία μεταβλητή Fisher-Snedecor να είναι μικρότερη του <i>h</i> είναι <i>p</i> (<i>n</i> και <i>m</i> είναι οι αριθμοί των βαθμών ελευθερίας και 0&le;<i>p</i>&le;1).</description>
     <description lang="zh">累积 Fisher 分布函数的反函数。  在分子 <i>n</i> 及分母 <i>m</i> 的自由度给定情况下，返回数值 <i>x</i>，使 <i>x</i> 点的 Fisher 下限尾部概率为 <i>p</i>。</description>
-    <description lang="hr">Realan broj <i>h</i> takav da je vjerojatnost da slučajna varijabla s Fisher-Snedecorovom razdiobom ima vrijednost manju od <i>h</i> jednaka <i>p</i> (<i>n</i> i <i>m</i> su brojevi stupnjeva slobode i 0&le;<i>p</i>&le;1).</description>
+    <description lang="hr">Realan broj <i>h</i> takav da je vjerojatnost da slučajna varijabla s Fisher-Snedecor razdiobom ima vrijednost manju od <i>h</i> jednaka <i>p</i> (<i>n</i> i <i>m</i> su brojevi stupnjeva slobode i 0&le;<i>p</i>&le;1).</description>
     <related>fisher_cdf</related>
     <related>fisherd</related>
     <example>fisher_icdf(4,10,0.95)</example>
@@ -10347,7 +10347,7 @@
     <description lang="es">Devuelve la probabilidad que una variable aleatoria según ley <i>&chi;</i>&sup2; sea mayor que <i>x</i><sub>0</sub> (<i>n</i> es el número de grados de libertad).</description>
     <description lang="el">Επιστρέφει την πιθανότητα μια <i>&chi;</i>&sup2;-τυχαία μεταβλητή να είναι μεγαλύτερη του <i>x</i><sub>0</sub> (<i>n</i> είναι ο αριθμός των βαθμών ελευθερίας).</description>
     <description lang="zh">上尾  <i>&chi;</i>&sup2; 概率分布函数。  返回某一数值处的上尾卡方概率，其中给定了自由度。  返回卡方随机变量大于某一数值的概率。</description>
-    <description lang="hr">Vjerojatnost da slučajna varijabla s <i>&chi;</i>&sup2;-razdiobom ima vrijednost veću od <i>x</i><sub>0</sub> (<i>n</i> je broj stupnjeva slobode).</description>
+    <description lang="hr">Vjerojatnost da slučajna varijabla s <i>&chi;</i>&sup2; razdiobom ima vrijednost veću od <i>x</i><sub>0</sub> (<i>n</i> je broj stupnjeva slobode).</description>
     <related>chisquare_cdf</related>
     <related>chisquare_icdf</related>
     <example>UTPC(2,6.1)</example>
@@ -10362,7 +10362,7 @@
     <description lang="es">Devuelve la probabilidad que una variable aleatoria según ley de Fisher-Snedecor sea mayor que <i>x</i><sub>0</sub> (<i>n</i> y <i>d</i> son los grados de libertad).</description>
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαία μεταβλητή Fisher-Snedecor να είναι μεγαλύτερη του <i>x</i><sub>0</sub> (<i>n</i>, <i>d</i> είναι οι βαθμοί ελευθερίας).</description>
     <description lang="zh">上尾 Snedecor F 概率分布函数。  返回某一数值处的上尾 Snedecor F 的概率，其中给定了分子自由度和分母自由度。 返回 Snedecor F 随机变量大于某一数值的概率。</description>
-    <description lang="hr">Vjerojatnost da slučajna varijabla s Fisher-Snedecorovom razdiobom ima vrijednost veću od <i>x</i><sub>0</sub> (<i>n</i> i <i>d</i> su brojevi stupnjeva slobode).</description>
+    <description lang="hr">Vjerojatnost da slučajna varijabla s Fisher-Snedecor razdiobom ima vrijednost veću od <i>x</i><sub>0</sub> (<i>n</i> i <i>d</i> su brojevi stupnjeva slobode).</description>
     <related>fisher_cdf</related>
     <related>fisher_icdf</related>
     <example>UTPF(4,10,3.5)</example>
@@ -11725,7 +11725,7 @@
     <description lang="es">Añade un punto de ruptura.</description>
     <description lang="el">Προσθήκη ενός σημείου διακοπής</description>
     <description lang="zh"></description>
-    <description lang="hr">Umentni prijelomnu točku u program.</description>
+    <description lang="hr">Umetni prekidnu točku u program.</description>
     <related>rmbreakpoint</related>
     <example>breakpoint(1)</example>
   </entry>
@@ -15544,6 +15544,7 @@
     <description lang="es">Traza la gráfica de una expresión de 1 o 2 variables con superposición.</description>
     <description lang="el">Σχεδιάζει το γράφημα μιας παράστασης με 1 ή 2 μεταβλητές, με υπέρθεση.</description>
     <description lang="zh"></description>
+    <description lang="hr"></description>
     <related>plot</related>
     <related>plot3d</related>
     <related>plotparam</related>
@@ -15558,13 +15559,15 @@
   </entry>
   <entry type="command">
     <name>plotimplicit implicitplot</name>
-    <parameters>Expr,Var1,Var2</parameters>
-    <description lang="en">plotimplicit(f(x,y),x,y) or plotimplicit(f(x,y),[x,y]) graph of f(x,y)=0.</description>
-    <description lang="fr">plotimplicit(f(x,y),x,y) ou plotimplicit(f(x,y),[x,y]) graphe de f(x,y)=0.</description>
+    <parameters>Expr(f(x,y)),Var(x),Var(y)</parameters>
+    <parameters>Expr(f(x,y)),Lst(x,y)</parameters>
+    <description lang="en">Draws the curve defined by <i>f</i>(<i>x</i>, <i>y</i>) = 0.</description>
+    <description lang="fr">Graphe de <i>f</i>(<i>x</i>, <i>y</i>) = 0.</description>
     <description lang="de"></description>
-    <description lang="es">plotimplicit(f(x,y),x,y) o plotimplicit(f(x,y),[x,y]) gráfica de f(x,y)=0.</description>
-    <description lang="el">plotimplicit(f(x,y),x,y) γράφημα της f(x,y)=0.</description>
+    <description lang="es">Gráfica de <i>f</i>(<i>x</i>, <i>y</i>) = 0.</description>
+    <description lang="el">Γράφημα της <i>f</i>(<i>x</i>, <i>y</i>) = 0.</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz krivulje implicitno zadane jednadžbom <i>f</i>(<i>x</i>, <i>y</i>) = 0.</description>
     <related>plotcontour</related>
     <related>unfactored</related>
     <related>plotinequation</related>
@@ -15580,13 +15583,14 @@
   </entry>
   <entry type="command">
     <name>fieldplot plotfield</name>
-    <parameters>Expr,VectVar,[Opt]</parameters>
-    <description lang="en">fieldplot(f(t,y),[t,y]) draws the plotfield of the diff equation y'=f(t,y).</description>
-    <description lang="fr">fieldplot(f(t,y),[t,y]) trace le champ des tangentes (normalisé ou non selon l'option) de l'equa diff y'=f(t,y).</description>
+    <parameters>Expr(f(t,y)),VectVar(t,y),[Opt]</parameters>
+    <description lang="en">Draws the plotfield of the differential equation <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>).</description>
+    <description lang="fr">Trace le champ des tangentes (normalisé ou non selon l'option) de l'equa diff <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>).</description>
     <description lang="de"></description>
-    <description lang="es">fieldplot(f(t,y),[t,y]) traza el campo de las tangentes (normalizadas o no según la opción) de la ecuación diferencial y'=f(t,y).</description>
-    <description lang="el">fieldplot(f(t,y),[t,y]) σχεδιάζει το πεδίο κλίσεων της διαφορικής εξίσωσης y'=f(t,y).</description>
+    <description lang="es">Traza el campo de las tangentes (normalizadas o no según la opción) de la ecuación diferencial <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>).</description>
+    <description lang="el">Σχεδιάζει το πεδίο κλίσεων της διαφορικής εξίσωσης <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz polja smjerova za diferencijalnu jednadžbu <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>).</description>
     <related>interactive_plotode</related>
     <related>odeplot</related>
     <related>odesolve</related>
@@ -15600,12 +15604,13 @@
   <entry type="command">
     <name>interactive_plotode interactive_odeplot</name>
     <parameters>Expr,VectVar</parameters>
-    <description lang="en">Draws (in DispG) a solution for each point t0+i*y0 clicked with the mouse (Esc=halt).</description>
-    <description lang="fr">Trace (dans DispG) une solution pour chaque point t0+i*y0 désigné par la souris (Esc=arrêt).</description>
+    <description lang="en">Draws (in DispG) a solution for each point <i>t</i><sub>0</sub> + i&sdot;<i>y</i><sub>0</sub> clicked with the mouse (<tt>Esc</tt> = halt).</description>
+    <description lang="fr">Trace (dans DispG) une solution pour chaque point t0+i*y0 désigné par la souris (<tt>Esc</tt> = arrêt).</description>
     <description lang="de"></description>
-    <description lang="es">Traza (en DispG) una solución para cada punto t0+i*y0 designado por el ratón (Esc=interrumpir).</description>
-    <description lang="el">Σχεδιάζει (στο DispG) μια λύση για κάθε σημείο t0+i*y0 που επιλέγεται με το ποντίκι (Esc=παύση).</description>
+    <description lang="es">Traza (en DispG) una solución para cada punto t0+i*y0 designado por el ratón (<tt>Esc</tt> = interrumpir).</description>
+    <description lang="el">Σχεδιάζει (στο DispG) μια λύση για κάθε σημείο t0+i*y0 που επιλέγεται με το ποντίκι (<tt>Esc</tt> = παύση).</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz rješenja diferencijalne jednadžbe u svakoj točki <i>t</i><sub>0</sub> + i&sdot;<i>y</i><sub>0</sub> koja je kliknuta pokazivačem (<tt>Esc</tt> = stop).</description>
     <related>odeplot</related>
     <related>plotfield</related>
     <related>odesolve</related>
@@ -15615,13 +15620,15 @@
   </entry>
   <entry type="command">
     <name>odeplot plotode</name>
-    <parameters>Expr,VectVar,VectInitCond</parameters>
-    <description lang="en">odeplot(f(t,y),[t,y],[t0,y0]) draws the solution of y'=f(t,y) and y(t0)=y0 or of the system [x'=g(t,x,y),y'=h(t,x,y)] with x(t0)=x0 and y(t0)=y0.</description>
-    <description lang="fr">odeplot(f(t,y),[t,y],[t0,y0]) trace la solution de y'=f(t,y) et y(t0)=y0 ou du système [x'=g(t,x,y),y'=h(t,x,y)] avec x(t0)=x0 et y(t0)=y0.</description>
+    <parameters>Expr(f(t,y)),VectVar(t[=t1..t2],y),VectInitCond(t0,y0)</parameters>
+    <parameters>VectExpr(g(t,x,y),h(t,x,y)),VectVar(t[=t1..t2],x,y),VectInitCond(t0,y0,x0)</parameters>
+    <description lang="en">Draws the solution of <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>) and <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub> or of the system <i>x</i>&prime; = <i>g</i>(<i>t</i>, <i>x</i>, <i>y</i>), <i>y</i>&prime; = <i>h</i>(<i>t</i>, <i>x</i>, <i>y</i>) with <i>x</i>(<i>t</i><sub>0</sub>) = <i>x</i><sub>0</sub> and <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub>.</description>
+    <description lang="fr">Trace la solution de <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>) et <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub> ou du système <i>x</i>&prime; = <i>g</i>(<i>t</i>, <i>x</i>, <i>y</i>), <i>y</i>&prime; = <i>h</i>(<i>t</i>, <i>x</i>, <i>y</i>) avec <i>x</i>(<i>t</i><sub>0</sub>) = <i>x</i><sub>0</sub> et <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub>.</description>
     <description lang="de"></description>
-    <description lang="es">odeplot(f(t,y),[t,y],[t0,y0])) traza la solución de y'=f(t,y) con y(t0)=y0.</description>
-    <description lang="el">odeplot(f(t,y),[t,y],[t0,y0)) σχεδιάζει τη λύση της y'=f(t,y) με y(t0)=y0.</description>
+    <description lang="es">Traza la solución de <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>) con <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub> o del sistema <i>x</i>&prime; = <i>g</i>(<i>t</i>, <i>x</i>, <i>y</i>), <i>y</i>&prime; = <i>h</i>(<i>t</i>, <i>x</i>, <i>y</i>) con <i>x</i>(<i>t</i><sub>0</sub>) = <i>x</i><sub>0</sub> y <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub>.</description>
+    <description lang="el">Σχεδιάζει τη λύση της <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>) με <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub> ή του συστήματος <i>x</i>&prime; = <i>g</i>(<i>t</i>, <i>x</i>, <i>y</i>), <i>y</i>&prime; = <i>h</i>(<i>t</i>, <i>x</i>, <i>y</i>) με <i>x</i>(<i>t</i><sub>0</sub>) = <i>x</i><sub>0</sub> et <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz (približnog) rješenja diferencijalne jednadžbe <i>y</i>&prime; = <i>f</i>(<i>t</i>, <i>y</i>) s početnim uvjetom <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub> odnosno sustava jednadžbi <i>x</i>&prime; = <i>g</i>(<i>t</i>, <i>x</i>, <i>y</i>), <i>y</i>&prime; = <i>h</i>(<i>t</i>, <i>x</i>, <i>y</i>) s početnim uvjetima <i>x</i>(<i>t</i><sub>0</sub>) = <i>x</i><sub>0</sub> i <i>y</i>(<i>t</i><sub>0</sub>) = <i>y</i><sub>0</sub>.</description>
     <related>interactive_plotode</related>
     <related>fieldplot</related>
     <related>odesolve</related>
@@ -15637,12 +15644,13 @@
   <entry type="command">
     <name>pmin</name>
     <parameters>Mtrx(A)||Real(a),[Var]</parameters>
-    <description lang="en">Returns the minimal polynomial of the matrix A or the minimal polynomial of the algebraic number a.</description>
-    <description lang="fr">Renvoie le polynôme minimal de la matrice A ou le polynôme minimal du nombre algébrique a.</description>
+    <description lang="en">Returns the minimal polynomial of the matrix <b>A</b> or the minimal polynomial of the algebraic number <i>a</i>.</description>
+    <description lang="fr">Renvoie le polynôme minimal de la matrice <b>A</b> ou le polynôme minimal du nombre algébrique <i>a</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuele el polinómio mínimo de una matriz A o el polinómio mínimo de un número algebraica a.</description>
-    <description lang="el">Επιστρέφει το ελάχιστο πολυώνυμο του Α (πίνακα) ή το ελάχιστο πολυώνυμο του a</description>
+    <description lang="es">Devuele el polinómio mínimo de una matriz <b>A</b> o el polinómio mínimo de un número algebraica <i>a</i>.</description>
+    <description lang="el">Επιστρέφει το ελάχιστο πολυώνυμο του <b>A</b> (πίνακα) ή το ελάχιστο πολυώνυμο του <i>a</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Minimalni polinom za matricu <b>A</b> odnosno polinom s racionalnim koeficijentima najnižeg stupnja kojemu je algebarski broj <i>a</i> korijen.</description>
     <related>pcar</related>
     <related>jordan</related>
     <example>(αλγεβρική αριθμού).</example>
@@ -15653,13 +15661,14 @@
   </entry>
   <entry type="command">
     <name>plotpolar polarplot DrawPol courbe_polaire</name>
-    <parameters>Expr,Var,VarMin,VarMax</parameters>
-    <description lang="en">plotpolar(f(x),x,a,b) draws the polar curve r=fx) for x in [a,b].</description>
-    <description lang="fr">plotpolar(f(x),x,a,b) trace la courbe en polaire r=f(x) pour x dans [a,b].</description>
+    <parameters>Expr(f(φ)),Var(φ),VarMin(a),VarMax(b)</parameters>
+    <description lang="en">Draws the polar curve <i>r</i> = <i>f</i>(<i>φ</i>) for <i>φ</i>&isin;[<i>a</i>, <i>b</i>].</description>
+    <description lang="fr">Trace la courbe en polaire <i>r</i> = <i>f</i>(<i>φ</i>) pour <i>φ</i>&isin;[<i>a</i>, <i>b</i>].</description>
     <description lang="de"></description>
-    <description lang="es">plotpolar(f(x),x,a,b) traza la curva polar r=f(x) para x en [a,b].</description>
-    <description lang="el">plotpolar(f(x),x,a,b) σχεδιάζει την πολική καμπύλη r=fx) για x στο [a,b].</description>
+    <description lang="es">Traza la curva polar <i>r</i> = <i>f</i>(<i>φ</i>) para <i>φ</i>&isin;[<i>a</i>, <i>b</i>].</description>
+    <description lang="el">Σχεδιάζει την πολική καμπύλη <i>r</i> = <i>f</i>(<i>φ</i>) για <i>φ</i>&isin;[<i>a</i>, <i>b</i>].</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz krivulje <i>r</i> = <i>f</i>(<i>φ</i>) for <i>φ</i>&isin;[<i>a</i>, <i>b</i>] u polarnom koordinatnom sustavu.</description>
     <related>plotparam</related>
     <related>plotfunc</related>
     <related>plotpolar</related>
@@ -15669,12 +15678,13 @@
   <entry type="command">
     <name>pixon</name>
     <parameters>Real(x),Real(y)</parameters>
-    <description lang="en">Pixel on</description>
-    <description lang="fr">Allume un pixel</description>
+    <description lang="en">Pixel on.</description>
+    <description lang="fr">Allume un pixel.</description>
     <description lang="de"></description>
-    <description lang="es">Activa un pixel</description>
-    <description lang="el">Ενεργοποίηση εικονοστοιχείου</description>
+    <description lang="es">Activa un pixel.</description>
+    <description lang="el">Ενεργοποίηση εικονοστοιχείου.</description>
     <description lang="zh"></description>
+    <description lang="hr"></description>
     <related>pixoff</related>
     <example>pixon(1,2)</example>
   </entry>
@@ -15687,31 +15697,34 @@
     <description lang="es">Desactiva un pixel.</description>
     <description lang="el">Απενεργοποίηση εικονοστοιχείου.</description>
     <description lang="zh"></description>
+    <description lang="hr"></description>
     <related>pixon</related>
     <example>pixoff(1,2)</example>
   </entry>
   <entry type="command">
     <name>potential</name>
-    <parameters>Vect(V),VectVar</parameters>
-    <description lang="en">Returns U such that derive(U,Vector_of_variable)=V.</description>
-    <description lang="fr">Renvoie U tel que gradient(U)=derive(U,Vector_of_variable)=V.</description>
+    <parameters>Vect(v),VectVar(x)</parameters>
+    <description lang="en">Returns <i>u</i>(<b>x</b>) such that <b>v</b> = &nabla;<i>u</i> (<i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> for <i>k</i> = 1, 2, &hellip;).</description>
+    <description lang="fr">Renvoie <i>u</i>(<b>x</b>) tel que <b>v</b> = &nabla;<i>u</i> (<i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> pour <i>k</i> = 1, 2, &hellip;).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve U tal que grad(U)=derive(U,Vector_of_variable)=V.</description>
-    <description lang="el">Επιστρέφει U τέτοιο ώστε derive(U,Vector_of_variable)=V.</description>
+    <description lang="es">Devuelve <i>u</i>(<b>x</b>) tal que <b>v</b> = &nabla;<i>u</i> (<i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> (<i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> por <i>k</i> = 1, 2, &hellip;).</description>
+    <description lang="el">Επιστρέφει <i>u</i>(<b>x</b>) τέτοιο ώστε <b>v</b> = &nabla;<i>u</i> (<i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> για <i>k</i> = 1, 2, &hellip;).</description>
     <description lang="zh"></description>
+    <description lang="hr">Izraz <i>u</i>(<b>x</b>) takav da vrijedi <b>v</b> = &nabla;<i>u</i> (<i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> za <i>k</i> = 1, 2, &hellip;).</description>
     <related>derive</related>
     <related>vpotential</related>
     <example>potential([2*x*y+3,x^2-4*z,-4*y],[x,y,z])</example>
   </entry>
   <entry type="command">
     <name>powmod powermod</name>
-    <parameters>Intg(a),Intg(n),Intg(p),[Expr(P(x))],[Var]</parameters>
-    <description lang="en">Computes a^n modulo p or modulo p,P(x) (fast algorithm).</description>
-    <description lang="fr">Calcule a^n modulo p ou modulo p,P(x) (puissance rapide).</description>
+    <parameters>Intg(a),Intg(n),Intg(p),[Expr(P(x))],[Var(x)]</parameters>
+    <description lang="en">Computes <i>a<sup>n</sup></i> modulo <i>p</i> [<i>p</i>, <i>P</i>(<i>x</i>)] (fast algorithm).</description>
+    <description lang="fr">Calcule <i>a<sup>n</sup></i> modulo <i>p</i> [<i>p</i>, <i>P</i>(<i>x</i>)] (puissance rapide).</description>
     <description lang="de"></description>
-    <description lang="es">Calcula a^n modulo p o modulo p,P(x) (cálculo rápido).</description>
-    <description lang="el">Υπολογίζει a^n modulo p ή modulo p,P(x) (ταχεία υλοποίηση).</description>
-    <description lang="zh">快速幂同余。 整数求幂与同余。 对于整数 a、n 及 p，返回 a^n mod p。</description>
+    <description lang="es">Calcula <i>a<sup>n</sup></i> modulo <i>p</i> [<i>p</i>, <i>P</i>(<i>x</i>)] (cálculo rápido).</description>
+    <description lang="el">Υπολογίζει <i>a<sup>n</sup></i> modulo <i>p</i> [<i>p</i>, <i>P</i>(<i>x</i>)] (ταχεία υλοποίηση).</description>
+    <description lang="zh">快速幂同余。 整数求幂与同余。 对于整数 <i>a</i>、<i>n</i> 及 <i>p</i>，返回 <i>a<sup>n</sup></i> mod <i>p</i>。</description>
+    <description lang="hr">Ostatak pri dijeljenju <i>a<sup>n</sup></i> brojem <i>p</i> [modulo <i>p</i>, <i>P</i>(<i>x</i>)] (brzi algoritam).</description>
     <related>pow</related>
     <related>^</related>
     <example>powmod(17,452,19)</example>
@@ -15720,12 +15733,12 @@
   <entry type="command">
     <name>pow</name>
     <parameters>Intg(a),Intg(n)</parameters>
-    <description lang="en">Computes a^n (fast algorithm).</description>
-    <description lang="fr">Calcule a^n.(puissance rapide).</description>
+    <description lang="en">Computes <i>a<sup>n</sup></i> (fast algorithm).</description>
+    <description lang="fr">Calcule <i>a<sup>n</sup></i>.(puissance rapide).</description>
     <description lang="de"></description>
-    <description lang="es">Calcula a^n(cálculo rápido).</description>
-    <description lang="el">Υπολογίζει a^n (ταχεία υλοποίηση).</description>
-    <description lang="zh">返回 a 的 n 次幂的结果。</description>
+    <description lang="es">Calcula <i>a<sup>n</sup></i> (cálculo rápido).</description>
+    <description lang="el">Υπολογίζει <i>a<sup>n</sup></i> (ταχεία υλοποίηση).</description>
+    <description lang="zh">返回 <i>a</i> 的 <i>n</i> 次幂的结果。</description>
     <related>^</related>
     <related>powmod</related>
     <example>pow(17,452)</example>
@@ -15734,12 +15747,13 @@
   <entry type="command">
     <name>preval</name>
     <parameters>Expr(F(var)),Real(a),Real(b),[Var]</parameters>
-    <description lang="en">Returns F(b)-F(a).</description>
-    <description lang="fr">Renvoie F(b)-F(a).</description>
+    <description lang="en">Returns <i>F</i>(<i>b</i>)&minus;<i>F</i>(<i>a</i>).</description>
+    <description lang="fr">Renvoie <i>F</i>(<i>b</i>)&minus;<i>F</i>(<i>a</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve F(b)-F(a).</description>
-    <description lang="el">Επιστρέφει F(b)-F(a).</description>
-    <description lang="zh">返回 F(b)-F(a)。</description>
+    <description lang="es">Devuelve <i>F</i>(<i>b</i>)&minus;<i>F</i>(<i>a</i>).</description>
+    <description lang="el">Επιστρέφει <i>F</i>(<i>b</i>)&minus;<i>F</i>(<i>a</i>).</description>
+    <description lang="zh">返回 <i>F</i>(<i>b</i>)&minus;<i>F</i>(<i>a</i>)。</description>
+    <description lang="hr">Vrijednost <i>F</i>(<i>b</i>)&minus;<i>F</i>(<i>a</i>).</description>
     <related>subst</related>
     <related>int</related>
     <example>preval(x^2-2,2,3)</example>
@@ -15750,12 +15764,13 @@
   <entry type="command">
     <name>prevprime</name>
     <parameters>Intg(a)</parameters>
-    <description lang="en">Previous prime or pseudo-prime before a given integer a.</description>
-    <description lang="fr">Nombre premier ou pseudo-premier précédent un entier a donné.</description>
+    <description lang="en">Previous prime or pseudo-prime before the given integer <i>a</i>.</description>
+    <description lang="fr">Nombre premier ou pseudo-premier précédent un entier <i>a</i> donné.</description>
     <description lang="de"></description>
-    <description lang="es">Número primo o pseudo-primo previo al entero dado a.</description>
+    <description lang="es">Número primo o pseudo-primo previo al entero dado <i>a</i>.</description>
     <description lang="el">Πρώτος ή ψευδο-πρώτος αριθμός πριν από δοθέντα ακέραιο.</description>
-    <description lang="zh">前一素数。  返回整数 a 的前一个素数。</description>
+    <description lang="zh">前一素数。  返回整数 <i>a</i> 的前一个素数。</description>
+    <description lang="hr">Najveći (pseudo)prost broj manji od danog cijelog broja <i>a</i>.</description>
     <related>nextprime</related>
     <related>is_prime</related>
     <related>ithprime</related>
@@ -15764,13 +15779,14 @@
   </entry>
   <entry type="command">
     <name>prepend</name>
-    <parameters>Lst||Set||Str(L),Elem(n)</parameters>
-    <description lang="en">Puts an element to a set or at the beginning of a list or of a string (L:=prepend(L,a) or L.prepend(a)).</description>
-    <description lang="fr">Rajoute un élément à un ensemble ou le met au début d'une liste ou d'une chaîne (L:=prepend(L,a) ou L.prepend(a)).</description>
+    <parameters>Lst||Set||Str(L),Elem(a)</parameters>
+    <description lang="en">Puts an element to a set or at the beginning of a list or of a string (<tt>L:=prepend(L,a)</tt> is equivalent to <tt>L.prepend(a)</tt>).</description>
+    <description lang="fr">Rajoute un élément à un ensemble ou le met au début d'une liste ou d'une chaîne (<tt>L:=prepend(L,a)</tt> est équivalent à <tt>L.prepend(a)</tt>).</description>
     <description lang="de"></description>
-    <description lang="es">Pone el elemento al principio de la lista (conjunto o cadena) (L:=prepend(L,a) o L.prepend(a)).</description>
-    <description lang="el">Ένθεση στοιχείου στην αρχή μιας λίστας (σύνολο ή συμβολοσειράς) (L:=prepend(L,a)  ή L.prepend(a)).</description>
+    <description lang="es">Pone el elemento al principio de la lista (conjunto o cadena) (<tt>L:=prepend(L,a)</tt> es equivalente a <tt>L.prepend(a)</tt>).</description>
+    <description lang="el">Ένθεση στοιχείου στην αρχή μιας λίστας (σύνολο ή συμβολοσειράς) (<tt>L:=prepend(L,a)</tt> είναι ισοδύναμο με <tt>L.prepend(a)</tt>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Skup, lista ili niz znakova <b>L</b> s ubačenim elementom <i>a</i> na kraj (naredba <tt>L:=prepend(L,a)</tt> je ekvivalentna naredbi <tt>L.prepend(a)</tt>).</description>
     <related>append</related>
     <related>concat</related>
     <example>prepend([1,2],3)</example>
@@ -15782,25 +15798,27 @@
   </entry>
   <entry type="command">
     <name>print Disp</name>
-    <parameters>Expr|| Str</parameters>
+    <parameters>Expr||Str</parameters>
     <description lang="en">Prints a result in a program.</description>
     <description lang="fr">Permet d'afficher un résultat intermédiaire dans un programme.</description>
     <description lang="de"></description>
     <description lang="es">Permite mostrar un resultado intermedio en un programa.</description>
     <description lang="el">Εκτύπωση ενδιαμέσου αποτελέσματος σε ένα πρόγραμμα.</description>
     <description lang="zh">将 expr 或 string 结果打印到终端。</description>
+    <description lang="hr">Ispis danog izraza ili niza znakova (u toku izvođenja programa).</description>
     <example>print(&quot;salut&quot;)</example>
     <example>print(a)</example>
   </entry>
   <entry type="command">
     <name>projection</name>
-    <parameters>Curve,Pnt</parameters>
-    <description lang="en">projection(C,A) is the orthogonal projection of A on the curve C.</description>
-    <description lang="fr">projection(C,A) est la projection orthogonale de A sur la courbe C.</description>
+    <parameters>Curve(C),Pnt(A)</parameters>
+    <description lang="en">The orthogonal projection of <i>A</i> on the curve <i>C</i>.</description>
+    <description lang="fr">La projection orthogonale de <i>A</i> sur la courbe <i>C</i>.</description>
     <description lang="de"></description>
-    <description lang="es">projection(C,A) es la proyección ortogonal de A sobre la curva C.</description>
-    <description lang="el">projection(C,A) είναι η ορθοργώνια προβολή του A πάνω στην καμπύλη C.</description>
+    <description lang="es">La proyección ortogonal de <i>A</i> sobre la curva <i>C</i>.</description>
+    <description lang="el">Η ορθοργώνια προβολή του <i>A</i> πάνω στην καμπύλη <i>C</i>.</description>
     <description lang="zh">射影。</description>
+    <description lang="hr">Ortogonalna projekcija točke <i>A</i> na krivulju <i>C</i>.</description>
     <related>perpendicular</related>
     <example>H:=projection(line(i,1-i),1+i)</example>
     <example>K:=projection(circle(0,1),1+i)</example>
@@ -15814,6 +15832,7 @@
     <description lang="es">Palabra reservada.</description>
     <description lang="el">Δεσμευμένη λέξη.</description>
     <description lang="zh"></description>
+    <description lang="hr">Rezervirana riječ.</description>
   </entry>
   <entry type="command">
     <name>proc</name>
@@ -15823,29 +15842,32 @@
     <description lang="es">Empieza un proceso (como en MuPAD).</description>
     <description lang="el">Εκκίνηση διαδικασίας (όπως η MuPAD).</description>
     <description lang="zh"></description>
+    <description lang="hr">Početak programske funkcije (kao u jeziku MuPAD).</description>
     <example>proc &hellip; begin &hellip; end_proc;</example>
   </entry>
   <entry type="command">
     <name>Psi</name>
     <parameters>Real(a),Intg(n)</parameters>
-    <description lang="en">Psi(a,n)=n-th derivative of the function DiGamma (=ln@Gamma) at point a (Psi(a,0)=Psi(a)).</description>
-    <description lang="fr">Psi(a,n)=dérivée n-ième de la fonction DiGamma (=ln@Gamma) au point a (Psi(a,0)=Psi(a)).</description>
+    <description lang="en">The <i>n</i>-th derivative of the function digamma <i>ψ</i>(<i>x</i>) = &Gamma;&prime;(<i>x</i>)/&Gamma;(<i>x</i>) at point <i>a</i>.</description>
+    <description lang="fr">Dérivée <i>n</i>-ième de la fonction digamma <i>ψ</i>(<i>x</i>) = &Gamma;&prime;(<i>x</i>)/&Gamma;(<i>x</i>) au point <i>a</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Psi(a,n)=n-ésima derivada de la función DiGamma (=ln@Gamma) en el punto a (Psi(a,0)=Psi(a)).</description>
-    <description lang="el">Psi(a,n)=n-στη παράγωγος της DiGamma συνάρτησης (=ln@Gamma) στο σημείο a (Psi(a,0)=Psi(a)).</description>
+    <description lang="es">La <i>n</i>-ésima derivada de la función digamma <i>ψ</i>(<i>x</i>) = &Gamma;&prime;(<i>x</i>)/&Gamma;(<i>x</i>) en el punto <i>a</i>.</description>
+    <description lang="el">Το <i>n</i>-στη παράγωγος της digamma συνάρτησης <i>ψ</i>(<i>x</i>) = &Gamma;&prime;(<i>x</i>)/&Gamma;(<i>x</i>) στο σημείο <i>a</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">The <i>n</i>-th derivative of the function digamma <i>ψ</i>(<i>x</i>) = &Gamma;&prime;(<i>x</i>)/&Gamma;(<i>x</i>) at point <i>a</i>.</description>
     <related>Gamma</related>
     <example>Psi(3,1)</example>
   </entry>
   <entry type="command">
     <name>ptayl</name>
-    <parameters>Expr||Poly(P(var)),Var=Real || Real(a),[Order || Var]</parameters>
-    <description lang="en">Returns the Taylor polynomial of the expression at the given point and order or a polynomial Q such that P(x)=Q(x-a).</description>
-    <description lang="fr">Renvoie le polynôme de Taylor de l'expression au point à l'ordre spécifié ou le polynôme Q tel que P(x)=Q(x-a).</description>
+    <parameters>Expr||Poly(P(var)),Var=Real || Real(a),[Order(n)||Var]</parameters>
+    <description lang="en">Returns the Taylor polynomial of the expression at the given point and order or a polynomial <i>Q</i> such that <i>P</i>(<i>x</i>) = <i>Q</i>(<i>x</i>&minus;<i>a</i>).</description>
+    <description lang="fr">Renvoie le polynôme de Taylor de l'expression au point à l'ordre spécifié ou le polynôme <i>Q</i> tel que <i>P</i>(<i>x</i>) = <i>Q</i>(<i>x</i>&minus;<i>a</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve el polinomio de Taylor Q tal que P(x)=Q(x-a).</description>
-    <description lang="el">Επιστρέφει το πολυώνυμου του Taylor Q τέτοιου ώστε P(x)=Q(x-a).</description>
+    <description lang="es">Devuelve el polinomio de Taylor <i>Q</i> tal que <i>P</i>(<i>x</i>) = <i>Q</i>(<i>x</i>&minus;<i>a</i>).</description>
+    <description lang="el">Επιστρέφει το πολυώνυμου του Taylor <i>Q</i> τέτοιου ώστε <i>P</i>(<i>x</i>) = <i>Q</i>(<i>x</i>&minus;<i>a</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Taylorov polinom stupnja <i>n</i> danog izraza s obzirom na točku <i>a</i> ili polinom <i>Q</i> takav da vrijedi <i>P</i>(<i>x</i>) = <i>Q</i>(<i>x</i>&minus;<i>a</i>).</description>
     <related>series</related>
     <related>taylor</related>
     <example>ptayl(sin(x),x=0,5)</example>
@@ -15857,13 +15879,14 @@
   </entry>
   <entry type="command">
     <name>purge DelVar del</name>
-    <parameters>Var</parameters>
-    <description lang="en">purge(varname) unassign the variable varname.</description>
-    <description lang="fr">purge(nomvar) enlève la valeur stockée dans la variable nomvar.</description>
+    <parameters>Var(x)</parameters>
+    <description lang="en">Unassign the variable <i>x</i>.</description>
+    <description lang="fr">Enlève la valeur stockée dans la variable <i>x</i>.</description>
     <description lang="de"></description>
-    <description lang="es">purge(nombrevariable) borra el valor guardado en la variable nombrevariable.</description>
-    <description lang="el">purge(varname) αποανάθεση της μεταβλητής με όνομα varname.</description>
+    <description lang="es">Borra el valor guardado en la variable <i>x</i>.</description>
+    <description lang="el">Aποανάθεση της μεταβλητής με όνομα <i>x</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Obriši varijablu <i>x</i>.</description>
     <related>sto</related>
     <related>restart</related>
     <related>assume</related>
@@ -15880,31 +15903,34 @@
     <description lang="es">Repertorio de trabajo actual.</description>
     <description lang="el">Τρέχον κατάλλογος εργασίας.</description>
     <description lang="zh"></description>
+    <description lang="hr">Trenutni radni direktorij.</description>
     <related>cd</related>
     <example>pwd()</example>
   </entry>
   <entry type="command">
     <name>p1oc2</name>
-    <parameters>Permut,Cycle</parameters>
-    <description lang="en">Returns the permutation product of p1 and c2.</description>
-    <description lang="fr">Renvoie la permutation produit de p1 et de c2.</description>
+    <parameters>Permut(p),Cycle(c)</parameters>
+    <description lang="en">Returns the permutation product of <i>p</i> and <i>c</i>.</description>
+    <description lang="fr">Renvoie la permutation produit de <i>p</i> et de <i>c</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve la permutación producto de p1 y c2.</description>
-    <description lang="el">Επιστρέφει το μεταθετικό γινόμενο του p1 και c2.</description>
+    <description lang="es">Devuelve la permutación producto de <i>p</i> y <i>c</i>.</description>
+    <description lang="el">Επιστρέφει το μεταθετικό γινόμενο του <i>p</i> και <i>c</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Umnožak permutacije <i>p</i> i ciklusa <i>c</i>.</description>
     <related>c1op2</related>
     <related>p1op2</related>
     <example>p1oc2([0,2,1],[2,1,3])</example>
   </entry>
   <entry type="command">
     <name>p1op2</name>
-    <parameters>Permut,Permut</parameters>
-    <description lang="en">Returns the permutation product of p1 and p2.</description>
-    <description lang="fr">Renvoie la permutation produit de p1 et de p2.</description>
+    <parameters>Permut(p1),Permut(p2)</parameters>
+    <description lang="en">Returns the permutation product of <i>p</i><sub>1</sub> and <i>p</i><sub>2</sub>.</description>
+    <description lang="fr">Renvoie la permutation produit de <i>p</i><sub>1</sub> et de <i>p</i><sub>2</sub>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve la permutación producto de p1 y p2.</description>
-    <description lang="el">Επιστρέφει το μεταθετικό γινόμενο του p1 και p2.</description>
+    <description lang="es">Devuelve la permutación producto de <i>p</i><sub>1</sub> y <i>p</i><sub>2</sub>.</description>
+    <description lang="el">Επιστρέφει το μεταθετικό γινόμενο του <i>p</i><sub>1</sub> και <i>p</i><sub>2</sub>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Umnožak permutacija <i>p</i><sub>1</sub> i <i>p</i><sub>2</sub>.</description>
     <related>c1op2</related>
     <related>p1oc2</related>
     <example>p1op2([0,2,1],[1,0,3,2])</example>
@@ -15912,24 +15938,26 @@
   <entry type="command">
     <name>qr</name>
     <parameters>Mtrx</parameters>
-    <description lang="en">For a numerical matrix A, returns R (right) such that A=QR and Q orthogonal.</description>
-    <description lang="fr">Pour A matrice numérique, renvoie R (right) telle que A=QR et Q orthogonale.</description>
+    <description lang="en">QR decomposition of a numerical matrix <b>A</b>: returns <b>R</b> and <b>Q</b> such that <b>A</b> = <b>Q</b>&sdot;<b>R</b> and <b>Q</b> is orthogonal.</description>
+    <description lang="fr">Pour <b>A</b> matrice numérique, renvoie <b>R</b> et <b>Q</b> telle que <b>A</b> = <b>Q</b>&sdot;<b>R</b> et <b>Q</b> orthogonale.</description>
     <description lang="de"></description>
-    <description lang="es">Para una matriz numérica A, devuelve R (derecha) tal que A=QR y Q es ortogonal.</description>
-    <description lang="el">Για έναν αριθμητικό πίνακα Α, επιστρέφει R (δεξιό) τέτοιο ώστε A=QR και Q ορθογώνιος.</description>
+    <description lang="es">Para una matriz numérica <b>A</b>, devuelve <b>R</b> y <b>Q</b> tal que <b>A</b> = <b>Q</b>&sdot;<b>R</b> y <b>Q</b> es ortogonal.</description>
+    <description lang="el">Για έναν αριθμητικό πίνακα <b>A</b>, επιστρέφει <b>R</b> και <b>Q</b> τέτοιο ώστε <b>A</b> = <b>Q</b>&sdot;<b>R</b> και <b>Q</b> ορθογώνιος.</description>
     <description lang="zh"></description>
+    <description lang="hr">QR dekompozicija numeričke matrice <b>A</b>: dobivaju se matrice <b>R</b> i <b>Q</b> takve da vrijedi <b>A</b> = <b>Q</b>&sdot;<b>R</b>, pri čemu je <b>Q</b> ortogonalna.</description>
     <related>lu</related>
     <example>qr([[1,2],[3,4]])</example>
   </entry>
   <entry type="command">
     <name>quote hold</name>
     <parameters>Expr</parameters>
-    <description lang="en">Returns its argument unevaluated (and also a:=quote(a) that purge a).</description>
-    <description lang="fr">Retourne son argument sans l'évaluer (et aussi a:=quote(a) qui purge a).</description>
+    <description lang="en">Returns its argument unevaluated.</description>
+    <description lang="fr">Retourne son argument sans l'évaluer.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve su argumento sin evaluarlo (y también a:=quote(a) que purge a).</description>
-    <description lang="el">Αναστολή υπολογισμών. Επιστρέφει το όρισμα μη-αποτιμημένο (και επίσης a:=quote(a) καθαρίζει το a).</description>
+    <description lang="es">Devuelve su argumento sin evaluarlo.</description>
+    <description lang="el">Αναστολή υπολογισμών. Επιστρέφει το όρισμα μη-αποτιμημένο.</description>
     <description lang="zh"></description>
+    <description lang="hr">Dani izraz bez evaluacije.</description>
     <example>quote(1+2)</example>
     <example>quote(1/x+1/(x-1))</example>
     <example>quote((x+1)*(x-1))</example>
@@ -15943,6 +15971,7 @@
     <description lang="es">Cociente euclidiano de 2 polinomios.</description>
     <description lang="el">Ευκλείδιο πηλίκο 2 πολυωνύμων.</description>
     <description lang="zh">商（多项式 综合除法）</description>
+    <description lang="hr">Euklidski količnik dvaju polinoma.</description>
     <related>rem</related>
     <related>quorem</related>
     <related>Quo</related>
@@ -15960,6 +15989,7 @@
     <description lang="es">Cociente euclidiano de 2 polinomios sin evaluar.</description>
     <description lang="el">Επιστρέφει το ευκλείδιου πηλίκο 2 πολυωνύμων δίχως αποτίμηση.</description>
     <description lang="zh"></description>
+    <description lang="hr">Inertna varijanta naredbe <tt>quo</tt>.</description>
     <related>quo</related>
     <related>quorem</related>
     <example>Quo([1,2,3,4],[-1,2])</example>
@@ -15975,6 +16005,7 @@
     <description lang="es">Cociente y resto euclidianos de 2 polinomios.</description>
     <description lang="el">Ευκλείδιο πηλίκο και υπόλοιπο 2 πολυωνύμων.</description>
     <description lang="zh"></description>
+    <description lang="hr">Lista koja sadrži količnik i ostatak pri dijeljenju danih dvaju polinoma.</description>
     <related>rem</related>
     <related>quo</related>
     <related>iquorem</related>
@@ -15985,25 +16016,30 @@
   </entry>
   <entry type="command">
     <name>q2a</name>
-    <parameters>QuadraForm, VectVar</parameters>
-    <description lang="en">q2a(q(x,y),[x,y])=the symmetric matrix associated to the quadratic form q.</description>
-    <description lang="fr">q2a(q(x,y),[x,y])=la matrice symétrique associée à la forme quadratique q.</description>
+    <parameters>QuadraForm(q), VectVar</parameters>
+    <description lang="en">The symmetric matrix associated to the quadratic form <i>q</i>.</description>
+    <description lang="fr">La matrice symétrique associée à la forme quadratique <i>q</i>.</description>
     <description lang="de"></description>
-    <description lang="es">q2a(q(x,y),[x,y])=matriz simétrica asociada a la forma cuadrática q.</description>
-    <description lang="el">q2a(q(x,y),[x,y])=ο συμμετρικός πίνακας συσχετισμένος με την τετραγωνική μορφή q.</description>
+    <description lang="es">Matriz simétrica asociada a la forma cuadrática <i>q</i>.</description>
+    <description lang="el">O συμμετρικός πίνακας συσχετισμένος με την τετραγωνική μορφή <i>q</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Simetrična matrica pridružena kvadratnoj formi <i>q</i>.</description>
     <related>a2q</related>
     <example>q2a(x^2+2*x*y+2*y^2,[x,y])</example>
   </entry>
   <entry type="command">
     <name>rand random</name>
-    <parameters>Intg(n) or Interval(p..n) or NULL,[Intg(b1) or Lst(L)],[Intg(b2)]</parameters>
-    <description lang="en">rand(n)=a random integer (resp. rand(p,n)=a real or rand(p..n)=a real function) with uniform distribution in 0..n-1 (resp. in [p;n])(rand()=rand(0,1)=a real in [0,1[) or rand(n,b1,b2)=n integers between b1 and b2 or rand(n,L)=list of n elements of L.</description>
-    <description lang="fr">rand(n)=un entier (resp. rand(p,n)=un réel ou rand(p..n)=une fonction réelle) aléatoire uniformément distribué dans 0.. n-1 (resp. dans [p; n]) (rand()=rand(0,1)=un réel de [0,1[) ou rand(n,b1,b2)=n entiers de [b1;b2] ou rand(n,L)=liste de n éléments de L.</description>
+    <parameters>Lst(L)</parameters>
+    <parameters>Intg(n),[Lst(L)]</parameters>
+    <parameters>Intg(n),Intg(l),Intg(u)</parameters>
+    <parameters>Seq||Interval(a,b)</parameters>
+    <description lang="en">Random element of the list <b>L</b> or random nonnegative integer (uniformly distributed) less than <i>n</i> [or <i>n</i> elements of the list <b>L</b>] or <i>n</i> random integers between <i>l</i> and <i>u</i> or a random real number in [<i>a</i>, <i>b</i>) (<tt>rand()</tt> returns a real number in [0, 1)) or a real function if an interval is given.</description>
+    <description lang="fr">Elément aléatoire de la liste <b>L</b> ou un entier non négatif aléatoire (uniformément distribué) plus petit que <i>n</i> [ou liste de <i>n</i> éléments de <b>L</b>] ou <i>n</i> entiers de [<i>u</i>, <i>l</i>] ou un réel aléatoire de [<i>a</i>, <i>b</i>) (<tt>rand()</tt> renvoie un réel de [0,1[) ou une fonction réelle si un intervalle est donné.</description>
     <description lang="de"></description>
-    <description lang="es">rand(n)=un número (resp. rand(p,n)=un número real o rand(p..n)=una función real) aleatorio distribuido en 0..n-1 (resp. en [p;n]) (rand()=rand(0,1)) o rand(n,b1,b2)= enteros entre b1 y b2 o rand(n,L)=lista de n elementos de L.</description>
-    <description lang="el">rand(n)=έναν τυχαίο ακέραιο (αντίστοιχα rand(p,n)=ένα πραγματικό ή rand(p..n)=μια πραγματική συνάρτηση) ομοιόμορφα κατανεμημένο στο 0..n-1 (αντίστοιχα στο [p;n])(rand()=rand(0,1)) ή rand(n,b1,b2)=n ακέραιους μεταξύ b1 και b2 ή rand(n,L)=λίστας n στοιχεία του L.</description>
+    <description lang="es">Elemento aleatorio de la lista <b>L</b> o un número aleatorio no negativo (distribuido uniformemente) menor que <i>n</i> [o lista de <i>n</i> elementos de <b>L</b>] o <i>n</i> enteros entre <i>l</i> y <i>u</i> o un número real en [<i>a</i>, <i>b</i>]) (<tt>rand()</tt> devuelve un número real en [0, 1)) o una función real si se da un intervalo.</description>
+    <description lang="el">Τυχαίο στοιχείο της λίστας <b>L</b> ή τυχαίο μη αρνητικό ακέραιο (ομοιόμορφα κατανεμημένο) μικρότερο από το <i>n</i> [ή λίστας <i>n</i> στοιχεία του <b>L</b>] ή <i>n</i> ακέραιους μεταξύ <i>l</i> και <i>u</i> ή ένα πραγματικό μεταξύ <i>a</i> και <i>b</i> (<tt>rand()</tt> επιστρέφει έναν πραγματικό αριθμό μεταξύ 0 και 1) ή μια πραγματική συνάρτηση εάν δοθεί ένα διάστημα.</description>
     <description lang="zh"></description>
+    <description lang="hr">Slučajno odabran element liste <b>L</b>, odnosno slučajni nenegativan cijeli broj (s jednolikom razdiobom) manji od <i>n</i> [ili <i>n</i> slučajno izabranih elemenata liste <b>L</b>], odnosno <i>n</i> slučajnih cijelih brojeva između <i>l</i> i <i>u</i>, odnosno slučajni realan broj između <i>a</i> i <i>b</i> (<tt>rand()</tt> daje slučajni realan broj između 0 i 1) ili realna funkcija koja generira takve brojeve ako su <i>a</i> i <i>b</i> zadani u sklopu intervala.</description>
     <related>srand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16022,12 +16058,13 @@
   <entry type="command">
     <name>choice</name>
     <parameters>Lst(L)</parameters>
-    <description lang="en">choice(L)=rand(L)=one extracted element of L.</description>
-    <description lang="fr">choice(L)=rand(L)=un élément de L tiré au hasard.</description>
+    <description lang="en">Random element of the list <b>L</b>.</description>
+    <description lang="fr">Un élément de <b>L</b> tiré au hasard.</description>
     <description lang="de"></description>
-    <description lang="es">choice(L)=rand(L)=  un elemento de L.</description>
-    <description lang="el">choice(L)=rand(L)</description>
+    <description lang="es">Elemento aleatorio de la lista <b>L</b>.</description>
+    <description lang="el">Τυχαίο στοιχείο της λίστας <b>L</b>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Slučajno odabran element liste <b>L</b>.</description>
     <related>rand </related>
     <related>sample</related>
     <example>choice([1,2,3,4,5,6])</example>
@@ -16038,12 +16075,13 @@
   <entry type="command">
     <name>randint</name>
     <parameters>Intg(n1),Intg(n2)</parameters>
-    <description lang="en">randint(n1,n2)=an integer in [n1, n2] or [n2,n1].</description>
-    <description lang="fr">randint(n1,n2)=un entier entre n1 et n2 (bornes incluses). </description>
+    <description lang="en">Random integer in [<i>n</i><sub>1</sub>, <i>n</i><sub>2</sub>] or [<i>n</i><sub>2</sub>, <i>n</i><sub>1</sub>].</description>
+    <description lang="fr">Un entier aléatoire entre <i>n</i><sub>1</sub> et <i>n</i><sub>2</sub> (bornes incluses). </description>
     <description lang="de"></description>
-    <description lang="es">randint(n1,n2)=un número un entero en [n1, n2] o [n2,n1].</description>
-    <description lang="el">randint(n1,n2)= ενός ακεραίο στο [n1, n2]  ή [n2,n1]</description>
+    <description lang="es">Un entero aleatorio en [<i>n</i><sub>1</sub>, <i>n</i><sub>2</sub>] o [<i>n</i><sub>2</sub>, <i>n</i><sub>1</sub>].</description>
+    <description lang="el">Eνός ακεραίο στο [<i>n</i><sub>1</sub>, <i>n</i><sub>2</sub>] ή [<i>n</i><sub>2</sub>, <i>n</i><sub>1</sub>]</description>
     <description lang="zh"></description>
+    <description lang="hr">Slučajni cijeli broj u segmentu [<i>n</i><sub>1</sub>, <i>n</i><sub>2</sub>] ili [<i>n</i><sub>2</sub>, <i>n</i><sub>1</sub>].</description>
     <related>rand </related>
     <related>rand </related>
     <example>sample([1,2,3,4,5,6],6)</example>
@@ -16058,12 +16096,13 @@
   <entry type="command">
     <name>hasard</name>
     <parameters>Intg(n) or Interval(p..n) or NULL,[Intg(b1) or Lst(L)],[Intg(b2)]</parameters>
-    <description lang="en">(hasard n)=a random integer (resp. (hasard p,n)=a real or hasard(p..n)=a real function) with uniform distribution in 0..n-1 (resp. in [p;n])(hasard= (hasard 0,1)=a random real in [0,1[) or hasard(n,b1,b2)=n integers between b1 and b2 or hasard(n,L)=n elements of L. If hasard has only one argument, () are not necessary (compatibility with turtle language).</description>
-    <description lang="fr">(hasard n)=un entier (resp. (hasard p,n)=un réel ou hasard(p..n)=une fonction réelle) aléatoire uniformément distribué dans 0.. n-1 (resp. dans [p; n]) (hasard ou (hasard 0,1)=un réel aléatoire de [0,1[) ou hasard(n,b1,b2)=n entiers de [b1;b2] ou hasard(n,L)=n éléments de L. Si hasard a un seul argument il peut se passer de () (compatibilité langage tortue).</description>
+    <description lang="en">Random element of the list <b>L</b> or random nonnegative integer (uniformly distributed) less than <i>n</i> [or <i>n</i> elements of the list <b>L</b>] or <i>n</i> random integers between <i>l</i> and <i>u</i> or a random real number in [<i>a</i>, <i>b</i>) (<tt>hasard</tt> gives a real number in [0, 1)) or a real function if an interval is given. If hasard has only one argument, () are not necessary (compatibility with turtle language).</description>
+    <description lang="fr">Elément aléatoire de la liste <b>L</b> ou un entier non négatif aléatoire (uniformément distribué) plus petit que <i>n</i> [ou liste de <i>n</i> éléments de <b>L</b>] ou <i>n</i> entiers de [<i>u</i>, <i>l</i>] ou un réel aléatoire de [<i>a</i>, <i>b</i>) (<tt>hasard</tt> renvoie un réel de [0,1[) ou une fonction réelle si un intervalle est donné. Si hasard a un seul argument il peut se passer de () (compatibilité langage tortue).</description>
     <description lang="de"></description>
-    <description lang="es">(hasard n)=un número (resp. hasard(p,n)=un número real o hasard(p..n)=una función real) aleatorio distribuido en 0..n-1 (resp. en [p;n]) (hasard =(hasard 0,1)) o nhasard(n,b1,b2)= enteros entre b1 y b2 o hasard(n,L)=n elementos de L. Si hasard tiene un sólo arguemnto, no se tiene que poner () (compatibilidad lenguaje tortuga).</description>
-    <description lang="el">(hasard n)=έναν τυχαίο ακέραιο (αντίστοιχα (hasard p,n)=ένα πραγματικό ή hasard(p..n)=μια πραγματική συνάρτηση) ομοιόμορφα κατανεμημένο στο 0..n-1 (αντίστοιχα στο [p;n])(hasard=(hasard 0,1)) ή hasard(n,b1,b2)=n ακέραιους μεταξύ b1 και b2 ή hasard(n,L)=n στοιχεία του L. Εάν η hasard έχει ένα μόνο όρισμα τότε οι () δεν είναι απαραίτητες (συμβατότητα με τη γλώσσα προγραμματισμού για την χελώνα).</description>
+    <description lang="es">Elemento aleatorio de la lista <b>L</b> o un número aleatorio no negativo (distribuido uniformemente) menor que <i>n</i> [o lista de <i>n</i> elementos de <b>L</b>] o <i>n</i> enteros entre <i>l</i> y <i>u</i> o un número real en [<i>a</i>, <i>b</i>]) (<tt>hasard</tt> devuelve un número real en [0, 1)) o una función real si se da un intervalo. Si hasard tiene un sólo arguemnto, no se tiene que poner () (compatibilidad lenguaje tortuga).</description>
+    <description lang="el">Τυχαίο στοιχείο της λίστας <b>L</b> ή τυχαίο μη αρνητικό ακέραιο (ομοιόμορφα κατανεμημένο) μικρότερο από το <i>n</i> [ή λίστας <i>n</i> στοιχεία του <b>L</b>] ή <i>n</i> ακέραιους μεταξύ <i>l</i> και <i>u</i> ή ένα πραγματικό μεταξύ <i>a</i> και <i>b</i> (<tt>hasard</tt> επιστρέφει έναν πραγματικό αριθμό μεταξύ 0 και 1) ή μια πραγματική συνάρτηση εάν δοθεί ένα διάστημα. Εάν η hasard έχει ένα μόνο όρισμα τότε οι () δεν είναι απαραίτητες (συμβατότητα με τη γλώσσα προγραμματισμού για την χελώνα).</description>
     <description lang="zh"></description>
+    <description lang="hr">Slučajno odabran element liste <b>L</b>, odnosno slučajni nenegativan cijeli broj (s jednolikom razdiobom) manji od <i>n</i> [ili <i>n</i> slučajno izabranih elemenata liste <b>L</b>], odnosno <i>n</i> slučajnih cijelih brojeva između <i>l</i> i <i>u</i>, odnosno slučajni realan broj između <i>a</i> i <i>b</i> (<tt>rand()</tt> daje slučajni realan broj između 0 i 1) ili realna funkcija koja generira takve brojeve ako su <i>a</i> i <i>b</i> zadani u sklopu intervala. Ako nije proslijeđen niti jedan argument, zagrade () mogu se izostaviti (zbog kompatibilnosti s jezikom LOGO).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16080,12 +16119,13 @@
   <entry type="command">
     <name>randbinomial</name>
     <parameters>Intg(n),Real(p)</parameters>
-    <description lang="en">Returns a random integer with binomial distribution B(n,p) i.e. the number of success for n independant tests where for each test, the success probability is p.</description>
-    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi binomiale B(n,p) i.e. le nombre de succès dans une suite de n tirages indépendants lorsque pour chaque tirage, un succès est de probabilité p.</description>
+    <description lang="en">Returns a random integer with binomial distribution <i>B</i>(<i>n</i>, <i>p</i>) i.e. the number of success for <i>n</i> independent tests where for each test the success probability is <i>p</i>.</description>
+    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi binomiale <i>B</i>(<i>n</i>, <i>p</i>) i.e. le nombre de succès dans une suite de n tirages indépendants lorsque pour chaque tirage, un succès est de probabilité <i>p</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley binomimal B(n,p).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή B(n,p).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley binomimal <i>B</i>(<i>n</i>, <i>p</i>).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή <i>B</i>(<i>n</i>, <i>p</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost diskretne slučajne varijable s binomnom raziobom <i>B</i>(<i>n</i>, <i>p</i>).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16100,13 +16140,14 @@
   </entry>
   <entry type="command">
     <name>randmultinomial</name>
-    <parameters>List(P),[List(K)]</parameters>
-    <description lang="en">Returns a random index or list element according to a multinomial distribution probability list P.</description>
-    <description lang="fr">Renvoie un index ou un élément d'une liste K, aléatoirement selon la loi multinomiale de probabilités données par une liste P.</description>
+    <parameters>List(p),[List(L)]</parameters>
+    <description lang="en">Returns a random index [or an element of the list <b>L</b>] according to a multinomial distribution probability list <b>p</b>.</description>
+    <description lang="fr">Renvoie un index [ou un élément d'une liste <b>L</b>], aléatoirement selon la loi multinomiale de probabilités données par une liste <b>p</b>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un índice o un elemento de K aleatorio distribuido según la ley multinomimal de probabilidad P.</description>
+    <description lang="es">Devuelve un índice [o un elemento de <b>L</b>] aleatorio distribuido según la ley multinomimal de probabilidad <b>p</b>.</description>
     <description lang="el"></description>
     <description lang="zh"></description>
+    <description lang="hr">Indeks [ili element liste <b>L</b>] slučajno izabran s obzirom na multinomijalnu razdiobu zadanu vjerojatnostima iz liste <b>p</b>.</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16122,12 +16163,13 @@
   <entry type="command">
     <name>randgeometric</name>
     <parameters>Real(p)</parameters>
-    <description lang="en">Returns a random integer following geometric distribution of parameter p.</description>
-    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi géométrique de paramètre p.</description>
+    <description lang="en">Returns a random integer according to the geometric distribution with parameter <i>p</i>.</description>
+    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi géométrique de paramètre <i>p</i>.</description>
     <description lang="de"></description>
     <description lang="es"></description>
     <description lang="el"></description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable s geometrijskom razdiobom <i>G</i>(<i>p</i>).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16142,12 +16184,13 @@
   <entry type="command">
     <name>randpoisson</name>
     <parameters>Real(λ)</parameters>
-    <description lang="en">Returns a random integer with poisson distribution P(λ).</description>
-    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi de poisson P(λ).</description>
+    <description lang="en">Returns a random integer according to Poisson distribution <i>P</i>(<i>λ</i>).</description>
+    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi de Poisson <i>P</i>(<i>λ</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley poisson P(λ).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή P(λ).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley Poisson <i>P</i>(<i>λ</i>).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή <i>P</i>(<i>λ</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable s Poissonovom razdiobom <i>P</i>(<i>λ</i>).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16163,12 +16206,13 @@
   <entry type="command">
     <name>randchisquare</name>
     <parameters>Intg(n)</parameters>
-    <description lang="en">Returns a random integer with chi^2 distribution, χ^2(n).</description>
-    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi du chi^2 ayant n degrés de liberté, χ^2(n).</description>
+    <description lang="en">Returns a random integer with <i>χ</i>&sup2; distribution with <i>n</i> degrees of freedom, <i>χ</i>&sup2;(<i>n</i>).</description>
+    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi du <i>χ</i>&sup2; ayant n degrés de liberté, <i>χ</i>&sup2;(<i>n</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley Chi-cuadrado, χ^2(n).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή χ^2(n).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley <i>χ</i>&sup2; con <i>n</i> grados de libertad, <i>χ</i>&sup2;(<i>n</i>).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή <i>χ</i>&sup2;(<i>n</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable s <i>χ</i>&sup2; razdiobom s <i>n</i> stupnjeva slobode, <i>χ</i>&sup2;(<i>n</i>).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16184,12 +16228,13 @@
   <entry type="command">
     <name>randstudent</name>
     <parameters>Intg(n)</parameters>
-    <description lang="en">Returns a random integer with Student distribution S(n).</description>
-    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi de Student S(n).</description>
+    <description lang="en">Returns a random integer with Student's <i>t</i>-distribution with <i>n</i> degrees of freedom.</description>
+    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi de Student <i>S</i>(<i>n</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley Student S(n).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή Student S(n).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley Student <i>S</i>(<i>n</i>).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή Student <i>S</i>(<i>n</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable sa Studentovom <i>t</i>-razdiobom s <i>n</i> stupnjeva slobode.</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16205,12 +16250,13 @@
   <entry type="command">
     <name>randfisher</name>
     <parameters>Intg(n),Intg(m)</parameters>
-    <description lang="en">Returns a random integer with Fisher-Snedecor distribution F(n,m).</description>
-    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi de Fisher-Snedecor F(n,m).</description>
+    <description lang="en">Returns a random integer with Fisher-Snedecor distribution <i>F</i>(<i>n</i>, <i>m</i>).</description>
+    <description lang="fr">Renvoie un entier aléatoirement distribué selon la loi de Fisher-Snedecor <i>F</i>(<i>n</i>, <i>m</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley Fisher-Snedecor F(n,m).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή Fisher-Snedecor F(n,m).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley Fisher-Snedecor <i>F</i>(<i>n</i>, <i>m</i>).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κατανομή Fisher-Snedecor <i>F</i>(<i>n</i>, <i>m</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable s Fisher-Snedecor razdiobom <i>F</i>(<i>n</i>, <i>m</i>).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16226,12 +16272,13 @@
   <entry type="command">
     <name>randnorm randNorm</name>
     <parameters>Real(mu),Real(sigma)</parameters>
-    <description lang="en">Returns a random real with normal distribution N(mu,sigma).</description>
-    <description lang="fr">Renvoie un réel aléatoirement distribué selon la loi normale N(mu,sigma).</description>
+    <description lang="en">Returns a random real with normal distribution <i>N</i>(<i>&mu;</i>, <i>&sigma;</i>).</description>
+    <description lang="fr">Renvoie un réel aléatoirement distribué selon la loi normale <i>N</i>(<i>&mu;</i>, <i>&sigma;</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley normal N(mu,sigma).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κανονική κατανομή N(μ,σ).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley normal <i>N</i>(<i>&mu;</i>, <i>&sigma;</i>).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με κανονική κατανομή <i>N</i>(<i>&mu;</i>, <i>&sigma;</i>).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable s normalnom razdiobom <i>N</i>(<i>&mu;</i>, <i>&sigma;</i>).</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>ranm</related>
@@ -16247,12 +16294,13 @@
   <entry type="command">
     <name>randexp</name>
     <parameters>Real(a)</parameters>
-    <description lang="en">Returns a random real according to the exponential distribution of parameter a&gt;0.</description>
-    <description lang="fr">Renvoie un réel aléatoirement distribué selon la loi exponentielle de paramètre a&gt;0.</description>
+    <description lang="en">Returns a random real according to the exponential distribution of parameter <i>a</i> &gt; 0.</description>
+    <description lang="fr">Renvoie un réel aléatoirement distribué selon la loi exponentielle de paramètre <i>a</i> &gt; 0.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve un número aleatorio distribuido según la ley exponencial (parámetro a&gt;0).</description>
-    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με Εκθετικό κατανομή (παράμετρο a&gt;0).</description>
+    <description lang="es">Devuelve un número aleatorio distribuido según la ley exponencial (parámetro <i>a</i> &gt; 0).</description>
+    <description lang="el">Επιστρέφει έναν τυχαίο πραγματικό με Εκθετικό κατανομή (παράμετρο <i>a</i> &gt; 0).</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost slučajne varijable s eksponencijalnom razdiobom s parametrom <i>a</i> &gt; 0.</description>
     <related>rand</related>
     <related>randpoly</related>
     <related>randnorm</related>
@@ -16262,13 +16310,14 @@
   </entry>
   <entry type="command">
     <name>randpoly randPoly</name>
-    <parameters>[Var(var)],Intg(n),[law]</parameters>
-    <description lang="en">Returns a polynomial of variable var (or x), of degree n and where the coefficients are random integers in the range -99 through 99 with uniform distribution or according to a law.</description>
-    <description lang="fr">Renvoie un polynôme de variable var (ou x), de degré n et dont les coefficients sont des entiers aléatoires équirépartis sur -99,+99 ou selon une loi.</description>
+    <parameters>[Var(v)],Intg(n),[law]</parameters>
+    <description lang="en">Returns a polynomial of variable <i>v</i> (by default <i>x</i>), of degree <i>n</i> and where the coefficients are random integers in the range &minus;99 through 99 with uniform distribution or according to a law.</description>
+    <description lang="fr">Renvoie un polynôme de variable <i>v</i> (par défaut x), de degré <i>n</i> et dont les coefficients sont des entiers aléatoires équirépartis entre &minus;99 et +99 ou selon une loi.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve el polinomio de variable var (o x), de grado n y cuyos coeficientes son enteros aleatorios equirepartidos entre -99 y 99.</description>
-    <description lang="el">Επιστρέφει ένα πολυώνυμο μεταβλητής var (ή x), βαθμού n και του οποίου οι συντελεστές είναι τυχαίοι ακέραιοι από -99 μέχρι 99 ομοιόμορφα κατανεμημένοι.</description>
+    <description lang="es">Devuelve el polinomio de variable <i>v</i> (por defecto <i>x</i>), de grado <i>n</i> y cuyos coeficientes son enteros aleatorios equirepartidos entre &minus;99 y 99.</description>
+    <description lang="el">Επιστρέφει ένα πολυώνυμο μεταβλητής <i>v</i> (από προεπιλογή <i>x</i>), βαθμού <i>n</i> και του οποίου οι συντελεστές είναι τυχαίοι ακέραιοι από &minus;99 μέχρι 99 ομοιόμορφα κατανεμημένοι.</description>
     <description lang="zh"></description>
+    <description lang="hr">Polinom u varijabli <i>v</i> (zadana varijabla je <i>x</i>) stupnja <i>n</i> čiji su koeficijenti slučajno odabrani cijeli brojevi između &minus;99 i 99 s obzirom na jednoliku razdiobu [ili realni brojevi generirani s obzirom na danu razdiobu].</description>
     <related>ranm</related>
     <related>randvector</related>
     <example>randpoly(5)</example>
@@ -16278,13 +16327,14 @@
   </entry>
   <entry type="command">
     <name>ranm randMat randmatrix</name>
-    <parameters>Intg(n), [Intg(m)],[Interval or quote(DistribLaw)]</parameters>
-    <description lang="en">Returns a list of size n or a n*m matrix that contains random integers in the range -99 through 99 with uniform distribution or contains random numbers according to the law put between quote.</description>
-    <description lang="fr">Renvoie une liste de taille n ou une matrice n*m constituée d'entiers aléatoires uniformément distribués entre -99 et 99 ou de nombres aléatoires distribués selon la loi mise entre-quote.</description>
+    <parameters>Intg(n),[Intg(m)],[Interval or quote(DistribLaw)]</parameters>
+    <description lang="en">Returns a list of size <i>n</i> or a <i>n</i> &times; <i>m</i> matrix that contains random integers in the range &minus;99 through 99 with uniform distribution or contains random numbers according to the law between quotes.</description>
+    <description lang="fr">Renvoie une liste de taille <i>n</i> ou une matrice <i>n</i> &times; <i>m</i> constituée d'entiers aléatoires uniformément distribués entre &minus;99 et 99 ou de nombres aléatoires distribués selon la loi mise entre-quote.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve una lista de tamaño n o una matriz n*m constituida por enteros aleatorios uniformemente distribuidos entre -99 y 99 o de números aleatorios distribuidos según la ley puesta entre comillas.</description>
-    <description lang="el">Επιστρέφει μια λίστα μεγέθους n ή έναν n*m πίνακα που θα περιέχει τυχαίους ακέραιους από -99 μέχρι 99 ομοιόμορφα κατανεμημένους ή θα περιέχει τυχαίους αριθμούς σύμφωνα με την παρένθετο κατανομή.</description>
-    <description lang="zh">创建一个具有指定行数和列数的随机矩阵。输入项是 –99 - 99 之间的整数。</description>
+    <description lang="es">Devuelve una lista de tamaño <i>n</i> o una matriz <i>n</i> &times; <i>m</i> constituida por enteros aleatorios uniformemente distribuidos entre &minus;99 y 99 o de números aleatorios distribuidos según la ley puesta entre comillas.</description>
+    <description lang="el">Επιστρέφει μια λίστα μεγέθους <i>n</i> ή έναν <i>n</i> &times; <i>m</i> πίνακα που θα περιέχει τυχαίους ακέραιους από &minus;99 μέχρι 99 ομοιόμορφα κατανεμημένους ή θα περιέχει τυχαίους αριθμούς σύμφωνα με την παρένθετο κατανομή.</description>
+    <description lang="zh">创建一个具有指定行数和列数的随机矩阵。输入项是 &minus;99 - 99 之间的整数。</description>
+    <description lang="hr">Lista duljine <i>n</i> odnosno matrica s <i>n</i> redaka i <i>m</i> stupaca čiji su elementi cijeli brojevi na slučajan način izabrani u intervalu [&minus;99, 99] s obzirom na jednoliku razdiobu [ili listu odnosno matricu realnih brojeva generiranih s obzirom na danu razdiobu].</description>
     <related>idn</related>
     <related>randPoly</related>
     <related>rand</related>
@@ -16305,13 +16355,14 @@
   </entry>
   <entry type="command">
     <name>randvector ranv</name>
-    <parameters>Intg(n), [Intg(m)],[Interval or quote(DistribLaw)]</parameters>
-    <description lang="en">Returns a list of size n that contains random integers in the range -99 through 99 (or in 0..m-1) with uniform distribution or contains random numbers according to the law put between quote.</description>
-    <description lang="fr">Renvoie une liste de taille n constituée d'entiers aléatoires entre -99 et 99 ou (entre 0 et m-1) uniformément distribués ou de nombres aléatoires distribués selon la loi mise entre-quote.</description>
+    <parameters>Intg(n),[Intg(m)],[Interval or quote(DistribLaw)]</parameters>
+    <description lang="en">Returns a list of size <i>n</i> that contains random integers in the range &minus;99 through 99 [or between 0 and <i>m</i>&minus;1] with uniform distribution or contains random numbers according to the law put between quote.</description>
+    <description lang="fr">Renvoie une liste de taille <i>n</i> constituée d'entiers aléatoires entre &minus;99 et 99 [ou entre 0 et <i>m</i>&minus;1] uniformément distribués ou de nombres aléatoires distribués selon la loi mise entre-quote.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve una lista de tamaño n constituida por enteros aleatorios uniformemente distribuidos entre -99 y 99 (o entre 0 y m-1) o de números aleatorios distribuidos según la ley puesta entre comillas.</description>
-    <description lang="el">Επιστρέφει μια λίστα μεγέθους n που θα περιέχει τυχαίους ακέραιους αριθμούς από -99 μέχρι 99 (0 μέχρι m-1) ομοιόμορφα κατανεμημένους ή τυχαίους αριθμούς σύμφωνα με την παρένθετο κατανομή.</description>
+    <description lang="es">Devuelve una lista de tamaño <i>n</i> constituida por enteros aleatorios uniformemente distribuidos entre &minus;99 y 99 (o entre 0 y <i>m</i>&minus;1) o de números aleatorios distribuidos según la ley puesta entre comillas.</description>
+    <description lang="el">Επιστρέφει μια λίστα μεγέθους <i>n</i> που θα περιέχει τυχαίους ακέραιους αριθμούς από &minus;99 μέχρι 99 [ή 0 μέχρι <i>m</i>&minus;1] ομοιόμορφα κατανεμημένους ή τυχαίους αριθμούς σύμφωνα με την παρένθετο κατανομή.</description>
     <description lang="zh"></description>
+    <description lang="hr">Lista duljine <i>n</i> s cjelobrojnim elementima na slučajan način odabranim između &minus;99 i 99 [ili između 0 i <i>m</i>&minus;1] s obzirom na jednoliku razdiobu [ili listu realnih brojeva generiranih s obzirom na danu razdiobu].</description>
     <related>idn</related>
     <related>randPoly</related>
     <related>rand</related>
@@ -16330,12 +16381,13 @@
   <entry type="command">
     <name>randperm shuffle</name>
     <parameters>Intg(n)||Lst(L)</parameters>
-    <description lang="en">Returns a random permutation of [0,1,2,..,n-1] or of the list L.</description>
-    <description lang="fr">Renvoie une permutation aléatoire de [0,1,2,..,n-1] ou de la liste L.</description>
+    <description lang="en">Returns a random permutation of [0, 1, &hellip;, <i>n</i>&minus;1] or of the list <b>L</b>.</description>
+    <description lang="fr">Renvoie une permutation aléatoire de [0, 1, &hellip;, <i>n</i>&minus;1] ou de la liste <b>L</b>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve una permutación aleatoria de [0,1,2,..,n-1] o de L.</description>
-    <description lang="el">Επιστρέφει μια τυχαία μετάθεση στο [0,1,2,..,n-1] ή στο L.</description>
+    <description lang="es">Devuelve una permutación aleatoria de [0, 1, &hellip;, <i>n</i>&minus;1] o de <b>L</b>.</description>
+    <description lang="el">Επιστρέφει μια τυχαία μετάθεση στο [0, 1, &hellip;, <i>n</i>&minus;1] ή στο <b>L</b>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Slučajna permutacija liste [0, 1, &hellip;, <i>n</i>&minus;1] odnosno liste <b>L</b>.</description>
     <related>permu2cycles</related>
     <related>is_permu</related>
     <related>permu2mat</related>
@@ -16352,8 +16404,9 @@
     <description lang="fr">Renvoie la permutation suivante dans l'ordre lexicographique.</description>
     <description lang="de"></description>
     <description lang="es">Devuelve la permutación siguiente en orden lexicográfico.</description>
-    <description lang="el">Επιστρέφει την επόμενη μετάθεση κατά λεξικογραφική σειρά</description>
+    <description lang="el">Επιστρέφει την επόμενη μετάθεση κατά λεξικογραφική σειρά.</description>
     <description lang="zh"></description>
+    <description lang="hr">Sljedeća permutacija s obzirom na leksikografski uređaj.</description>
     <related>prevperm</related>
     <related>is_permu</related>
     <example>nextperm([0,2,1,3])</example>
@@ -16368,6 +16421,7 @@
     <description lang="es">Devuelve la permutación anterior en orden lexicográfico.</description>
     <description lang="el">Επιστρέφει την προηγούμενη μετάθεση κατά λεξικογραφική σειρά</description>
     <description lang="zh"></description>
+    <description lang="hr">Prethodna permutacija s obzirom na leksikografski uređaj.</description>
     <related>nextperm</related>
     <related>is_permu</related>
     <example>prevperm([0,1,3,2])</example>
@@ -16376,12 +16430,13 @@
   <entry type="command">
     <name>radius</name>
     <parameters>Crcle</parameters>
-    <description lang="en">radius(C) gives the radius of the circle C.</description>
-    <description lang="fr">rayon(C) donne le rayon du cercle C.</description>
+    <description lang="en">Returns the radius of the circle <i>C</i>.</description>
+    <description lang="fr">Donne le rayon du cercle <i>C</i>.</description>
     <description lang="de"></description>
-    <description lang="es">radius(C) devuelve el radio de la circunferencia C.</description>
-    <description lang="el">radius(C) δίνει την ακτίνα του κύκλου C.</description>
+    <description lang="es">Devuelve el radio de la circunferencia <i>C</i>.</description>
+    <description lang="el">Επιστρέφει την ακτίνα του κύκλου <i>C</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Polumjer kružnice <i>C</i>.</description>
     <related>center</related>
     <related>circle</related>
     <example>radius(incircle(-1,1-i,i))</example>
@@ -16395,6 +16450,7 @@
     <description lang="es">Llama al contenido de una variable sin evaluarlo.</description>
     <description lang="el">Επανακαλεί το περιεχόμενο μιας μεταβλητής, δίχως αποτίμηση.</description>
     <description lang="zh"></description>
+    <description lang="hr"></description>
     <example>rcl(a)</example>
   </entry>
   <entry type="command">
@@ -16406,6 +16462,7 @@
     <description lang="es">Devuelve la parte real de un número complejo.</description>
     <description lang="el">Επιστρέφει το πραγματικό μέρος ενός μιγαδικού αριθμού.</description>
     <description lang="zh"></description>
+    <description lang="hr">Realni dio danog kompleksnog broja ili lista realnih dijelova elemenata dane liste kompleksnih brojeva.</description>
     <related>im</related>
     <related>conj</related>
     <example>re(1+2*i)</example>
@@ -16421,6 +16478,7 @@
     <description lang="es">Resto euclidiano de 2 polinomios.</description>
     <description lang="el">Ευκλείδιο υπόλοιπο 2 πολυωνύμων.</description>
     <description lang="zh">余项（多项式 综合除法）</description>
+    <description lang="hr">Ostatak pri dijeljenju dvaju polinoma.</description>
     <related>quo</related>
     <related>quorem</related>
     <related>Rem</related>
@@ -16438,6 +16496,7 @@
     <description lang="es">Resto euclidiano de 2 polinomios sin evaluar.</description>
     <description lang="el">Επιστρέφει το ευκλείδιο υπόλοιπο 2 πολυωνύμων δίχως αποτίμηση.</description>
     <description lang="zh"></description>
+    <description lang="hr">Inertna varijanta funkcije <tt>rem</tt>.</description>
     <related>rem</related>
     <related>quorem</related>
     <example>Rem([1,2,3,4],[-1,2])</example>
@@ -16446,13 +16505,14 @@
   </entry>
   <entry type="command">
     <name>remove</name>
-    <parameters>FncBool(f)||a,Lst(l)</parameters>
-    <description lang="en">Remove the occurrences a of l or the elements a such that f(a)=true.</description>
-    <description lang="fr">Enlève les occurrences a de l ou les éléments a qui vérifient f(a)=vrai.</description>
+    <parameters>FncBool(f)||a,Lst(x)</parameters>
+    <description lang="en">Remove the occurrences of the element <i>a</i> in the list <b>x</b> = [<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;, <i>x<sub>n</sub></i>] or remove the elements <i>x<sub>k</sub></i> such that f(<i>x<sub>k</sub></i>) is true, <i>k</i> = 1, 2, &hellip; <i>n</i>.</description>
+    <description lang="fr">Enlève les occurrences <i>a</i> de <b>x</b> = [<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;, <i>x<sub>n</sub></i>] ou les éléments <i>x<sub>k</sub></i> a qui vérifient <i>f</i>(<i>x<sub>k</sub></i>) est vrai, <i>k</i> = 1, 2, &hellip; <i>n</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Borra los elementos a de l tales que f(a)=verdadero.</description>
-    <description lang="el">Απομάκρυνση των στοιχείων a της l για τα οποία f(a)=true.</description>
+    <description lang="es">Borra los elementos <i>a</i> de <b>x</b> = [<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;, <i>x<sub>n</sub></i>] tales que <i>f</i>(<i>x<sub>k</sub></i>) es verdadero, <i>k</i> = 1, 2, &hellip; <i>n</i>.</description>
+    <description lang="el">Απομάκρυνση των στοιχείων <i>a</i> της <b>x</b> = [<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;, <i>x<sub>n</sub></i>] για τα οποία <i>f</i>(<i>x<sub>k</sub></i>) είναι αληθές, <i>k</i> = 1, 2, &hellip; <i>n</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Lista <b>x</b> = [<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;, <i>x<sub>n</sub></i>] s uklonjenim elementima koji su jednaki <i>a</i> odnosno s uklonjenim elementima <i>x<sub>k</sub></i> za koje je f(<i>x<sub>k</sub></i>) istina, za <i>k</i> = 1, 2, &hellip; <i>n</i>.</description>
     <related>select</related>
     <related>suppress</related>
     <example>remove(x-&gt;x&ge;5,[1,2,6,7])</example>
@@ -16460,13 +16520,14 @@
   </entry>
   <entry type="command">
     <name>reorder</name>
-    <parameters>Expr, LstVar</parameters>
-    <description lang="en">Reorders the variables in E according to the order of the second argument.</description>
-    <description lang="fr">Réordonne les variables de E selon l'ordre donné dans le deuxième argument.</description>
+    <parameters>Expr(R), LstVar</parameters>
+    <description lang="en">Reorders the variables in <i>R</i> according to the order of the second argument.</description>
+    <description lang="fr">Réordonne les variables de <i>R</i> selon l'ordre donné dans le deuxième argument.</description>
     <description lang="de"></description>
-    <description lang="es">Reordena las variables en E según el orden dado en 2º argumento.</description>
-    <description lang="el">Επαναδιάταξη των μεταβλητών της Ε σύμφωνα με τη διάταξη του 2ου ορίσματος.</description>
+    <description lang="es">Reordena las variables en <i>R</i> según el orden dado en 2º argumento.</description>
+    <description lang="el">Επαναδιάταξη των μεταβλητών της <i>R</i> σύμφωνα με τη διάταξη του 2ου ορίσματος.</description>
     <description lang="zh"></description>
+    <description lang="hr">Razmještanje članova odnosno faktora u izrazu <i>R</i> s obzirom na poredak varijabli dan drugim argumentom.</description>
     <example>reorder(x^2+2*x+y^2,[y,x])</example>
   </entry>
   <entry type="command">
@@ -16478,6 +16539,7 @@
     <description lang="es">Resultante de 2 polinomios.</description>
     <description lang="el">Απαλείφουσα 2 πολυωνύμων.</description>
     <description lang="zh"></description>
+    <description lang="hr">Rezultanta dvaju polinoma.</description>
     <related>sylvester</related>
     <related>gcd</related>
     <example>resultant(x^2-1,x^3-1,x)</example>
@@ -16485,13 +16547,14 @@
   </entry>
   <entry type="command">
     <name>sylvester</name>
-    <parameters>Poly,Poly,Var</parameters>
-    <description lang="en">Sylvester matrix of two polynomials.</description>
-    <description lang="fr">Matrice de Sylvester de deux polynômes.</description>
+    <parameters>Poly(P),Poly(Q),Var(x)</parameters>
+    <description lang="en">Sylvester matrix of two univariate polynomials <i>P</i> and <i>Q</i> with respect to the variable <i>x</i>.</description>
+    <description lang="fr">Matrice de Sylvester de deux polynômes <i>P</i> et <i>Q</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Matriz de Sylvester de 2 polinomios.</description>
-    <description lang="el">Ο πίνακας Sylvester 2 πολυωνύμων.</description>
+    <description lang="es">Matriz de Sylvester de 2 polinomios <i>P</i> y <i>Q</i>.</description>
+    <description lang="el">Ο πίνακας Sylvester 2 πολυωνύμων <i>P</i> και <i>Q</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Sylvesterova matrica polinoma <i>P</i> i <i>Q</i> u varijabli <i>x</i>.</description>
     <related>resultant</related>
     <example>sylvester(x^2-1,x^3-1,x)</example>
     <example>sylvester(x^3-p*x+q,3*x^2-p,x)</example>
@@ -16499,25 +16562,28 @@
   <entry type="command">
     <name>rootof</name>
     <parameters>LstPoly(P),LstPoly(Q)</parameters>
-    <description lang="en">Polynomial in terms of a root of an irreducible polynomial on Q. Returns P(a) with a the greatest root of Q.</description>
-    <description lang="fr">Polynôme fonction d'une racine d'un polynôme irréductible sur Q. Renvoie P(a) où a est la plus grande racine de Q.</description>
+    <description lang="en">Polynomial in terms of a root of an irreducible polynomial on &#8474;. Returns <i>P</i>(<i>a</i>) where <i>a</i> is the root of <i>Q</i> with the greatest real part (or the greatest imaginary part among two or more roots with real parts equal to each other).</description>
+    <description lang="fr">Polynôme fonction d'une racine d'un polynôme irréductible sur &#8474;. Renvoie <i>P</i>(<i>a</i>) où a est la plus grande racine de <i>Q</i>.</description>
     <description lang="de"></description>
-    <description lang="es">Polinomio en términos de la raíz de un Q polinomio irreducible.</description>
-    <description lang="el">Πολυώνυμο συναρτήσει μιας ρίζας ενός ανάγωγου πολυωνύμου.</description>
+    <description lang="es">Polinomio en términos de la raíz de un &#8474; polinomio irreducible. Devuelve <i>P</i>(<i>a</i>) tal que <i>a</i> es la raíz más grande de <i>Q</i>.</description>
+    <description lang="el">Πολυώνυμο συναρτήσει μιας ρίζας ενός ανάγωγου πολυωνύμου. Επιστρέφει το <i>P</i>(<i>a</i>) έτσι ώστε το <i>a</i> είναι η μεγαλύτερη ρίζα του <i>Q</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Vrijednost <i>P</i>(<i>a</i>) gdje je <i>a</i> onaj korijen polinoma <i>Q</i> (ireducibilnog nad poljem &#8474;) koji ima najveći realni dio (odnosno najveći imaginarni dio između dva ili više korijena kojima se realni dijelovi podudaraju).</description>
     <example>normal(1/rootof([1,0],[1,0,10,0,1]))</example>
     <example>normal(1/rootof([1,0,0],[1,1,0,-1]))</example>
     <example>rootof(x^4+x+1):='j'; normal(j^5); </example>
   </entry>
   <entry type="command">
     <name>rotation</name>
-    <parameters>(Pnt(B) or Cplx or Dr3),Angle(a1),(Pnt(A) or Curve)</parameters>
-    <description lang="en">rotation(B,a1,A)(resp. rotation(d,a1,A)) is the transformed of A by rotation of center B (resp. of axis d) and of angle a1.</description>
-    <description lang="fr">rotation(B,a1,A) (resp. rotation(d,a1,A)) est le transformé de A par rotation de centre B (resp. d'axe d) et d'angle a1.</description>
+    <parameters>(Pnt||Cplx)(B),Angle(α),Pnt(A)||Curve(C)</parameters>
+    <parameters>Line(d),Angle(α),Pnt(A)||Curve(C)</parameters>
+    <description lang="en">Transformation of the point <i>A</i> (or the curve <i>C</i>) obtained by rotation by <i>α</i> about the point <i>B</i> in 2D resp. the axis <i>d</i> in 3D.</description>
+    <description lang="fr">Le transformé du point <i>A</i> (ou de la courbe <i>C</i>) par rotation de centre <i>B</i> (resp. d'axe <i>d</i> en 3D) et d'angle <i>α</i>.</description>
     <description lang="de"></description>
-    <description lang="es">rotation(B,a1,A)(resp. rotation(d,a1,A)) es la transformación de A por rotación de centro B (resp. eje d) y ángulo a1.</description>
-    <description lang="el">rotation(B,a1,A)(αντίστοιχα rotation(d,a1,A)) είναι ο μετασχηματισμός του Α μέσω περιστροφής κέντρου Β (αντίστοιχα άξονα d) και γωνίας a1.</description>
+    <description lang="es">La transformación del punto <i>A</i> (o de la curva <i>C</i>) por rotación de centro <i>B</i> (resp. eje <i>d</i> in 3D) y ángulo <i>α</i>.</description>
+    <description lang="el">O μετασχηματισμός του <i>A</i> (ή της καμπύλης <i>C</i>) μέσω περιστροφής κέντρου <i>B</i> (αντίστοιχα άξονα <i>d</i>) και γωνίας <i>α</i>.</description>
     <description lang="zh">2 维旋转 与 3 维旋转</description>
+    <description lang="hr">Transformacija točke <i>A</i> (ili krivulje <i>C</i>) dobivena rotacijom za kut <i>α</i> oko točke <i>B</i> u ravnini odnosno oko pravca <i>d</i> u prostoru.</description>
     <related>translation</related>
     <related>reflection</related>
     <example>rotation(point(1+i),pi/2,point(i))</example>
@@ -16535,30 +16601,33 @@
     <description lang="es">Quita un punto de ruptura.</description>
     <description lang="el">Απομάκρυνση ενός σημείου διαφυγής.</description>
     <description lang="zh"></description>
+    <description lang="hr">Uklanjanje točke prekida.</description>
     <related>breakpoint</related>
     <example>rmbreakpoint(1)</example>
   </entry>
   <entry type="command">
     <name>rmwatch</name>
     <parameters>Var</parameters>
-    <description lang="en">Clears a variables from the table of displayed variables in step/step.</description>
+    <description lang="en">Clears a variable from the table of displayed variables in step-by-step execution.</description>
     <description lang="fr">Efface une variable de la table des variables affichées en pas-à-pas.</description>
     <description lang="de"></description>
     <description lang="es">Borra una variable de la tabla de variables mostrada en paso a paso.</description>
     <description lang="el">Εκκαθάριση μιας μεταβλητής από τον πίνακα των εμφανισθέντων μεταβλητών, στην βήμα προς βήμα λειτουργία.</description>
     <description lang="zh"></description>
+    <description lang="hr">Ukloni varijablu s liste prikazanih varijabli prilikom izvođenja programa korak po korak.</description>
     <related>watch</related>
     <example>rmwatch(a)</example>
   </entry>
   <entry type="command">
     <name>rref gaussjord</name>
-    <parameters>Mtrx(M),[Intg(k)]||Opt</parameters>
-    <description lang="en">Row reduction to echelon form of AX=b (M=A|(-b)) [Reduction on columns 0..k-1]</description>
-    <description lang="fr">Réduction sous forme échelonnée de AX=b (M=A|(-b)) [Réduction sur les k premières colonnes].</description>
+    <parameters>Mtrx(M),[Intg(k)||Opt]</parameters>
+    <description lang="en">Row reduction to echelon form [on the first <i>k</i> columns] of the system <b>A</b>&sdot;<b>x</b> = <b>b</b> where <b>M</b> = [<b>A</b> | <b>b</b>].</description>
+    <description lang="fr">Réduction sous forme échelonnée [sur les <i>k</i> premières colonnes] de <b>A</b>&sdot;<b>x</b> = <b>b</b> où <b>M</b> = [<b>A</b> | <b>b</b>].</description>
     <description lang="de"></description>
-    <description lang="es">Reducción a la forma escalonada de AX=b (M=A|(-b)) [Reducción sobre los columnas 0..k-1].</description>
-    <description lang="el">Αναγωγή σε κλιμακωτή μορφή του AX=b (M=A|(-b)).</description>
+    <description lang="es">Reducción a la forma escalonada [sobre las primeras <i>k</i> columnas] de <b>A</b>&sdot;<b>x</b> = <b>b</b> donde <b>M</b> = [<b>A</b> | <b>b</b>].</description>
+    <description lang="el">Αναγωγή σε κλιμακωτή μορφή του <b>A</b>&sdot;<b>x</b> = <b>b</b> όπου <b>M</b> = [<b>A</b> | <b>b</b>].</description>
     <description lang="zh">行简阶梯性形式。 将矩形矩阵更改为其行简阶梯形矩阵。</description>
+    <description lang="hr">Redukcija [prvih <i>k</i> stupaca] sustava linearnih jednadžbi <b>A</b>&sdot;<b>x</b> = <b>b</b> gdje je <b>M</b> = [<b>A</b> | <b>b</b>] Gauss-Jordanovom metodom eliminacije.</description>
     <related>ker</related>
     <related>image</related>
     <related>det</related>
@@ -16573,33 +16642,26 @@
   </entry>
   <entry type="option">
     <name>keep_pivot</name>
-    <description lang="en">Option of the rref command.</description>
-    <description lang="fr">Option de la commande rref.</description>
+    <description lang="en">Option of the <tt>rref</tt> command.</description>
+    <description lang="fr">Option de la commande <tt>rref</tt>.</description>
     <description lang="de"></description>
-    <description lang="es">Opción de rref.</description>
-    <description lang="el">Επιλογή της εντολής rref.</description>
+    <description lang="es">Opción de <tt>rref</tt>.</description>
+    <description lang="el">Επιλογή της εντολής <tt>rref</tt>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Parametar za naredbu <tt>rref</tt>.</description>
     <related>rref</related>
     <example>rref([[1,1,0,0,-a1],[0,1,1,0,-a2],[0,0,1,1,-a3],[1,0,0,1,-a4]],keep_pivot)</example>
-  </entry>
-  <entry type="option">
-    <name>keep_pivot</name>
-    <description lang="en"></description>
-    <description lang="fr"></description>
-    <description lang="de"></description>
-    <description lang="es"></description>
-    <description lang="el"></description>
-    <description lang="zh"></description>
   </entry>
   <entry type="command">
     <name>Rref</name>
     <parameters>Mtrx(M)</parameters>
-    <description lang="en">Returns the row reduction to echelon form of AX=b (M=A|b) without evaluation.</description>
-    <description lang="fr">Renvoie la réduction sous forme échelonnée de AX=b (M=A|(-b)) sans évaluation.</description>
+    <description lang="en">Returns the row reduction to echelon form of <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]) without evaluation.</description>
+    <description lang="fr">Renvoie la réduction sous forme échelonnée de <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]) sans évaluation.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve la reducción en forma escalonada de AX=b (M=A|b) sin evaluar.</description>
-    <description lang="el">Επιστρέφει την ανηγμένη κλιμακωτή μορφή του AX=b (M=A|(-b)) δίχως αποτίμηση</description>
+    <description lang="es">Devuelve la reducción en forma escalonada de <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]) sin evaluar.</description>
+    <description lang="el">Επιστρέφει την ανηγμένη κλιμακωτή μορφή του <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]) δίχως αποτίμηση</description>
     <description lang="zh"></description>
+    <description lang="hr">Inertna varijanta naredbe <tt>rref</tt>.</description>
     <related>rref</related>
     <example>Rref([[3,1,-2],[3,2,2]])</example>
     <example>Rref([[2,1,1,-1],[1,1,2,-1],[1,2,1,-4]])</example>
@@ -16607,12 +16669,13 @@
   <entry type="command">
     <name>ref</name>
     <parameters>Mtrx(M)</parameters>
-    <description lang="en">Reduction of Gauss of AX=b (M=A|(-b)).</description>
-    <description lang="fr">Réduction de Gauss de AX=b (M=A|(-b)).</description>
+    <description lang="en">Reduction of Gauss of <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]).</description>
+    <description lang="fr">Réduction de Gauss de <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]).</description>
     <description lang="de"></description>
-    <description lang="es">Reducción de Gauss de AX=b (M=A|(-b)).</description>
-    <description lang="el">Αναγωγή Gauss του AX=b (M=A|(-b)).</description>
+    <description lang="es">Reducción de Gauss de <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]).</description>
+    <description lang="el">Αναγωγή Gauss του AX=b <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]).</description>
     <description lang="zh"></description>
+    <description lang="hr">Redukcija sustava <b>A</b>&sdot;<b>x</b> = <b>b</b> (<b>M</b> = [<b>A</b> | <b>b</b>]) Gaussovom metodom eliminacije.</description>
     <related>rref</related>
     <related>det</related>
     <example>ref([[3,1,-2],[3,2,2]])</example>
@@ -16627,31 +16690,35 @@
     <description lang="es">Comprobación de igualdad.</description>
     <description lang="el">Έλεγχος ισότητας.</description>
     <description lang="zh"></description>
+    <description lang="hr">Test jednakosti dvaju izraza.</description>
     <example>same(a,b)</example>
     <example>same((2-1)^2,2^2-2*2+1)</example>
   </entry>
   <entry type="command">
     <name>sec</name>
     <parameters>Expr</parameters>
-    <description lang="en">Secant: sec(x)=1/cos(x).</description>
-    <description lang="fr">Sécante: sec(x)=1/cos(x).</description>
+    <description lang="en">Secant: sec(<i>x</i>) = 1/cos(<i>x</i>).</description>
+    <description lang="fr">Sécante: sec(<i>x</i>) = 1/cos(<i>x</i>).</description>
     <description lang="de"></description>
-    <description lang="es">Secante: sec(x)=1/cos(x).</description>
-    <description lang="el">Τέμνουσα sec(x)=1/cos(x).</description>
-    <description lang="zh">正割。  正割函数; 即，1/cos(x)。</description>
+    <description lang="es">Secante: sec(<i>x</i>) = 1/cos(<i>x</i>).</description>
+    <description lang="el">Τέμνουσα sec(<i>x</i>) = 1/cos(<i>x</i>).</description>
+    <description lang="zh">正割。  正割函数; 即，1/cos(<i>x</i>)。</description>
+    <description lang="hr">Funkcija sekans: sec(<i>x</i>) = 1/cos(<i>x</i>).</description>
     <related>cos</related>
     <related>asec</related>
     <example>sec(pi/3)</example>
   </entry>
   <entry type="command">
     <name>segment</name>
-    <parameters>(Pnt or Cplx or Lst([xM,yM])),(Pnt or Cplx or Lst([xN,yN]),[Var],[Var]</parameters>
-    <description lang="en">segment(A,B) draws the segment AB and segment([xM,yM],[xN,yN]) draws the vector as origin [xM,yM], of coordinates [xN,yN] (i.e draws segment(M,point(M+N)).</description>
-    <description lang="fr">segment(A,B) trace le segment AB et segment([xM,yM],[xN,yN]) trace le vecteur d'origine [xM,yM], de coordonnées [xN,yN] (i.e trace segment(M,point(M+N)).</description>
+    <parameters>(Pnt||Cplx)(A),(Pnt||Cplx)(B),[Var],[Var]</parameters>
+    <parameters>Lst(u),Lst(v),[Var],[Var]</parameters>
+    <description lang="en">Draws the segment <i>AB</i> or draws the segment from the point defined by the vector <b>u</b> to the point defined by the vector <b>u</b>+<b>v</b>.</description>
+    <description lang="fr">Trace le segment <i>AB</i> ou trace le vecteur d'origine <b>u</b> et de coordonnées <b>v</b> (i.e trace le segment [<b>u</b>, <b>u</b>+<b>v</b>]).</description>
     <description lang="de"></description>
-    <description lang="es">segment(A,B) traza el segmento AB y segment([xM,yM],[xN,yN]) traza el vector con origen [xM,yM] de coordenadas [xN,yN] (i.e traza segment(M,point(M+N)).</description>
-    <description lang="el">segment(A,B) σχεδιάζει το ευθύγραμμο τμήμα ΑΒ.</description>
+    <description lang="es">Traza el segmento <i>AB</i> o traza el vector con origen <b>u</b> de coordenadas <b>v</b> (i.e traza el segmento [<b>u</b>, <b>u</b>+<b>v</b>]).</description>
+    <description lang="el">Σχεδιάζει το ευθύγραμμο τμήμα <i>AB</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz segmenta <i>AB</i> ili segmenta od točke dane radijvektorom <b>u</b> do točke dane radijvektorom <b>u</b>+<b>v</b>.</description>
     <related>line</related>
     <example>segment(i,1+i)</example>
     <example>segment(point(i),point(1+i))</example>
@@ -16662,12 +16729,13 @@
   <entry type="command">
     <name>half_line</name>
     <parameters>(Pnt or Cplx),(Pnt or Cplx)</parameters>
-    <description lang="en">half_line(A,B) draws the half-line AB with A as origin.</description>
-    <description lang="fr">demi_droite(A,B) trace la demi-droite AB d'origine A.</description>
+    <description lang="en">Draws the half-line <i>AB</i> with <i>A</i> as origin.</description>
+    <description lang="fr">Trace la demi-droite <i>AB</i> d'origine <i>A</i>.</description>
     <description lang="de"></description>
-    <description lang="es">half_line(A,B) traza la media-recta AB con origen A.</description>
-    <description lang="el">half_line(A,B) σχεδιάζει την ημιευθεία ΑΒ με αρχή το Α.</description>
+    <description lang="es">Traza la media-recta <i>AB</i> con origen <i>A</i>.</description>
+    <description lang="el">Σχεδιάζει την ημιευθεία <i>AB</i> με αρχή το <i>A</i>.</description>
     <description lang="zh"></description>
+    <description lang="hr">Prikaz polupravca <i>AB</i> s ishodištem u točki <i>A</i>.</description>
     <related>line</related>
     <example>half_line(i,1+i)</example>
     <example>half_line(point(i),point(1+i))</example>

@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(giacProcessingFinished(const gen &,const QStringList &)));
     ui->messagesTextBrowser->setFont(QFont("FreeSerif", 12));
     ui->messagesTextBrowser->setText(QString("<html><style>radicand{text-decoration:overline;}</style>") +
-                                     "<body><a href=\"https://en.wikipedia.org/wiki/Photon_energy\">Photon wavelength</a> <i>c</i>&sdot;<i>h</i>&sdot;<i>E</i><sup>&minus;1</sup> for <i>E</i> = 1 J.</body></html>");
+                                     "<body>Traza el segmento <i>AB</i> o traza el vector con origen <b>u</b> de coordenadas <b>v</b> (i.e traza el segmento [<b>u</b>, <b>u</b>+<b>v</b>]).</body></html>");
 }
 
 MainWindow::~MainWindow()
