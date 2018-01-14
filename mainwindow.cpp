@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(giacProcessingFinished(const gen &,const QStringList &)));
     ui->messagesTextBrowser->setFont(QFont("FreeSerif", 12));
     ui->messagesTextBrowser->setText(QString("<html><style>radicand{text-decoration:overline;}</style>") +
-                                     "<body>Traza el segmento <i>AB</i> o traza el vector con origen <b>u</b> de coordenadas <b>v</b> (i.e traza el segmento [<b>u</b>, <b>u</b>+<b>v</b>]).</body></html>");
+                                     "<body>Integralni sinus &int;<sub><i>t</i>=0..<i>x</i></sub> sin(<i>t</i>)/<i>t</i>&sdot;d<i>t</i>.</body></html>");
 }
 
 MainWindow::~MainWindow()
