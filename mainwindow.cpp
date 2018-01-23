@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(giacProcessingFinished(const gen &,const QStringList &)));
     ui->messagesTextBrowser->setFont(QFont("FreeSerif", 12));
     ui->messagesTextBrowser->setText(QString("<html><style>radicand{text-decoration:overline;}</style>") +
-                                     "<body>Zapis polinoma <i>Q</i> drugog stupnja u obliku <i>a</i>(<i>x</i>+<i>b</i>)&sup2;+<i>c</i>.</body></html>");
+                                     "<body>Lista [<i>c</i>, <i>l</i>] gdje je <i>l</i> = LCM(<i>p</i>, <i>q</i>) i <i>c</i> je cijeli broj takav da vrijedi <i>d</i> &equiv; <i>a</i> (mod <i>p</i>) i <i>d</i> &equiv; <i>b</i> (mod <i>q</i>) za sve <i> d </i> = <i>c</i> + <i>k</i>&sdot;<i>l</i>, <i>k</i> &isin; ℤ.</body></html>");
 }
 
 MainWindow::~MainWindow()

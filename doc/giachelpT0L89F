@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE commandindex
 [
    <!ELEMENT commandindex (entry+)>
@@ -68,7 +68,7 @@
    <!ATTLIST lst explicit (true | false) "false">
    <!ATTLIST lst optional (true | false) "false">
    <!ATTLIST lst alt CDATA #IMPLIED>
-   <!ELEMENT vect (#PCDATA)>
+   <!ELEMENT vect ANY>
    <!ATTLIST vect elem CDATA #IMPLIED>
    <!ATTLIST vect optional (true | false) "false">
    <!ELEMENT set ANY>
@@ -378,7 +378,7 @@
     <category>Algebra:Linear</category>
     <parameters>
       <mtrx>A</mtrx>
-      <lst elem="intg" explicit="true"><el>n1</el><el>n2</el></lst>
+      <lst elem="intg" explicit="true"><el><i>n</i><sub>1</sub></el><el><i>n</i><sub>2</sub></el></lst>
       <mtrx>B</mtrx>
     </parameters>
     <returns><mtrx/></returns>
@@ -524,15 +524,13 @@
   <entry type="command">
     <name>chisquaret</name>
     <category>Statistics</category>
+    <parameters><seq elem="vect" explicit="true">
+		<el><b>s</b><sub>1</sub></el>
+		<el><b>s</b><sub>2</sub></el>
+		<etc/>
+	</seq></parameters>
     <parameters>
-      <seq elem="vect" explicit="true">
-		    <el>s1</el>
-		    <el>s2</el>
-		    <etc/>
-	    </seq>
-    </parameters>
-    <parameters>
-      <vect>s</vect>
+      <vect><b>s</b></vect>
       <func optional="true">f</func>
       <seq optional="true">p</seq>
     </parameters>
@@ -629,7 +627,7 @@
     <name>index</name>
     <category>General</category>
     <parameters>
-      <vect>v</vect>
+      <vect><b>v</b></vect>
       <expr></expr>
     </parameters>
     <returns><intg/></returns>
@@ -651,19 +649,18 @@
     <name>count</name>
     <category>General</category>
     <parameters>
-      <func>f</func>
+      <or><func>f</func><lst elem="intg"></lst></or>
       <or name="v"><mtrx/><vect/></or>
       <or optional="true"><option>row</option><option>col</option></or>
     </parameters>
-    <parameters><lst elem="intg">n</lst></parameters>
-    <returns><or><intg/><mtrx/></or></returns>
-    <description lang="en">Returns <b>&sum;</b><sub><i>k</i></sub> <i>f</i>(<i>v<sub>k</sub></i>) or counts the number of occurrences of each element if the argument is a vector of integers <b>n</b>.</description>
-    <description lang="fr">Renvoie <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>) ou compte le nombre d'occurrences si l'argument est une liste d'entiers <b>n</b> en renvoyant une matrice de 1ère col les éléments de la liste triée et deuxième col l'effectif de cet élément dans la liste.</description>
+    <returns><expr/></returns>
+    <description lang="en">Returns <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>) or counts the number of occurrences of each element if the argument is a vector of integers.</description>
+    <description lang="fr">Renvoie <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>) ou compte le nombre d'occurrences si l'argument est une liste d'entiers en renvoyant une matrice de 1ère col les éléments de la liste triée et deuxième col l'effectif de cet élément dans la liste.</description>
     <description lang="de"></description>
     <description lang="es">Devuelve <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>).</description>
     <description lang="el">Επιστρέφει <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>).</description>
     <description lang="zh"></description>
-    <description lang="hr">Vrijednost <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>), odnosno broj pojavljivanja svakog od elemenata ako je prvi argument lista cijelih brojeva <b>n</b>.</description>
+    <description lang="hr">Vrijednost <b>&sum;</b><sub><i>k</i></sub><i> f</i>(<i>v<sub>k</sub></i>), odnosno broj pojavljivanja svakog od elemenata ako je prvi argument lista cijelih brojeva.</description>
     <related>count_eq</related>
     <related>count_inf</related>
     <related>count_sup</related>
@@ -1075,7 +1072,7 @@
     <name>randmarkov</name>
     <category>Statistics</category>
     <parameters>
-      <or><mtrx>M</mtrx><vect>v</vect></or>
+      <or><mtrx>M</mtrx><vect><b>v</b></vect></or>
       <intg>i0</intg>
       <intg optional="true">n</intg>
     </parameters>
@@ -1097,7 +1094,7 @@
     <category>Algebra:Linear</category>
     <parameters>
       <mtrx>A</mtrx>
-      <vect>y</vect>
+      <vect><b>y</b></vect>
       <vect optional="true">x0</vect>
       <real optional="true">ε</real>
     </parameters>
@@ -2264,7 +2261,7 @@
   <entry type="command">
     <name>listplot plotlist</name>
     <category>Plotting</category>
-    <parameters><or><lst>y</lst><mtrx>M</mtrx></or></parameters>
+    <parameters><or><lst><b>y</b></lst><mtrx>M</mtrx></or></parameters>
     <returns><geo dim="2"/></returns>
     <description lang="en">Draws the polygonal line through the points of abscissa [0, &hellip;, <i>n</i>&minus;1] and ordinate <b>y</b> = [<i>y</i><sub>0</sub>, &hellip;, <i>y</i><sub><i>n</i>&minus;1</sub>] or the line through the points of abscissa represented by the first column and ordinate represented by the second column of matrix <b>M</b>.</description>
     <description lang="fr">Trace la ligne polygonale reliant les points d'abscisse [0, &hellip;, <i>n</i>&minus;1] et d'ordonnée <b>y</b> = [<i>y</i><sub>0</sub>, &hellip;, <i>y</i><sub><i>n</i>&minus;1</sub>] ou la ligne reliant les points d'abscisse la première colonne de <b>M</b> et d'ordonnée sa deuxième colonne.</description>
@@ -2386,8 +2383,8 @@
     <category>Optimization</category>
     <parameters>
       <mtrx>A</mtrx>
-      <vect>b</vect>
-      <vect>c</vect>
+      <vect><b>b</b></vect>
+      <vect><b>c</b></vect>
     </parameters>
     <parameters><mtrx>M</mtrx></parameters>
     <returns><seq/></returns>
@@ -2408,8 +2405,8 @@
     <name>spline</name>
     <category>Polynomials</category>
     <parameters>
-      <lst>v_x</lst>
-      <lst>v_y</lst>
+      <lst><b>v</b><sub><i>x</i></sub></lst>
+      <lst><b>v</b><sub><i>y</i></sub></lst>
       <var>x</var>
       <intg>n</intg>
     </parameters>
@@ -2739,7 +2736,7 @@
   <entry type="command">
     <name>reverse_rsolve</name>
     <category>Algebra:Linear</category>
-    <parameters><vect>v</vect></parameters>
+    <parameters><vect><b>v</b></vect></parameters>
     <returns><vect/></returns>
     <description lang="en">If <b>v</b>=[<i>v</i><sub>0</sub>,&hellip;,<i>v</i><sub>2<i>n</i>&minus;1</sub>], return [<i>b<sub>n</sub></i>,&hellip;,<i>b</i><sub>0</sub>] such that <i>b</i><sub>n</sub>&sdot;<i>v</i><sub><i>n</i>+<i>k</i></sub>+&#8943;+<i>b</i><sub>0</sub>&sdot;<i>v<sub>k</sub></i>=0 for <i>k</i>=0,&hellip;,<i>n</i>&minus;1.</description>
     <description lang="fr">Si <b>v</b>=[<i>v</i><sub>0</sub>,&hellip;,<i>v</i><sub>2<i>n</i>&minus;1</sub>], renvoie [<i>b<sub>n</sub></i>,&hellip;,<i>b</i><sub>0</sub>] tel que <i>b</i><sub>n</sub>&sdot;<i>v</i><sub><i>n</i>+<i>k</i></sub>+&#8943;+<i>b</i><sub>0</sub>&sdot;<i>v<sub>k</sub></i>=0 pour <i>k</i>=0,&hellip;,<i>n</i>&minus;1.</description>
@@ -2920,7 +2917,7 @@
     <name>fft</name>
     <category>Signal Processing</category>
     <parameters>
-      <vect>v</vect>
+      <vect><b>v</b></vect>
       <intg optional="true">a</intg>
       <intg optional="true">p</intg>
     </parameters>
@@ -2939,7 +2936,7 @@
   <entry type="command">
     <name>ifft</name>
     <category>Signal Processing</category>
-    <parameters><vect>v</vect></parameters>
+    <parameters><vect><b>v</b></vect></parameters>
     <returns><vect/></returns>
     <description lang="en">Inverse Fast Fourier Transform.</description>
     <description lang="fr">Inverse Fast Fourier Transform.</description>
@@ -3380,7 +3377,7 @@
     <category>Geometry</category>
     <parameters>
       <pnt>A</pnt>
-      <vect>v</vect>
+      <vect><b>v</b></vect>
       <real>t</real>
       <real optional="true">h</real>
     </parameters>
@@ -3402,7 +3399,7 @@
     <category>Geometry</category>
     <parameters>
       <pnt>A</pnt>
-      <vect>v</vect>
+      <vect><b>v</b></vect>
       <real>t</real>
       <real optional="true">h</real>
     </parameters>
@@ -3424,7 +3421,7 @@
     <category>Geometry</category>
     <parameters>
       <pnt>A</pnt>
-      <vect>v</vect>
+      <vect><b>v</b></vect>
       <real>r</real>
       <real optional="true">h</real>
     </parameters>
@@ -4269,7 +4266,7 @@
     <category>Geometry</category>
     <parameters>
 		<circle>C</circle>
-		<or><lst explicit="true"><pnt/><line/></lst><lst explicit="true"><line/><pnt/></lst></or>
+		<or><lst><pnt/><line/></lst><lst><line/><pnt/></lst></or>
 	</parameters>
 	<returns><geo dim="2"/></returns>
     <description lang="en">Returns the list where a point (resp. a line) is replaced with its polar (resp. pole), with respect to the circle <i>C</i>.</description>
@@ -7302,7 +7299,7 @@
     <name>center2interval</name>
     <category>General</category>
     <parameters>
-    	<lst>c</lst>
+    	<lst><b>c</b></lst>
     	<real optional="true">a0</real>
     </parameters>
     <returns><lst elem="interval"/></returns>
@@ -7322,7 +7319,7 @@
     <category>General:Matrix</category>
     <parameters>
     	<mtrx>A</mtrx>
-    	<lst>b</lst>
+    	<lst><b>b</b></lst>
     </parameters>
     <description lang="en">Returns the matrix obtained appending column <b>b</b> with <i>n</i> elements to matrix <b>A</b> with <i>n</i> rows.</description>
     <description lang="fr">Renvoie la matrice formée par <b>A</b> bordée de <i>b</i> en dernière colonne, si <tt>nrows(A)</tt>=<tt>size(b)</tt> : <tt>border(A,b)</tt>=<tt>tran(append(tran(A),b))</tt>.</description>
@@ -7361,7 +7358,7 @@
     <parameters>
 		<intg>m</intg>
 		<intg>n</intg>
-		<lst>b</lst></parameters>
+		<lst><b>b</b></lst></parameters>
     <description lang="en">Returns the matrix obtained by dividing the list <b>b</b> into <i>m</i> sublists of length <i>n</i>.</description>
     <description lang="fr">Renvoie la matrice obtenue en scindant la liste <b>b</b> selon <i>m</i> listes de longueur <i>n</i>.</description>
     <description lang="de"></description>
@@ -10748,8 +10745,8 @@
     <category>Combinatorics</category>
     <parameters>
 		<intg>n</intg>
-		<vect>p</vect>
-		<vect>k</vect>
+		<vect><b>p</b></vect>
+		<vect><b>k</b></vect>
 	</parameters>
 	<returns><intg/></returns>
     <description lang="en">Returns <i>n</i>!&sdot;(<i>p</i><sub>0</sub><sup><i>k</i>0</sup><i>p</i><sub>1</sub><sup><i>k</i>1</sup>&hellip;<i>p</i><sub><i>j</i></sub><sup><i>kj</i></sup>)/(<i>k</i><sub>0</sub>!<i>k</i><sub>1</sub>!&hellip;<i>k<sub>j</sub></i>!), where <b>&sum; </b><i>p<sub>i</sub></i> = 1 and <b>&sum; </b><i>k<sub>i</sub></i> = <i>n</i>.</description>
@@ -12952,7 +12949,7 @@
 	</parameters>
 	<parameters>
 		<lst>v</lst>
-		<lst>d</lst>
+		<lst><b>d</b></lst>
 		<lst>u</lst>
 	</parameters>
     <returns><or><mtrx/><lst/></or></returns>
@@ -13820,7 +13817,7 @@
     <category>Algebra:Linear</category>
     <parameters>
 		<mtrx>A</mtrx>
-		<vect>v</vect>
+		<vect><b>v</b></vect>
 	</parameters>
 	<returns><expr/></returns>
     <description lang="en">The quadratic form <i>q</i> associated to <b>A</b>, where <b>v</b> is the vector of variables.</description>
@@ -14523,8 +14520,8 @@
     <name>cross crossproduct crossP</name>
     <category>Algebra:Linear</category>
     <parameters>
-		<vect>v1</vect>
-		<vect>v2</vect>
+		<vect><b>v</b><sub>1</sub></vect>
+		<vect><b>v</b><sub>2</sub></vect>
 	</parameters>
     <returns><vect/></returns>
     <description lang="en">Wedge product <b>v</b><sub>1</sub> &times; <b>v</b><sub>2</sub>.</description>
@@ -14843,8 +14840,8 @@
     <name>dot dotP scalarProduct scalar_product dotprod</name>
     <category>Algebra:Linear</category>
     <parameters>
-		<vect>v1</vect>
-		<vect>v2</vect>
+		<vect><b>v</b><sub>1</sub></vect>
+		<vect><b>v</b><sub>2</sub></vect>
 	</parameters>
 	<returns><expr/></returns>
     <description lang="en">Scalar product of two vectors <b>v</b><sub>1</sub> and <b>v</b><sub>2</sub>.</description>
@@ -14979,7 +14976,7 @@
     <name>poly2symb r2e</name>
     <category>Polynomials</category>
     <parameters>
-		<vect>c</vect>
+		<vect><b>c</b></vect>
 		<or optional="true"><var>x</var><real>a</real></or>
 	</parameters>
 	<returns><expr/></returns>
@@ -15134,13 +15131,13 @@
 	</parameters>
 	<parameters><expr>p(x, y)</expr></parameters>
 	<returns><geo/></returns>
-    <description lang="en">Draws the ellipse with focal points <i>F</i><sub>1</sub> and <i>F</i><sub>2</sub> through <i>P</i> or such that ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> or with the equation <i>p</i>(<i>x</i>, <i>y</i>) = 0 such that <tt>deg</tt>(<i>p</i>) = 2.</description>
-    <description lang="fr">Dessine l'ellipse de foyers <i>F</i><sub>1</sub> et <i>F</i><sub>2</sub> passant par <i>P</i> ou tel que ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> ou avec l'équation <i>p</i>(<i>x</i>, <i>y</i>) = 0 telle que <tt>deg</tt>(<i>p</i>) = 2.</description>
+    <description lang="en">Draws the ellipse with focal points <i>F</i><sub>1</sub> and <i>F</i><sub>2</sub> through <i>P</i> or such that ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> or with the equation <i>p</i>(<i>x</i>, <i>y</i>) = 0 such that deg(<i>p</i>) = 2.</description>
+    <description lang="fr">Dessine l'ellipse de foyers <i>F</i><sub>1</sub> et <i>F</i><sub>2</sub> passant par <i>P</i> ou tel que ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> ou avec l'équation <i>p</i>(<i>x</i>, <i>y</i>) = 0 telle que deg(<i>p</i>) = 2.</description>
     <description lang="de"></description>
-    <description lang="es">Traza la elipse de focos <i>F</i><sub>1</sub> y <i>F</i><sub>2</sub> que pasa por <i>P</i> o ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> o con la ecuación <i>p</i>(<i>x</i>, <i>y</i>) = 0 tal que <tt>deg</tt>(<i>p</i>) = 2.</description>
-    <description lang="el">Σχεδιάστε την έλλειψη με εστίες <i>F</i><sub>1</sub> και <i>F</i><sub>2</sub> που διέρχεται από το <i>P</i> ή τέτοια ώστε ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> ή με την εξίσωση <i>p</i>(<i>x</i>, <i>y</i>) = 0 έτσι ώστε <tt>deg</tt>(<i>p</i>) = 2.</description>
+    <description lang="es">Traza la elipse de focos <i>F</i><sub>1</sub> y <i>F</i><sub>2</sub> que pasa por <i>P</i> o ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> o con la ecuación <i>p</i>(<i>x</i>, <i>y</i>) = 0 tal que deg(<i>p</i>) = 2.</description>
+    <description lang="el">Σχεδιάστε την έλλειψη με εστίες <i>F</i><sub>1</sub> και <i>F</i><sub>2</sub> που διέρχεται από το <i>P</i> ή τέτοια ώστε ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i> ή με την εξίσωση <i>p</i>(<i>x</i>, <i>y</i>) = 0 έτσι ώστε deg(<i>p</i>) = 2.</description>
     <description lang="zh">椭圆。</description>
-    <description lang="hr">Prikaz elipse s žarištima <i>F</i><sub>1</sub> i <i>F</i><sub>2</sub> koja prolazi točkom <i>P</i> ili tako da vrijedi ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>, odnosno elipse zadane jednadžbom <i>p</i>(<i>x</i>, <i>y</i>) = 0 pri čemu je <tt>deg</tt>(<i>p</i>) = 2.</description>
+    <description lang="hr">Prikaz elipse s žarištima <i>F</i><sub>1</sub> i <i>F</i><sub>2</sub> koja prolazi točkom <i>P</i> ili tako da vrijedi ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>, odnosno elipse zadane jednadžbom <i>p</i>(<i>x</i>, <i>y</i>) = 0 pri čemu je deg(<i>p</i>) = 2.</description>
     <related>hyperbola</related>
     <related>parabola</related>
     <example>ellipse(-1,1,point(1+i))</example>
@@ -15737,22 +15734,22 @@
 	</parameters>
     <parameters>
 		<lst elem="expr||equal" explicit="true">
-			<equal optionalrhs="true"><expr>f(xx)</expr><zero/></equal>
-			<equal optionalrhs="true"><expr>g(xx)</expr><zero/></equal>
+			<equal><expr>f1(x1, x2, …)</expr><zero/></equal>
+			<equal><expr>f2(x1, x2, …)</expr><zero/></equal>
 			<etc/>
 		</lst>
-		<lst elem="var">x</lst>
+		<lst elem="var"><b>x</b></lst>
 		<lst optional="true" elem="real"><b>x</b><sub>0</sub></lst>
 		<option optional="true">method</option>
 	</parameters>
 	<returns><or><real/><lst elem="real"/></or></returns>
-    <description lang="en">Numerical solution of an equation <i>f</i>(<i>x</i>) = 0 or a system of equations <i>f</i>(<b>x</b>) = 0, <i>g</i>(<b>x</b>) = 0, &hellip; (with an optional initial guess <i>x</i><sub>0</sub> resp. <b>x</b><sub>0</sub> and using the algorithm specified by <tt>method</tt>).</description>
+    <description lang="en">Numerical solution of an equation <i>f</i>(<i>x</i>) = 0 or a system of equations <i>f</i><sub>1</sub>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;) = 0, <i>f</i><sub>2</sub>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;) = 0, &hellip; (with an optional initial guess <i>x</i><sub>0</sub> resp. <b>x</b><sub>0</sub> and using the algorithm specified by <tt>method</tt>).</description>
     <description lang="fr">Résolution numérique d'une équation ou d'un système.</description>
     <description lang="de"></description>
     <description lang="es">Resolución numérica de una ecuación o de un sistema de ecuaciones.</description>
     <description lang="el">Αριθμητική επίλυση μιας εξίσωσης ή ενός συστήματος εξίσωσεων.</description>
     <description lang="zh">函数求根（类似于“求解”应用程序）。  所求变量值能使表达式的值最接近零。 使用猜测值作为初始估算值。</description>
-    <description lang="hr">Približno rješenje jednadžbe <i>f</i>(<i>x</i>) = 0 odnosno sustava jednadžbi <i>f</i>(<b>x</b>) = 0, <i>g</i>(<b>x</b>) = 0, &hellip; (dobiveno numeričkom metodom koja je zadana parametrom <tt>method</tt> s početnim približnim rješenjem <i>x</i><sub>0</sub> odnosno <b>x</b><sub>0</sub>).</description>
+    <description lang="hr">Približno rješenje jednadžbe <i>f</i>(<i>x</i>) = 0 odnosno sustava jednadžbi <i>f</i><sub>1</sub>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;) = 0, <i>f</i><sub>2</sub>(<i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip;) = 0, &hellip; (dobiveno numeričkom metodom koja je zadana parametrom <tt>method</tt> s početnim približnim rješenjem <i>x</i><sub>0</sub> odnosno <b>x</b><sub>0</sub>).</description>
     <related>cfsolve</related>
     <related>nSolve</related>
     <related>solve</related>
@@ -15773,11 +15770,11 @@
 	</parameters>
     <parameters>
 		<lst elem="expr||equal" explicit="true">
-			<equal optionalrhs="true"><expr>f(zz)</expr><zero/></equal>
-			<equal optionalrhs="true"><expr>g(zz)</expr><zero/></equal>
+			<el><i>f</i><sub>1</sub>(<i>z</i><sub>1</sub>, <i>z</i><sub>2</sub>, &hellip;) [= 0]</el>
+			<el><i>f</i><sub>2</sub>(<i>z</i><sub>1</sub>, <i>z</i><sub>2</sub>, &hellip;) [= 0]</el>
 			<etc/>
 		</lst>
-		<lst elem="var">z</lst>
+		<lst elem="var"><b>z</b></lst>
 		<lst optional="true" elem="cplx"><b>z</b><sub>0</sub></lst>
 		<option optional="true">method</option>
 	</parameters>
@@ -15939,7 +15936,7 @@
     <name>gramschmidt</name>
     <category>Algebra:Linear</category>
     <parameters>
-		<lst elem="vect">b</lst>
+		<lst elem="vect"><b>b</b></lst>
 		<func>s</func>
 	</parameters>
 	<returns><lst elem="vect"/></returns>
@@ -16164,12 +16161,9 @@
   </entry>
   <entry type="command">
     <name>midpoint</name>
-    <category>Geometry</category>
     <parameters>
-  		<or name="A"><pnt/><cplx/></or>
-	  	<or name="B"><pnt/><cplx/></or>
+    
     </parameters>
-    <returns><pnt/></returns>
     <description lang="en">Draws the midpoint of the segment <i>AB</i>.</description>
     <description lang="fr">Trace le milieu du segment <i>AB</i>.</description>
     <description lang="de"></description>
@@ -16183,9 +16177,7 @@
   </entry>
   <entry type="command">
     <name>head</name>
-    <category>General</category>
-    <parameters><or><vect/><seq/><strng/></or></parameters>
-    <returns><expr/></returns>
+    <parameters>Vect or Seq or Str</parameters>
     <description lang="en">Shows the first element of a vector or a sequence or a string.</description>
     <description lang="fr">Désigne le premier élément d'un vecteur ou d'une suite d'éléments ou d'une chaîne.</description>
     <description lang="de"></description>
@@ -16204,20 +16196,14 @@
   </entry>
   <entry type="command">
     <name>hermite</name>
-    <category>Polynomials</category>
-    <parameters>
-      <intg>n</intg>
-      <var optional="true">x</var>
-    </parameters>
-    <parameters><mtrx>A</mtrx></parameters>
-    <returns><or><expr/><seq/></or></returns>
-    <description lang="en">Returns the Hermite polynomial (with respect to the variable <i>x</i>) of degree <i>n</i> or the Hermite normal form for a polynomial coefficients matrix (matrices <b>U</b> and upper triangular <b>H</b> such that <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
+    <parameters>Intg(n)||Matr(A)</parameters>
+    <description lang="en">Returns the Hermite polynomial of degree <i>n</i> or the Hermite normal form for a polynomial coefficients matrix (matrices <b>U</b> and upper triangular <b>H</b> such that <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
     <description lang="fr">Renvoie le polynôme de Hermite de degré <i>n</i> ou la forme normale de Hermite d'une matrice a coefficients polynomiaux (matrices <b>U</b> et triangulaire supérieure <b>H</b> tels que <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
     <description lang="de"></description>
     <description lang="es">Devuelve el polinómio de Hermite de grado <i>n</i> o la forma normal de Hermite para una matriz de coeficientes polinomiales (matrices <b>U</b> y triangular superior <b>H</b> tal que <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
     <description lang="el">Επιστρέφει το πολυώνυμο Hermite βαθμού <i>n</i> ή την κανονική μορφή Hermite για μια μήτρα πολυωνυμικών συντελεστών (πίνακες <b>U</b> και άνω τριγωνικό <b>H</b> έτσι ώστε <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
     <description lang="zh"></description>
-    <description lang="hr">Hermiteov polinom (u varijabli <i>x</i>) stupnja <i>n</i> ili hermitska normalna forma za matricu polinoma (dobivaju se matrica <b>U</b> i gornja trokutasta matrica <b>H</b> za koje vrijedi <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
+    <description lang="hr">Hermiteov polinom stupnja <i>n</i> ili hermitska normalna forma za matricu polinoma (dobivaju se matrica <b>U</b> i gornja trokutasta matrica <b>H</b> za koje vrijedi <b>U</b>&sdot;<b>A</b> = <b>H</b>).</description>
     <related>legendre</related>
     <related>laguerre</related>
     <related>smith</related>
@@ -16228,9 +16214,7 @@
   </entry>
   <entry type="command">
     <name>smith</name>
-    <category>Algebra:Linear</category>
-    <parameters><mtrx>A</mtrx></parameters>
-    <returns><seq/></returns>
+    <parameters>Matr(A)</parameters>
     <description lang="en">Returns the Smith normal form of a matrix with polynomial coefficients (matrices <b>U</b>, <b>D</b> and <b>V</b> such that <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b> = <b>D</b>).</description>
     <description lang="fr">Renvoie la forme normale de Smith d'une matrice a coefficients polynomiaux (matrices <b>U</b>, <b>D</b> et <b>V</b> tels que <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b> = <b>D</b>).</description>
     <description lang="de"></description>
@@ -16246,45 +16230,33 @@
   </entry>
   <entry type="command">
     <name>grad</name>
-    <category>Calculus</category>
-    <parameters>
-      <expr>f(xx)</expr>
-      <lst elem="var">x</lst>
-    </parameters>
-    <returns><vect/></returns>
-    <description lang="en">Returns the gradient &nabla;<i>f</i>(<b>x</b>).</description>
-    <description lang="fr">Renvoie le gradient &nabla;<i>f</i>(<b>x</b>).</description>
+    <parameters>Expr(R),LstVar(v)</parameters>
+    <description lang="en">Returns the gradient &nabla;<i>R</i> of the expression <i>R</i> with respect to <b>v</b>.</description>
+    <description lang="fr">Renvoie le gradient &nabla;<i>R</i> de l'expression <i>R</i> par rapport à <b>v</b>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve el gradiente &nabla;<i>f</i>(<b>x</b>).</description>
-    <description lang="el">Επιστρέφει την κλίση της <i>f</i> σε σχέση με <b>x</b>.</description>
+    <description lang="es">Devuelve el gradiente &nabla;<i>R</i> de <i>R</i> con respecto a <b>v</b>.</description>
+    <description lang="el">Επιστρέφει την κλίση της <i>R</i> σε σχέση με <b>v</b>.</description>
     <description lang="zh"></description>
-    <description lang="hr">Gradijent &nabla;<i>f</i>(<b>x</b>).</description>
+    <description lang="hr">Gradijent &nabla;<i>R</i> izraza <b>R</b> s obzirom na varijable dane listom <b>v</b>.</description>
     <related>hessian</related>
     <example>grad(2*x^2*y-x*z^3,[x,y,z])</example>
   </entry>
   <entry type="command">
     <name>hessian</name>
-    <category>Algebra:Linear</category>
-    <parameters>
-      <expr>f(xx)</expr>
-      <lst elem="var">x</lst>
-    </parameters>
-    <returns><mtrx/></returns>
-    <description lang="en">Returns the hessian of the function <i>f</i> with respect to <b>v</b>.</description>
-    <description lang="fr">Renvoie la hessienne de la fonction <i>f</i> par rapport à <b>x</b>.</description>
+    <parameters>Expr(R),LstVar(v)</parameters>
+    <description lang="en">Returns the hessian of the expression <i>R</i> with respect to <b>v</b>.</description>
+    <description lang="fr">Renvoie la hessienne de l'expression <i>R</i> par rapport à <b>v</b>.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve el hessiano de <i>f</i> con respecto a <b>x</b>.</description>
-    <description lang="el">Επιστρέφει τον Hessian-ό πίνακα της <i>f</i> σε σχέση με <b>x</b>.</description>
+    <description lang="es">Devuelve el hessiano de <i>R</i> con respecto a <b>v</b>.</description>
+    <description lang="el">Επιστρέφει τον Hessian-ό πίνακα της <i>R</i> σε σχέση με <b>v</b>.</description>
     <description lang="zh"></description>
-    <description lang="hr">Hesijan za funkciju <i>f</i> s obzirom na varijable <b>x</b>.</description>
+    <description lang="hr">Hesijan izraza <i>R</i> s obzirom na varijable dane listom <b>v</b>.</description>
     <related>grad</related>
     <example>hessian(2*x^2*y-x*z,[x,y,z])</example>
   </entry>
   <entry type="command">
     <name>hilbert</name>
-    <category>Algebra:Linear</category>
-    <parameters><intg>n</intg></parameters>
-    <returns><mtrx/></returns>
+    <parameters>Intg(n)</parameters>
     <description lang="en">Returns the <i>n</i>-th order Hilbert matrix <b>H</b><sub><i>n</i></sub>, <i>h<sub>jk</sub></i> = (<i>j</i>+<i>k</i>+1)<sup>&minus;1</sup> for <i>j</i>,<i>k</i> = 1, &hellip;, <i>n</i>.</description>
     <description lang="fr">Renvoie la <i>n</i>-ième matrice de Hilbert <b>H</b><sub><i>n</i></sub>, <i>h<sub>jk</sub></i> = (<i>j</i>+<i>k</i>+1)<sup>&minus;1</sup> pour <i>j</i>,<i>k</i> = 1, &hellip;, <i>n</i>.</description>
     <description lang="de"></description>
@@ -16296,13 +16268,7 @@
   </entry>
   <entry type="command">
     <name>homothety</name>
-    <category>Geometry</category>
-    <parameters>
-      <or name="C"><pnt/><cplx/></or>
-      <real>k</real>
-      <or name="A"><pnt/><cplx/></or>
-    </parameters>
-    <returns><pnt/></returns>
+    <parameters>Pnt(C),Real(k),Pnt(A)</parameters>
     <description lang="en">Returns the point <i>B</i> such that <b>b</b> = <i>k</i>&sdot;<b>a</b> where <b>a</b> is the vector <i>CA</i> and <b>b</b> is the vector <i>CB</i>.</description>
     <description lang="fr">Renvoie le point <i>B</i> tel que <b>b</b> = <i>k</i>&sdot;<b>a</b> où <b>a</b> est le vecteur <i>CA</i> et <b>b</b> est le vecteur <i>CB</i>.</description>
     <description lang="de"></description>
@@ -16319,13 +16285,7 @@
   </entry>
   <entry type="command">
     <name>inversion</name>
-    <category>Geometry</category>
-    <parameters>
-      <or name="C"><pnt/><cplx/></or>
-      <real>k</real>
-      <or name="A"><pnt/><cplx/></or>
-    </parameters>
-    <returns><pnt/></returns>
+    <parameters>Pnt(C),Real(k),Pnt(A)</parameters>
     <description lang="en">Returns the point <i>B</i> on the half-line <i>CA</i> such that ∣<i>CA</i>∣&sdot;∣<i>CB</i>∣=<i>k</i>.</description>
     <description lang="fr">Renvoie le point <i>B</i> sur la demi-droite <i>CA</i> tel que ∣<i>CA</i>∣&sdot;∣<i>CB</i>∣=<i>k</i>.</description>
     <description lang="de"></description>
@@ -16341,9 +16301,7 @@
   </entry>
   <entry type="command">
     <name>hyp2exp</name>
-    <category>Rewriting</category>
-    <parameters><expr/></parameters>
-    <returns><expr/></returns>
+    <parameters>ExprHyperb</parameters>
     <description lang="en">Transforms the hyperbolic functions with the exponential function.</description>
     <description lang="fr">Transforme les fonctions hyperboliques en exponentielle.</description>
     <description lang="de"></description>
@@ -16356,20 +16314,14 @@
   </entry>
   <entry type="command">
     <name>hyperbola</name>
-    <category>Geometry</category>
-    <parameters>
-      <or name="F1"><pnt/><cplx/></or>
-      <or name="F2"><pnt/><cplx/></or>
-      <or><pnt>P</pnt><real>a</real></or>
-    </parameters>
-    <returns><geo/></returns>
-    <description lang="en">Draws the hyperbole with focal points <i>F</i><sub>1</sub> and <i>F</i><sub>2</sub> passing through <i>P</i> (or such that ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) or the hyperbole defined by the equation <i>p</i>(<i>x</i>, <i>y</i>) = 0 if <tt>deg</tt>(<i>p</i>) = 2.</description>
-    <description lang="fr">Dessine l'hyperbole de foyers <i>F</i><sub>1</sub> et <i>F</i><sub>2</sub> passant par <i>P</i> (ou ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) ou l'hyperbole définis par l'équation <i>p</i>(<i>x</i>, <i>y</i>) = 0 si <tt>deg</tt>(<i>p</i>) = 2.</description>
+    <parameters>Focus(F1),Focus(F2),(Pnt(P) or Real(a))</parameters>
+    <description lang="en">Draws the hyperbole with focal points <i>F</i><sub>1</sub> and <i>F</i><sub>2</sub> passing through <i>P</i> (or such that ∣<i>PF</i><sub>1</sub>∣+∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) or the hyperbole defined by the equation <i>p</i>(<i>x</i>, <i>y</i>) = 0 if deg(<i>p</i>) = 2.</description>
+    <description lang="fr">Dessine l'hyperbole de foyers <i>F</i><sub>1</sub> et <i>F</i><sub>2</sub> passant par <i>P</i> (ou ∣<i>PF</i><sub>1</sub>∣+∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) ou l'hyperbole définis par l'équation <i>p</i>(<i>x</i>, <i>y</i>) = 0 si deg(<i>p</i>) = 2.</description>
     <description lang="de"></description>
-    <description lang="es">Traza la hipérbola de focos <i>F</i><sub>1</sub> y <i>F</i><sub>2</sub> y pasa por <i>P</i> (o ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) o la hipérbola definidos por la ecuación <i>p</i>(<i>x</i>, <i>y</i>) = 0 si <tt>deg</tt>(<i>p</i>) = 2.</description>
-    <description lang="el">Σχεδιάζει την υπερβολή με εστίες <i>F</i><sub>1</sub> και <i>F</i><sub>2</sub> διερχόμενη από το <i>P</i> (ή ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) ή την υπερβολή που ορίζεται από την εξίσωση <i>p</i>(<i>x</i>, <i>y</i>) = 0 αν <tt>deg</tt>(<i>p</i>) = 2.</description>
+    <description lang="es">Traza la hipérbola de focos <i>F</i><sub>1</sub> y <i>F</i><sub>2</sub> y pasa por <i>P</i> (o ∣<i>PF</i><sub>1</sub>∣+∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) o la hipérbola definidos por la ecuación <i>p</i>(<i>x</i>, <i>y</i>) = 0 si deg(<i>p</i>) = 2.</description>
+    <description lang="el">Σχεδιάζει την υπερβολή με εστίες <i>F</i><sub>1</sub> και <i>F</i><sub>2</sub> διερχόμενη από το <i>P</i> (ή ∣<i>PF</i><sub>1</sub>∣+∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) ή την υπερβολή που ορίζεται από την εξίσωση <i>p</i>(<i>x</i>, <i>y</i>) = 0 αν deg(<i>p</i>) = 2.</description>
     <description lang="zh"></description>
-    <description lang="hr">Prikaz hiperbole s žarištima <i>F</i><sub>1</sub> i <i>F</i><sub>2</sub> koja prolazi točkom <i>P</i> (ili točkom <i>P</i> takvom da vrijedi ∣<i>PF</i><sub>1</sub>∣ + ∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) odnosno hiperbole zadane jednadžbom <i>p</i>(<i>x</i>, <i>y</i>) = 0 ako je <tt>deg</tt>(<i>p</i>) = 2.</description>
+    <description lang="hr">Prikaz hiperbole s fokalnim točkama <i>F</i><sub>1</sub> i <i>F</i><sub>2</sub> koja prolazi točkom <i>P</i> (ili točkom <i>P</i> takvom da vrijedi ∣<i>PF</i><sub>1</sub>∣+∣<i>PF</i><sub>2</sub>∣ = 2<i>a</i>) odnosno hiperbole zadane jednadžbom <i>p</i>(<i>x</i>, <i>y</i>) = 0 ako je deg(<i>p</i>) = 2.</description>
     <related>ellipse</related>
     <related>parabola</related>
     <example>hyperbola(-1,1,point(1+i))</example>
@@ -16377,7 +16329,7 @@
     <example>hyperbola(point(-1,0,0),point(1,0,0),point(1,1,1))</example>
     <example>hyperbola(x^2-y^2+y+2)</example>
   </entry>
-  <entry type="constant">
+  <entry type="command">
     <name>i</name>
     <description lang="en">The imaginary unit.</description>
     <description lang="fr">Racine carrée de &minus;1.</description>
@@ -16390,7 +16342,7 @@
     <related>e</related>
     <example>i*i</example>
   </entry>
-  <entry type="constant">
+  <entry type="command">
     <name>e</name>
     <description lang="en">Napier's constant (Euler's number).</description>
     <description lang="fr">Constante de Néper (nombre d'Euler).</description>
@@ -16403,7 +16355,7 @@
     <related>pi</related>
     <example>evalf(e)</example>
   </entry>
-  <entry type="constant">
+  <entry type="command">
     <name>pi Pi</name>
     <description lang="en">Number π (Ludolph's constant).</description>
     <description lang="fr">Le nombre π</description>
@@ -16421,23 +16373,18 @@
   </entry>
   <entry type="command">
     <name>ibasis</name>
-    <category>Algebra:Linear</category>
-    <parameters>
-      <lst elem="vect">U</lst>
-      <lst elem="vect">V</lst>
-    </parameters>
-    <returns><lst elem="vect"/></returns>
-    <description lang="en">Basis of the intersection of two vector spaces spanned by vectors from <b>U</b> resp. from <b>V</b>.</description>
+    <parameters>Lst(Vect,..,Vect),Lst(Vect,..,Vect)</parameters>
+    <description lang="en">Basis of the intersection of two vector spaces.</description>
     <description lang="fr">Base d'une intersection de deux espaces vectoriels.</description>
     <description lang="de"></description>
     <description lang="es">Base de la intersección de dos espacios vectoriales.</description>
     <description lang="el">Βάση της τομής 2 διανυσματικών χώρων.</description>
     <description lang="zh"></description>
-    <description lang="hr">Baza presjeka dvaju vektorskih prostora razapetih vektorima iz <b>U</b> odnosno iz <b>V</b>.</description>
+    <description lang="hr">Baza presjeka dvaju vektorskih prostora.</description>
     <related>basis</related>
     <example>ibasis([[1,0,0],[0,1,0]],[[1,1,1],[0,0,1]])</example>
   </entry>
-  <entry type="constant">
+  <entry type="command">
     <name>infinity</name>
     <description lang="en">Unsigned infinity.</description>
     <description lang="fr">Infini non signé.</description>
@@ -16449,7 +16396,7 @@
     <related>+infinity</related>
     <related>-infinity</related>
   </entry>
-  <entry type="constant">
+  <entry type="command">
     <name>+infinity inf</name>
     <description lang="en">Positive infinity.</description>
     <description lang="fr">Plus infini.</description>
@@ -16461,7 +16408,7 @@
     <related>infinity</related>
     <related>-infinity</related>
   </entry>
-  <entry type="constant">
+  <entry type="command">
     <name>-infinity</name>
     <description lang="en">Negative infinity.</description>
     <description lang="fr">Moins infini.</description>
@@ -16476,15 +16423,7 @@
   </entry>
   <entry type="command">
     <name>ibpdv</name>
-    <category>Calculus</category>
-    <parameters>
-      <expr>f(x)</expr>
-      <expr>v(x)</expr>
-      <var optional="true">x</var>
-      <real optional="true">a</real>
-      <real optional="true">b</real>
-    </parameters>
-    <returns><expr/></returns>
+    <parameters>Expr(f(x)),Expr(v(x)),[Var(x)],[Real(a)],[Real(b)]</parameters>
     <description lang="en">Integration by parts of <i>f</i>(<i>x</i>) = <i>u</i>(<i>x</i>)&sdot;<i>v</i>&prime;(<i>x</i>) with <i>f</i>(<i>x</i>) as first argument and <i>v</i>(<i>x</i>) (or 0 to integrate directly) as second argument. A variable of integration may be specified and also the calculus of the integrate (bounds <i>a</i> and <i>b</i>).</description>
     <description lang="fr">Intégration par parties de <i>f</i>(<i>x</i>) = <i>u</i>(<i>x</i>)&sdot;<i>v</i>&prime;(<i>x</i>) avec <i>f</i>(<i>x</i>) comme premier argument et <i>v</i>(<i>x</i>) (ou 0 pour intégrer directement) comme deuxième argument. On peut rajouter comme argument la variable et aussi les bornes <i>a</i> et <i>b</i> pour une intégrale définie.</description>
     <description lang="de"></description>
@@ -16502,15 +16441,7 @@
   </entry>
   <entry type="command">
     <name>ibpu</name>
-    <category>Calculus</category>
-    <parameters>
-      <expr>f(x)</expr>
-      <expr>u(x)</expr>
-      <var optional="true">x</var>
-      <real optional="true">a</real>
-      <real optional="true">b</real>
-    </parameters>
-    <returns><expr/></returns>
+    <parameters>Expr(f(x)),Expr(u(x)),[Var(x)],[Real(a)],[Real(b)]</parameters>
     <description lang="en">Integration by parts of <i>f</i>(<i>x</i>) = <i>u</i>(<i>x</i>)&sdot;<i>v</i>&prime;(<i>x</i>) with <i>f</i>(<i>x</i>) as first argument and <i>u</i>(<i>x</i>) (or 0 to integrate directly) as second argument. A variable of integration may be specified and also the calculus of the integrate (bounds <i>a</i> and <i>b</i>).</description>
     <description lang="fr">Intégration par parties de <i>f</i>(<i>x</i>) = <i>u</i>(<i>x</i>)&sdot;<i>v</i>&prime;(<i>x</i>) avec <i>f</i>(<i>x</i>) comme premier argument et <i>u</i>(<i>x</i>) (ou 0 pour intégrer directement) comme deuxième argument. On peut rajouter comme argument la variable et aussi les bornes <i>a</i> et <i>b</i> pour une intégrale définie.</description>
     <description lang="de"></description>
@@ -16528,19 +16459,14 @@
   </entry>
   <entry type="command">
     <name>ichinrem ichrem</name>
-    <category>Number Theory</category>
-    <parameters>
-      <lst elem="intg" explicit="true"><el>a</el><el>p</el></lst>
-      <lst elem="intg" explicit="true"><el>b</el><el>q</el></lst>
-    </parameters>
-    <returns><lst elem="intg"/></returns>
-    <description lang="en">Chinese remainders for integers. Returns the list [<i>c</i>, <i>l</i>] where <i>l</i> = LCM(<i>p</i>, <i>q</i>) and <i>c</i> is an integer such that <i>d</i> &equiv; <i>a</i> (mod <i>p</i>) and <i>d</i> &equiv; <i>b</i> (mod <i>q</i>) for all <i> d </i> = <i>c</i> + <i>k</i>&sdot;<i>l</i>, <i>k</i> &isin; ℤ.</description>
+    <parameters>LstIntg(a,p),LstIntg(b,q)</parameters>
+    <description lang="en">Chinese remainders for integers.</description>
     <description lang="fr">Restes chinois pour des entiers.</description>
     <description lang="de"></description>
     <description lang="es">Restos chinos de enteros.</description>
     <description lang="el">Κινέζικο υπόλοιπο για τους ακεραίους.</description>
     <description lang="zh">整数的中国余数。 取 [<i>a</i>, <i>p</i>] 和 [<i>b</i>, <i>q</i>] 两a列，返回一个双整数列 [<i>r</i>, <i>n</i>]，使 <i>x</i> = <i>r</i> mod <i>n</i>。在该例中，<i>x</i> 有 <i>x</i> = <i>a</i> mod <i>p</i>，并且 <i>x</i> = <i>b</i> mod <i>q</i>； 并有 <i>n</i> = <i>pq</i>。</description>
-    <description lang="hr">Lista [<i>c</i>, <i>l</i>] gdje je <i>l</i> = NZV(<i>p</i>, <i>q</i>) i <i>c</i> je cijeli broj takav da vrijedi <i>d</i> &equiv; <i>a</i> (mod <i>p</i>) i <i>d</i> &equiv; <i>b</i> (mod <i>q</i>) za sve <i> d </i> = <i>c</i> + <i>k</i>&sdot;<i>l</i>, <i>k</i> &isin; ℤ.</description>
+    <description lang="hr">Kineski ostaci za cijele brojeve.</description>
     <related>gcd</related>
     <related>fracmod</related>
     <related>chinrem</related>
@@ -16550,7 +16476,7 @@
     <example>ichinrem([2%7,3%5,1%9])</example>
     <example>ichinrem([(x+1)%2,(x+2)%3,(3*x-1)%5])</example>
   </entry>
-  <entry type="keyword">
+  <entry type="command">
     <name>if</name>
     <description lang="en">Test: <tt>if</tt> (condition) &hellip; <tt>else</tt> &hellip;</description>
     <description lang="fr">Test: <tt>if</tt> (condition) &hellip; <tt>else</tt> &hellip;</description>
@@ -16574,36 +16500,28 @@
   </entry>
   <entry type="command">
     <name>ifactor factoriser_entier</name>
-    <category>Number Theory</category>
-    <parameters><intg>n</intg></parameters>
-    <returns><expr/></returns>
+    <parameters>Intg(a)</parameters>
     <description lang="en">Factorization of an integer into prime factors.</description>
     <description lang="fr">Factorisation d'un entier en facteurs premiers.</description>
     <description lang="de"></description>
     <description lang="es">Factorización de un entero en factores primos.</description>
     <description lang="el">Παραγοντοποίηση ενός ακεραίου σε πρώτους παράγοντες.</description>
-    <description lang="zh">素数分解。  以乘积的形式返回整数 <i>n</i> 的素数分解。 是否可与 STO 一起使用？</description>
-    <description lang="hr">Rastav cijelog broja <i>n</i> na proste faktore.</description>
+    <description lang="zh">素数分解。  以乘积的形式返回整数 a 的素数分解。 是否可与 STO 一起使用？</description>
+    <description lang="hr">Rastav cijelog broja na proste faktore.</description>
     <related>factor</related>
     <example>ifactor(50)</example>
     <example>ifactor(123456789)</example>
   </entry>
   <entry type="command">
     <name>ilaplace invlaplace</name>
-    <category>Calculus</category>
-    <parameters>
-      <expr>r(s)</expr>
-      <var optional="true">s</var>
-      <var optional="true">t</var>
-    </parameters>
-    <returns><expr/></returns>
-    <description lang="en">Inverse Laplace transform <i>f</i>(<i>t</i>) of a rational fraction <i>r</i>(<i>s</i>).</description>
-    <description lang="fr">Transformée de Laplace inverse <i>f</i>(<i>t</i>) d'une fraction rationnelle <i>r</i>(<i>s</i>).</description>
+    <parameters>Expr,[Var],[IlapVar]</parameters>
+    <description lang="en">Inverse Laplace transform of a rational fraction.</description>
+    <description lang="fr">Transformée de Laplace inverse d'une fraction rationnelle.</description>
     <description lang="de"></description>
-    <description lang="es">Anti-Transformada de Laplace de una fracción racional <i>r</i>(<i>s</i>).</description>
+    <description lang="es">Anti-Transformada de Laplace de una fracción racional.</description>
     <description lang="el">Αντίστροφος μετασχηματισμός Laplace μιας ρητής παράστασης.</description>
     <description lang="zh"></description>
-    <description lang="hr">Inverzna Laplaceova transformacija (original) <i>f</i>(<i>t</i>) racionalnog izraza <i>r</i>(<i>s</i>).</description>
+    <description lang="hr">Inverzna Laplaceova transformacija za racionalne funkcije.</description>
     <related>laplace</related>
     <related>ztrans</related>
     <related>invztrans</related>
@@ -16614,16 +16532,14 @@
   </entry>
   <entry type="command">
     <name>im imag</name>
-    <category>Algebra:Elementary</category>
-    <parameters><cplx>z</cplx></parameters>
-    <returns><real/></returns>
-    <description lang="en">Returns the imaginary part of a complex number <i>z</i>.</description>
-    <description lang="fr">Partie imaginaire d'un nombre complexe <i>z</i>.</description>
+    <parameters>Cplx</parameters>
+    <description lang="en">Returns the imaginary part of a complex number.</description>
+    <description lang="fr">Partie imaginaire d'un nombre complexe.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve la parte imaginaria de un número complejo <i>z</i>.</description>
+    <description lang="es">Devuelve la parte imaginaria de un número complejo.</description>
     <description lang="el">Επιστρέφει το φανταστικό μέρος ενός μιγαδικού αριθμού.</description>
     <description lang="zh"></description>
-    <description lang="hr">Imaginarni dio kompleksnog broja <i>z</i>.</description>
+    <description lang="hr">Imaginarni dio kompleksnog broja.</description>
     <related>re</related>
     <related>conj</related>
     <example>im(1+2*i)</example>
@@ -16632,24 +16548,21 @@
   </entry>
   <entry type="command">
     <name>image</name>
-    <category>Algebra:Linear</category>
-    <parameters><mtrx>A</mtrx></parameters>
-    <returns><lst elem="vect"/></returns>
-    <description lang="en">Image of a linear application of matrix <b>A</b>.</description>
-    <description lang="fr">Image d'une application linéaire de matrice <b>A</b>.</description>
+    <parameters>Mtrx(M)</parameters>
+    <description lang="en">Image of a linear application of matrix <b>M</b>.</description>
+    <description lang="fr">Image d'une application linéaire de matrice <b>M</b>.</description>
     <description lang="de"></description>
-    <description lang="es">Imagen de una aplicación lineal de matriz <b>A</b>.</description>
-    <description lang="el">Εικόνα μιας γραμμικής εφαρμογής ενός πίνακα <b>A</b>.</description>
+    <description lang="es">Imagen de una aplicación lineal de matriz <b>M</b>.</description>
+    <description lang="el">Εικόνα μιας γραμμικής εφαρμογής ενός πίνακα <b>M</b>.</description>
     <description lang="zh"></description>
-    <description lang="hr">Slika linearnog operatora zadanog matricom <b>A</b>.</description>
+    <description lang="hr">Slika linearnog operatora zadanog matricom <b>M</b>.</description>
     <related>ker</related>
     <related>rref</related>
     <example>image([[1,2],[3,6]])</example>
     <example>image([[1,2,3],[1,3,6],[2,5,9]])</example>
   </entry>
-  <entry type="keyword">
+  <entry type="command">
     <name>in</name>
-    <category>Programming</category>
     <description lang="en">Used for iterating over the elements of a set or list.</description>
     <description lang="fr">Utilisé pour itérer sur des éléments d'un ensemble ou d'une liste ou d'une plage de valeurs.</description>
     <description lang="de"></description>
@@ -16668,7 +16581,6 @@
   </entry>
   <entry type="command">
     <name>incircle</name>
-    <category>Geometry</category>
     <parameters>(Pnt or Cplx),(Pnt or Cplx),(Pnt or Cplx)</parameters>
     <description lang="en">Draws the inscribed circle of the triangle <i>ABC</i>.</description>
     <description lang="fr">Trace le cercle inscrit au triangle <i>ABC</i>.</description>
@@ -18056,13 +17968,13 @@
     <parameters>Pnt(F),Pnt(A),[Pnt(P)]</parameters>
     <parameters>Pnt(xA+i*yA),Real(c)</parameters>
     <parameters>Expr(P(x,y))</parameters>
-    <description lang="en">Draws the parabola with focus <i>F</i> and top <i>A</i> (in the plane <i>ABP</i>), or the parabola of equation <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> and ∣<i>FA</i>∣ = <i>p</i>/2, or the parabola defined by <i>P</i>(<i>x</i>, <i>y</i>) = 0 if <tt>deg</tt>(<i>P</i>) = 2.</description>
-    <description lang="fr">Dessine la parabole avec foyer <i>F</i> et sommet <i>A</i> (dans le plan <i>ABP</i>) ou la parabole d'équation <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> et ∣<i>FA</i>∣ = <i>p</i>/2, ou la parabole définie par <i>P</i>(<i>x</i>, <i>y</i>) = 0 si <tt>deg</tt>(<i>P</i>) = 2.</description>
+    <description lang="en">Draws the parabola with focus <i>F</i> and top <i>A</i> (in the plane <i>ABP</i>), or the parabola of equation <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> and ∣<i>FA</i>∣ = <i>p</i>/2, or the parabola defined by <i>P</i>(<i>x</i>, <i>y</i>) = 0 if deg(<i>P</i>) = 2.</description>
+    <description lang="fr">Dessine la parabole avec foyer <i>F</i> et sommet <i>A</i> (dans le plan <i>ABP</i>) ou la parabole d'équation <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> et ∣<i>FA</i>∣ = <i>p</i>/2, ou la parabole définie par <i>P</i>(<i>x</i>, <i>y</i>) = 0 si deg(<i>P</i>) = 2.</description>
     <description lang="de"></description>
-    <description lang="es">Dibuja la parábola de foco <i>F</i> y vértice <i>A</i> (en el plan <i>ABP</i>), o la parábola de ecuación <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> y ∣<i>FA</i>∣ = <i>p</i>/2, o la parábola definida por <i>P</i>(<i>x</i>, <i>y</i>) = 0 si <tt>deg</tt>(<i>P</i>) = 2.</description>
-    <description lang="el">Σχεδιάζει την παραβολή με εστία <i>F</i> και κορυφή <i>A</i> (στο επίπεδο <i>ABP</i>), ή την παραβολή της εξίσωσης <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> και ∣<i>FA</i>∣ = <i>p</i>/2, ή την παραβολή που ορίζεται από <i>P</i>(<i>x</i>, <i>y</i>) = 0 αν <tt>deg</tt>(<i>P</i>) = 2.</description>
+    <description lang="es">Dibuja la parábola de foco <i>F</i> y vértice <i>A</i> (en el plan <i>ABP</i>), o la parábola de ecuación <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> y ∣<i>FA</i>∣ = <i>p</i>/2, o la parábola definida por <i>P</i>(<i>x</i>, <i>y</i>) = 0 si deg(<i>P</i>) = 2.</description>
+    <description lang="el">Σχεδιάζει την παραβολή με εστία <i>F</i> και κορυφή <i>A</i> (στο επίπεδο <i>ABP</i>), ή την παραβολή της εξίσωσης <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2;, <i>c</i> = 1/2<i>p</i> και ∣<i>FA</i>∣ = <i>p</i>/2, ή την παραβολή που ορίζεται από <i>P</i>(<i>x</i>, <i>y</i>) = 0 αν deg(<i>P</i>) = 2.</description>
     <description lang="zh"></description>
-    <description lang="hr">Prikaz parabole s fokusom <i>F</i> i tjemenom u točki <i>A</i> (u ravnini <i>ABP</i>), ili parabole zadane jednadžbom <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2; gdje je <i>c</i> = 1/2<i>p</i> i ∣<i>FA</i>∣ = <i>p</i>/2, ili parabole zadane jednadžbom <i>P</i>(<i>x</i>, <i>y</i>) = 0 ako je <tt>deg</tt>(<i>P</i>) = 2.</description>
+    <description lang="hr">Prikaz parabole s fokusom <i>F</i> i tjemenom u točki <i>A</i> (u ravnini <i>ABP</i>), ili parabole zadane jednadžbom <i>y</i> = <i>y<sub>A</sub></i>+<i>c</i>(<i>x</i>&minus;<i>x<sub>A</sub></i>)&sup2; gdje je <i>c</i> = 1/2<i>p</i> i ∣<i>FA</i>∣ = <i>p</i>/2, ili parabole zadane jednadžbom <i>P</i>(<i>x</i>, <i>y</i>) = 0 ako je deg(<i>P</i>) = 2.</description>
     <related>ellipse</related>
     <related>hyperbola</related>
     <example>parabola(point(0),point(2))</example>
@@ -21719,10 +21631,10 @@
     <name>propfrac propFrac</name>
     <parameters>Frac or RatFrac</parameters>
     <description lang="en">Simplifies and writes the (rational) fraction as a sum of integer (polynomial) and a proper (rational) fraction.</description>
-    <description lang="fr">Simplifie et écrit la fraction (ou fraction rationnelle) <i>A</i>/<i>B</i> sous la forme <i>Q</i> + <i>R</i>/<i>B</i> avec <i>R</i> &lt; <i>B</i> (ou <tt>deg</tt>(<i>R</i>) &lt; <tt>deg</tt>(<i>B</i>)).</description>
+    <description lang="fr">Simplifie et écrit la fraction (ou fraction rationnelle) <i>A</i>/<i>B</i> sous la forme <i>Q</i> + <i>R</i>/<i>B</i> avec <i>R</i> &lt; <i>B</i> (ou deg(<i>R</i>) &lt; deg(<i>B</i>)).</description>
     <description lang="de"></description>
-    <description lang="es">Simplifica y escribe la facción (o fracción racional) <i>A</i>/<i>B</i> como <i>Q</i> + <i>R</i>/<i>B</i> con <i>R</i> &lt; <i>B</i> (o <tt>deg</tt>(<i>R</i>) &lt; <tt>deg</tt>(<i>B</i>)).</description>
-    <description lang="el">Απλοποίηση και απόδοση του κλάσματος (ή ρητής συνάρτησης) <i>A</i>/<i>B</i> ως <i>Q</i> + <i>R</i>/<i>B</i> με <i>R</i> &lt; <i>B</i> (ή <tt>deg</tt>(<i>R</i>) &lt; <tt>deg</tt>(<i>B</i>)).</description>
+    <description lang="es">Simplifica y escribe la facción (o fracción racional) <i>A</i>/<i>B</i> como <i>Q</i> + <i>R</i>/<i>B</i> con <i>R</i> &lt; <i>B</i> (o deg(<i>R</i>) &lt; deg(<i>B</i>)).</description>
+    <description lang="el">Απλοποίηση και απόδοση του κλάσματος (ή ρητής συνάρτησης) <i>A</i>/<i>B</i> ως <i>Q</i> + <i>R</i>/<i>B</i> με <i>R</i> &lt; <i>B</i> (ή deg(<i>R</i>) &lt; deg(<i>B</i>)).</description>
     <description lang="zh"></description>
     <description lang="hr">Zapis pojednostavnjenog razlomka (racionalne funkcije) <i>A</i>/<i>B</i> u obliku zbroja cijelog broja (polinoma) <i>Q</i> i razlomka (prave racionalne funkcije) <i>R</i>/<i>B</i> tako da vrijedi <i>R</i> &lt; <i>B</i> (st(<i>R</i>) &lt; st(<i>B</i>)).</description>
     <related>partfrac</related>
