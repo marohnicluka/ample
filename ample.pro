@@ -34,7 +34,8 @@ SOURCES += \
     qgen.cpp \
     mathglyphs.cpp \
     mathdisplaywidget.cpp \
-    session.cpp
+    session.cpp \
+    commandindex.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     qgen.h \
     mathglyphs.h \
     mathdisplaywidget.h \
-    session.h
+    session.h \
+    commandindex.h
 
 FORMS += \
         mainwindow.ui

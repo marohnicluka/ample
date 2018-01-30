@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(giacProcessingFinished(const gen &,const QStringList &)));
     ui->messagesTextBrowser->setFont(QFont("FreeSerif", 12));
     ui->messagesTextBrowser->setText(QString("<html><style>radicand{text-decoration:overline;}</style>") +
-                                     "<body>Lista [<i>c</i>, <i>l</i>] gdje je <i>l</i> = LCM(<i>p</i>, <i>q</i>) i <i>c</i> je cijeli broj takav da vrijedi <i>d</i> &equiv; <i>a</i> (mod <i>p</i>) i <i>d</i> &equiv; <i>b</i> (mod <i>q</i>) za sve <i> d </i> = <i>c</i> + <i>k</i>&sdot;<i>l</i>, <i>k</i> &isin; ℤ.</body></html>");
+                                     "<body>Returns the (partial) derivative of <i>f</i>(<b>x</b>, <b>y</b>) (or the function <i>y</i> or the functions <i>y</i><sub>1</sub>, <i>y</i><sub>2</sub>, &hellip;) with dependent variable(s) <b>y</b> and subject to constraint <i>g</i>(<b>x</b>, <b>y</b>) = 0 (or constraints <i>g</i><sub>1</sub>(<b>x</b>, <b>y</b>) = 0, <i>g</i><sub>2</sub>(<b>x</b>, <b>y</b>) = 0, &hellip;), according to the given variables <i>x<sub>1</sub></i>, <i>x<sub>2</sub></i>, &hellip; in the given order, or all partial derivatives of order <i>k</i>, optionally evaluated at the point [<b>x</b><sub>0</sub>, <b>y</b><sub>0</sub>].</body></html>");
 }
 
 MainWindow::~MainWindow()
