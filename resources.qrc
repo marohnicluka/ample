@@ -48,5 +48,6 @@
         <file>icons/insert-image-symbolic.svg</file>
         <file>icons/insert-list-symbolic.svg</file>
         <file>icons/insert-table-symbolic.svg</file>
+        <file>doc/giachelp.xml</file>
     </qresource>
 </RCC>

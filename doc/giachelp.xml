@@ -2,13 +2,14 @@
 <!DOCTYPE commandindex
 [
    <!ELEMENT commandindex (entry+)>
-   <!ELEMENT entry (name,category,parameters*,description+,related*,example*)>
+   <!ELEMENT entry (name,category,parameters*,description+,reference*,related*,example*)>
    <!ATTLIST entry type (command | variable | keyword | option | constant | operator) #REQUIRED>
    <!ELEMENT name (#PCDATA)>
    <!ELEMENT category (#PCDATA)>
    <!ELEMENT parameters ANY>
    <!ATTLIST parameters ret CDATA #IMPLIED>
    <!ELEMENT description ANY>
+   <!ELEMENT reference ANY>
    <!ATTLIST description lang CDATA #REQUIRED>
    <!ELEMENT related (#PCDATA)>
    <!ELEMENT example (#PCDATA)>
@@ -17,22 +18,22 @@
    <!ELEMENT char (#PCDATA)>
    <!ELEMENT file (#PCDATA)>
    <!ELEMENT func (#PCDATA)>
-   <!ATTLIST func optional CDATA #IMPLIED>
+   <!ATTLIST func optional (true | false) "false">
    <!ELEMENT strng (#PCDATA)>
-   <!ATTLIST strng optional CDATA #IMPLIED>
+   <!ATTLIST strng optional (true | false) "false">
    <!ELEMENT bool (#PCDATA)>
-   <!ATTLIST bool optional CDATA #IMPLIED>
-   <!ELEMENT letter (#PCDATA)>
+   <!ATTLIST bool optional (true | false) "false">
    <!ELEMENT table (#PCDATA)>
    <!ELEMENT mtrx (#PCDATA)>
    <!ATTLIST mtrx elem CDATA #IMPLIED>
-   <!ATTLIST mtrx optional CDATA #IMPLIED>
+   <!ATTLIST mtrx optional (true | false) "false">
    <!ELEMENT expr (#PCDATA)>
    <!ATTLIST expr optional (true | false) "false">
    <!ELEMENT var (#PCDATA)>
    <!ATTLIST var optional (true | false) "false">
    <!ELEMENT quoted ANY>
-   <!ATTLIST quoted optional CDATA #IMPLIED>
+   <!ATTLIST quoted elem CDATA #IMPLIED>
+   <!ATTLIST quoted optional (true | false) "false">
    <!ELEMENT interval ANY>
    <!ATTLIST interval optional (true | false) "false">
    <!ELEMENT real (#PCDATA)>
@@ -84,11 +85,12 @@
    <!ELEMENT el ANY>
    <!ELEMENT etc EMPTY>
    <!ELEMENT null EMPTY>
-   <!ELEMENT undef EMPTY>
    <!ELEMENT zero EMPTY>
    <!ELEMENT i ANY>
    <!ELEMENT b ANY>
    <!ELEMENT tt (#PCDATA)>
+   <!ELEMENT a (#PCDATA)>
+   <!ATTLIST a href CDATA #REQUIRED>
    <!ELEMENT sup ANY>
    <!ELEMENT sub ANY>
    <!ELEMENT radicand ANY>
@@ -129,10 +131,11 @@
     <description lang="en">Smith normal form of a matrix with polynomial coefficients: returns matrices <b>U</b>,<b>D</b>,<b>V</b> such that <b>U</b> and <b>V</b> are invertible, <b>D</b> is diagonal, and <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b>.</description>
     <description lang="fr">Calcule la forme normale de Smith d'une matrice a coefficients polynomiaux : renvoie <b>U</b>,<b>D</b>,<b>V</b> tels que tels que <b>U</b> et <b>V</b> inversibles, <b>D</b> diagonale et <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b>.</description>
     <description lang="de">Gibt die Smith-Normalform der Koeffizientenmatrix an (<b>U</b>,<b>D</b>,<b>V</b> wobei <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b>)</description>
-    <description lang="es">Calcula la forma normal de Smith de una matriz a coeficientes polominos: devuelve <b>U</b>,<b>D</b>,<b>V</b> tales que <b>U</b> y <b>V</b> invertibles, <b>D</b> diagonal, y <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b>.</description>
+    <description lang="es">Calcula la forma normal de Smith de una matriz a coeficientes polinomiales: devuelve <b>U</b>,<b>D</b>,<b>V</b> tales que <b>U</b> y <b>V</b> invertibles, <b>D</b> diagonal, y <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b>.</description>
     <description lang="el">Υπολογίζει την κανονική μορφή Smith ενός πίνακα με συντελεστές πολυώνυμα : επιστρέφει <b>U</b>,<b>D</b>,<b>V</b> τέτοια ώστε <b>U</b> και <b>V</b> αντιστρέψιμα, <b>D</b> διαγώνιος, και <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b>.</description>
     <description lang="zh"></description>
     <description lang="hr">Matrice <b>U</b>, <b>D</b> i <b>V</b> takve da su <b>U</b> i <b>V</b> invertibilne, <b>D</b> dijagonalna te vrijedi <b>U</b>&sdot;<b>A</b>&sdot;<b>V</b>=<b>D</b> (Smithova normalna forma).</description>
+    <reference><a href="https://www.encyclopediaofmath.org/index.php/Normal_form_(for_matrices)#The_Smith_normal_form.">The Smith normal form</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>hermite</related>
     <related>ismith</related>
     <related>ihermite</related>
@@ -155,6 +158,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Wilf-Zeilbergerov certifikat za identitet <b>&sum;</b><sub>k</sub><i>U</i>(<i>n</i>,<i>k</i>) = <i>r</i>.</description>
+    <reference><a href="https://en.wikipedia.org/wiki/Wilf%E2%80%93Zeilberger_pair">Wilf–Zeilberger pair</a>. <i>Wikipedia</i>, the free encyclopedia.</reference>
     <related>sum</related>
     <example>wz_certificate((-1)^k*comb(n,k)*comb(2k,k)*4^(n-k),comb(2n,n),n,k);</example>
     <example>wz_certificate((-1)^k*comb(n,k)/comb(k+a,k),a/(n+a),n,k);</example>
@@ -211,6 +215,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Rješenje sustava linearnih jednadžbi <b>A</b>&sdot;<b>x</b>=<b>b</b> dobivenog Gauss-Seidelovom metodom (s zadanom vrijednosti <i>ω</i> = 1) ili metodom relaksacije, s najvećom dopustivom greškom <i>ε</i> i brojem iteracija ne većim od <i>n</i>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Seidel_method">Seidel method</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>jacobi_linsolve</related>
     <related>linsolve</related>
     <example>a:=[[100,2],[2,100]];gauss_seidel_linsolve(a,[0,1],1e-12);</example>
@@ -249,6 +254,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Vrijednost Besselove funkcije druge vrste <i>Y</i><sub>p</sub>(<i>x</i>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Bessel_function_of_the_second_kind">Neumann function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>BesselY</related>
     <related>BesselJ</related>
     <related>besselJ</related>
@@ -269,6 +275,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Vrijednost Besselove funkcije druge vrste <i>Y</i><sub>p</sub>(<i>x</i>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Bessel_function_of_the_second_kind">Neumann function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>besselY</related>
     <related>BesselJ</related>
     <related>besselJ</related>
@@ -289,6 +296,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Vrijednost Besselove funkcije prve vrste <i>J</i><sub>p</sub>(<i>x</i>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Bessel_functions">Bessel functions</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>BesselJ</related>
     <related>BesselY</related>
     <related>besselY</related>
@@ -309,6 +317,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Vrijednost Besselove funkcije prve vrste <i>J</i><sub>p</sub>(<i>x</i>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Bessel_functions">Bessel functions</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>besselJ</related>
     <related>BesselY</related>
     <related>besselY</related>
@@ -398,6 +407,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Izračunava <i>l</i><sub>&infin;</sub>-normu matrice.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Norm">Norm</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>l1norm</related>
     <related>l2norm</related>
     <related>matrix_norm</related>
@@ -415,6 +425,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Frobeniusova norma (<b>&sum;</b>∣<i>a</i><sub><i>ij</i></sub>∣&sup2;)<sup>&minus;1/2</sup> matrice <b>A</b>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Frobenius_matrix_norm">Frobenius matrix norm</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>l1norm</related>
     <related>l2 norm</related>
     <related>linfnorm</related>
@@ -471,6 +482,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Broj uvjetovanosti matrice: za <i>t</i> = 1 (zadana vrijednost) koristi se <i>l</i><sub>1</sub>-norma, za <i>t</i> = 2 <i>l</i><sub>2</sub>-norma a za <i>t</i> = <tt>inf</tt> <i>l</i><sub>&infin;</sub>-norma.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Condition_number">Condition number</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>SVL</related>
     <example>COND([[1,2],[1,4]])</example>
     <example>COND([[1,2],[1,4]],1)</example>
@@ -491,6 +503,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Bezierova krivulja određena danim kontrolnim točkama (za prikaz krivulje treba navesti parametar <tt>plot</tt> kao drugi argument).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Bezier_curve">Bezier curve</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>parameq</related>
     <example>bezier(1,1+i,2+i,3-i,plot)</example>
     <example>bezier(point([0,0,0]),point([1,1,0]),point([0,1,1]),plot)</example>
@@ -527,6 +540,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr"><i>χ</i>&sup2; test: usporedba dvaju ili više statističkih nizova <b>s</b><sub>1</sub>, <b>s</b><sub>2</sub>, &hellip; odnosno statističkog niza <b>s</b> i multinomijalne razdiobe (odnosno razdiobe dane funkcijom <i>f</i> i parametrima <b>p</b>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Chi-squared_test">Chi-squared test</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>normalt</related>
     <related>studentt</related>
     <related>kolmogorovt</related>
@@ -671,6 +685,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα της πιθανότητας της κατανομής uniform.</description>
     <description lang="zh">uniform（或 uniform）概率密度函数。 </description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s jednolikom razdiobom na segmentu [<i>a</i>,<i>b</i>] u točki <i>x</i>.</description>
+    <reference><a href="https://www.encyclopediaofmath.org/index.php/Uniform_distribution#The_uniform_distribution_on_an_interval_of_the_line_.28the_rectangular_distribution.29.">Uniform distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>uniform_cdf</related>
     <related>uniform_icdf</related>
     <related>randvector</related>
@@ -696,6 +711,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαίας μεταβλητής uniform να είναι μικρότερη του <i>x</i><sub>0</sub>.</description>
     <description lang="zh">累积 <tt>uniform</tt> 分布函数。  返回 <tt>uniform</tt> 概率密度函数在 <i>x</i><sub>0</sub> 点的下限尾部概率。</description>
     <description lang="hr">Vjerojatnost da slučajna varijabla s jednolikom razdiobom na segmentu [<i>a</i>,<i>b</i>] ima vrijednost manju od <i>x</i><sub>0</sub> [ili između <i>x</i><sub>0</sub> i <i>y</i><sub>0</sub>].</description>
+    <reference><a href="https://www.encyclopediaofmath.org/index.php/Uniform_distribution#The_uniform_distribution_on_an_interval_of_the_line_.28the_rectangular_distribution.29.">Uniform distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>uniformd</related>
     <related>uniform_icdf</related>
     <example>uniform_cdf(3.2,5.7,4.4)</example>
@@ -716,6 +732,7 @@
     <description lang="el">Επιστρέφει h τέτοιο ώστε η πιθανότητα μια τυχαία μεταβλητή uniform να είναι μικρότερη του h είναι p (0&le;<i>p</i>&le;1).</description>
     <description lang="zh">累积 <tt>uniform</tt> 分布函数的反函数。</description>
     <description lang="hr">Vrijednost <i>h</i> za koju je vjerojatnost da slučajna varijabla s jednolikom razdiobom na [<i>a</i>,<i>b</i>] ima vrijednost manju od <i>h</i> jednaka <i>p</i>, gdje je 0&le;<i>p</i>&le;1.</description>
+    <reference><a href="https://www.encyclopediaofmath.org/index.php/Uniform_distribution#The_uniform_distribution_on_an_interval_of_the_line_.28the_rectangular_distribution.29.">Uniform distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>uniform_cdf</related>
     <related>uniformd</related>
     <example>uniform_icdf(4.2,10.3,0.95)</example>
@@ -735,6 +752,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα της πιθανότητας της κατανομής exponential.</description>
     <description lang="zh">exponential（或 exponential）概率密度函数。</description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s ekponencijalnom razdiobom s parametrom <tt>lambda</tt> u točki <i>x</i>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Exponential_distribution">Exponential distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>exponential_cdf</related>
     <related>exponential_icdf</related>
     <related>randvector</related>
@@ -759,6 +777,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαίας μεταβλητής exponential να είναι μικρότερη του <i>x</i><sub>0</sub>.</description>
     <description lang="zh">累积 exponential 分布函数。  返回 exponential 概率密度函数在 <i>x</i><sub>0</sub> 点的下限尾部概率。</description>
     <description lang="hr">Vjerojatnost da slučajna varijabla s eksponencijalnom razdiobom s parametrom <tt>lambda</tt> ima vrijednost manju od <i>x</i><sub>0</sub> (ili između <i>x</i><sub>0</sub> and <i>y</i><sub>0</sub>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Exponential_distribution">Exponential distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>exponentiald</related>
     <related>exponential_icdf</related>
     <example>exponential_cdf(4.2,2.1)</example>
@@ -778,6 +797,7 @@
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια τυχαία μεταβλητή exponential να είναι μικρότερη του <i>h</i> είναι <i>p</i> (0&le;<i>p</i>&le;1).</description>
     <description lang="zh">累积 exponential 分布函数的反函数。</description>
     <description lang="hr">Vrijednost <i>h</i> takva da je vjerojatnost da slučajna varijabla s eksponencijalnom razdiobom s parametrom <i>λ</i> ima vrijednost manju od <i>h</i> jednaka <i>p</i>, gdje je 0&le;<i>p</i>&le;1.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Exponential_distribution">Exponential distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>exponential_cdf</related>
     <related>exponentiald</related>
     <example>exponential_icdf(4.2,0.95)</example>
@@ -797,6 +817,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα της πιθανότητας της κατανομής geometric (0&lt;<i>p</i>&lt;1).</description>
     <description lang="zh">geometric（或 geometric）概率密度函数 (0&lt;<i>p</i>&lt;1)。</description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti s geometrijskom razdiobom s parametrom <i>p</i> u točki <i>k</i>, gdje je 0&lt;<i>p</i>&lt;1.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Geometric_distribution">Geometric distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>geometric_cdf</related>
     <related>geometric_icdf</related>
     <related>randvector</related>
@@ -821,6 +842,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαίας μεταβλητής geometric να είναι μικρότερη του <i>k</i>.</description>
     <description lang="zh">累积 geometric 分布函数。  返回 geometric 概率密度函数在 k 点的下限尾部概率。</description>
     <description lang="hr">Vjerojatnost da slučajna varijabla s geometrijskom razdiobom s parametrom <i>p</i>, gdje je 0&lt;<i>p</i>&lt;1, ima vrijednost manju od <i>k</i> (ili između <i>k</i> i <i>m</i>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Geometric_distribution">Geometric distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>geometric</related>
     <related>geometric_icdf</related>
     <example>geometric_cdf(0.3,4)</example>
@@ -840,6 +862,7 @@
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια τυχαία μεταβλητή geometric να είναι μικρότερη του <i>h</i> είναι <i>q</i> (0&le;<i>q</i>&le;1).</description>
     <description lang="zh">累积 geometric 分布函数的反函数。</description>
     <description lang="hr">Vrijednost <i>h</i> takva da je vjerojatnost da slučajna varijabla s geometrijskom razdiobom s parametrom <i>p</i> (0&lt;<i>p</i>&lt;1) ima vrijednost manju od <i>h</i> jednaka <i>q</i>, gdje je 0&le;<i>q</i>&le;1.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Geometric_distribution">Geometric distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>geometric_cdf</related>
     <related>geometric</related>
     <example>geometric_icdf(0.3,0.95)</example>
@@ -860,6 +883,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα της πιθανότητας της κατανομής Weibull.</description>
     <description lang="zh">Weibull（或 Weibull）概率密度函数。</description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s Weibullovom razdiobom s parametrima <i>k</i>, <i>λ</i> i <i>θ</i> u točki <i>x</i> (zadano je <i>θ</i>=0).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Weibull_distribution">Weibull distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>weibull_cdf</related>
     <related>weibull_icdf</related>
     <example>weibull(2.1,1.2,1.3)</example>
@@ -882,6 +906,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαίας μεταβλητής Weibull να είναι μικρότερη του <i>x</i><sub>0</sub>.</description>
     <description lang="zh">累积 Weibull 分布函数。  返回 Weibull 概率密度函数在。</description>
     <description lang="hr">Vjerojatnost da slučajna varijabla s Weibullovom distribucijom s parametrima <i>k</i>, <i>λ</i> i <i>θ</i> ima vrijednost manju od <i>x</i><sub>0</sub>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Weibull_distribution">Weibull distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>weibulld</related>
     <related>weibull_icdf</related>
     <example>weibull_cdf(2.1,1.2,1.9)</example>
@@ -906,6 +931,7 @@
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια τυχαία μεταβλητή Weibull να είναι μικρότερη του <i>h</i> είναι <i>p</i> (0&le;<i>p</i>&le;1).</description>
     <description lang="zh">累积 Weibull 分布函数的反函数。</description>
     <description lang="hr">Vrijednost <i>h</i> takva da je vjerojatnost da slučajna varijabla s Weibullovom razdiobom s parametrom <i>k</i>, <i>λ</i> i <i>θ</i> ima vrijednost manju od <i>h</i> jednaka <i>p</i>, gdje je 0&le;<i>p</i>&le;1).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Weibull_distribution">Weibull distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>weibull_cdf</related>
     <related>weibull</related>
     <example>weibull_icdf(4.2,1.3,0.0,0.95)</example>
@@ -926,6 +952,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα της πιθανότητας της κατανομής Cauchy.</description>
     <description lang="zh">Cauchy（或 Cauchy）概率密度函数。</description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable sa Cauchyevom razdiobom s parametrima <i>x</i><sub>0</sub> and <i>a</i>&gt;0 (zadane vrijednosti su <i>x</i><sub>0</sub>=0 and <i>a</i>=1) u točki <i>x</i>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Cauchy_distribution">Cauchy distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>cauchy_cdf</related>
     <related>cauchy_icdf</related>
     <example>cauchy(0.0,2.0,1.0)</example>
@@ -946,6 +973,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μια τυχαίας μεταβλητής Cauchy να είναι μικρότερη του <i>x</i>.</description>
     <description lang="zh">累积 Cauchy 分布函数。  返回 Cauchy 概率密度函数在 <i>x</i> 点的下限尾部概率。</description>
     <description lang="hr">Vjerojatnost da slučajna varijabla sa Cauchyevom razdiobom s parametrima <i>x</i><sub>0</sub> i <i>a</i>&gt;0 ima vrijednost manju od <i>x</i> (ili između <i>x</i> i <i>y</i>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Cauchy_distribution">Cauchy distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>cauchyd</related>
     <related>cauchy_icdf</related>
     <example>cauchy_cdf(0.0,2.0,2.1)</example>
@@ -966,6 +994,7 @@
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια τυχαία μεταβλητή Cauchy να είναι μικρότερη του <i>h</i> είναι <i>p</i> (0&le;<i>p</i>&le;1).</description>
     <description lang="zh">累积 Cauchy 分布函数的反函数。</description>
     <description lang="hr">Vrijednost <i>h</i> takva da je vjerojatnost da slučajna varijabla s Cauchyevom razdiobom s parametrima <i>x</i><sub>0</sub> i <i>a</i> ima vrijednost manju od <i>h</i> jednaka <i>p</i>, gdje je 0&le;<i>p</i>&le;1.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Cauchy_distribution">Cauchy distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>cauchy_cdf</related>
     <related>cauchy</related>
     <example>cauchy_icdf(0.0,2.0,0.95)</example>
@@ -984,6 +1013,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Kumulativna funkcija <i>f</i> razdiobe vjerojatnosti s parametrima <b>p</b>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Distribution_function">Distribution function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>icdf</related>
     <related>binomial_cdf</related>
     <related>normald_cdf</related>
@@ -1007,6 +1037,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Inverz kumulativne funkcije <i>f</i> razdiobe vjerojatnosti s parametrima <b>p</b>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Distribution_function">Distribution function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>cdf</related>
     <related>binomial_icdf</related>
     <related>normald_icdf</related>
@@ -1027,6 +1058,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr"></description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Markov_chain">Markov chain</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>randmarkov</related>
     <related>plotproba</related>
     <example>markov([[0,0,1/2,0,1/2],[0,0,1,0,0],[1/4,1/4,0,1/4,1/4],[0,0,1/2,0,1/2],[0,0,0,0,1]])</example>
@@ -1046,6 +1078,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr"></description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Markov_chain">Markov chain</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>markov</related>
     <related>plotproba</related>
     <example>randmarkov([[0,0,1/2,0,1/2],[0,0,1,0,0],[1/4,1/4,0,1/4,1/4],[0,0,1/2,0,1/2],[0,0,0,0,1]],2,20)</example>
@@ -1067,6 +1100,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Rješenje sustava linearnih jednadžbi <b>A</b>&sdot;<b>x</b>=<b>y</b> dobiveno metodom konjugiranih gradijenata s točnosti <i>ε</i>, gdje je <b>A</b> simetrična pozitivno definitna matrica a <b>x</b><sub>0</sub> početno približno rješenje.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Conjugate_gradients,_method_of">Conjugate gradients, method of</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>linsolve</related>
     <example>conjugate_gradient([[2,1],[1,5]],[1,0])</example>
     <example>conjugate_gradient([[4,1+i],[1-i,5]],[1,0])</example>
@@ -1087,6 +1121,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Funkcija generiranja momenata za razdiobu vjerojatnosti danu funkcijom <i>f</i> (normalnu, binomnu, Poissonovu, beta odnosno gamma razdiobu) s parametrima <b>p</b>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Moment">Moment</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <example>mgf(normald,1,0)</example>
     <example>mgf(poisson,5)</example>
     <example>mgf(binomial,n,p)</example>
@@ -1102,6 +1137,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Kolmogorov-Smirnov razdioba vjerojatnosti, 1&minus;2&sdot;<b>&sum;</b><sub><i>k</i>&ge;1</sub>(&minus;1)<sup><i>k</i>&minus;1</sup>e<sup>&minus;<i>k</i>&sup2;<i>x</i>&sup2;</sup>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Kolmogorov-Smirnov_test">Kolmogorov-Smirnov test</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <example>kolmogorovd(1.36)</example>
   </entry>
   <entry type="command">
@@ -1118,6 +1154,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Kolmogorov-Smirnov test usporedbe dvaju uzoraka <b>u</b> i <b>v</b> međusobno (kada njihova razdioba vjerojatnosti nije poznata) odnosno uzorka <b>u</b> i razdiobe vjerojatnosti dane funkcijom <i>f</i>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Kolmogorov-Smirnov_test">Kolmogorov-Smirnov test</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>chisquaret</related>
     <related>normalt</related>
     <related>studentt</related>
@@ -1141,6 +1178,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα πιθανότητας της Gamma κατανομής <i>x</i><sup><i>a</i>&minus;1</sup>e<sup>&minus;<i>bx</i></sup><i>b<sup>a</sup></i>&sdot;Γ(<i>a</i>)<sup>&minus;1</sup>.</description>
     <description lang="zh">=<i>x</i><sup><i>a</i>&minus;1</sup>e<sup>&minus;<i>bx</i></sup><i>b<sup>a</sup></i>&sdot;Γ(<i>a</i>)<sup>&minus;1</sup></description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s gama razdiobom <i>x</i><sup><i>a</i>&minus;1</sup>e<sup>&minus;<i>bx</i></sup><i>b<sup>a</sup></i>&sdot;Γ(<i>a</i>)<sup>&minus;1</sup>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Gamma-distribution">Gamma-distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>gammad_cdf;</related>
     <related>gammad_icdf</related>
     <example>gammad(2.2,1.5,0.8)</example>
@@ -1161,6 +1199,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μιας τυχαίας μεταβλητής Gamma κατανομής να είναι μικρότερη από <i>x</i><sub>0</sub>.</description>
     <description lang="zh"></description>
     <description lang="hr">Vjerojatnost da slučajna varijabla s gama razdiobom s parametrima <i>a</i> i <i>b</i> ima vrijednost manju od <i>x</i><sub>0</sub> (ili između <i>x</i><sub>0</sub> i <i>y</i><sub>0</sub>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Gamma-distribution">Gamma-distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>gammad</related>
     <related>gammad_icdf</related>
     <example>gammad_cdf(2,1,2.96)</example>
@@ -1181,6 +1220,7 @@
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια Gamma τυχαία μεταβλητή να είναι μικρότερη του <i>h</i> είναι <i>p</i> (0&le;<i>p</i>&le;1).</description>
     <description lang="zh"></description>
     <description lang="hr">Vrijednost <i>h</i> takva da je vjerojatnost da slučajna varijabla s gama razdiobom s parametrima <i>a</i> i <i>b</i> ima vrijednost manju od <i>h</i> jednaka <i>p</i>, gdje je 0&le;<i>p</i>&le;1.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Gamma-distribution">Gamma-distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>gammad_cdf</related>
     <related>gammad</related>
     <example>gammad_icdf(2,1,0.95)</example>
@@ -1201,6 +1241,7 @@
     <description lang="el">Επιστρέφει την πυκνότητα πιθανότητας της Beta κατανομής Γ(<i>a</i>+<i>b</i>)<i>x</i><sup><i>a</i>&minus;1</sup>(1&minus;<i>x</i>)<sup><i>b</i>&minus;1</sup>Γ(<i>a</i>)<sup>&minus;1</sup>Γ(<i>b</i>)<sup>&minus;1</sup>.</description>
     <description lang="zh">=Γ(<i>a</i>+<i>b</i>)<i>x</i><sup><i>a</i>&minus;1</sup>(1&minus;<i>x</i>)<sup><i>b</i>&minus;1</sup>Γ(<i>a</i>)<sup>&minus;1</sup>Γ(<i>b</i>)<sup>&minus;1</sup></description>
     <description lang="hr">Vrijednost funkcije gustoće vjerojatnosti slučajne varijable s beta razdiobom Γ(<i>a</i>+<i>b</i>)<i>x</i><sup><i>a</i>&minus;1</sup>(1&minus;<i>x</i>)<sup><i>b</i>&minus;1</sup>Γ(<i>a</i>)<sup>&minus;1</sup>Γ(<i>b</i>)<sup>&minus;1</sup>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Beta-distribution">Beta-distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>betad_cdf</related>
     <related>betad_icdf</related>
     <example>betad(2.2,1.5,0.8)</example>
@@ -1221,6 +1262,7 @@
     <description lang="el">Επιστρέφει την πιθανότητα μιας τυχαίας μεταβλητής Beta κατανομής να είναι μικρότερη από <i>x</i><sub>0</sub>.</description>
     <description lang="zh"></description>
     <description lang="hr">Vjerojatnost da slučajna varijabla s beta razdiobom s parametrima <i>a</i> i <i>b</i> ima vrijednost manju od <i>x</i><sub>0</sub> [ili između <i>x</i><sub>0</sub> i <i>y</i><sub>0</sub>].</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Beta-distribution">Beta-distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>betad</related>
     <related>betad_icdf</related>
     <example>betad_cdf(2,1,0.2)</example>
@@ -1241,6 +1283,7 @@
     <description lang="el">Επιστρέφει <i>h</i> τέτοιο ώστε η πιθανότητα μια Beta τυχαία μεταβλητή να είναι μικρότερη του <i>h</i> είναι <i>p</i> (0&le;<i>p</i>&le;1).</description>
     <description lang="zh"></description>
     <description lang="hr">Vrijednost <i>h</i> takva da je vjerojatnost da slučajna varijabla s beta razdiobom s parametrima <i>a</i> i <i>b</i> ima vrijednost manju od <i>h</i> jednaka <i>p</i>, pri čemu je 0&le;<i>p</i>&le;1.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Beta-distribution">Beta-distribution</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>betad_cdf</related>
     <related>betad</related>
     <example>betad_icdf(2,1,0.95)</example>
@@ -1312,6 +1355,7 @@
     <description lang="el">Συνάρτηση που είναι 0 εάν <i>x</i>&lt;0 και 1 εάν <i>x</i>&ge;0.</description>
     <description lang="zh"></description>
     <description lang="hr">Heavisideova funkcija, koja je jednaka 0 za <i>x</i>&lt;0 odnosno 1 za <i>x</i>&ge;0.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Heaviside_function">Heaviside function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>Dirac</related>
     <related>laplace</related>
     <example>Heaviside(1)</example>
@@ -1329,6 +1373,7 @@
     <description lang="el">Συνάρτηση παράγωγος της συνάρτησης Heaviside.</description>
     <description lang="zh"></description>
     <description lang="hr">Prva derivacija Heavisideove funkcije (Diracova funkcija).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Dirac_delta-function">Dirac delta-function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>Heaviside</related>
     <example>int(Dirac(x)*(x-1)^2,x,-1,2)</example>
   </entry>
@@ -1343,6 +1388,7 @@
     <description lang="el">Επιστρέφει την λίστα του μέτρου και του ορίσματος της προσθήκης ενός σημείου (2-Δ) ή ενός μιγαδικού αριθμού ή μιας λίστας καρτεσιανών συντεταγμένων.</description>
     <description lang="zh"></description>
     <description lang="hr">Lista koja sadrži modul i argument (tj. polarne koordinate) ravninske točke, odnosno kompleksnog broja.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Polar_coordinates">Polar coordinates</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>abscissapoint</related>
     <related>ordinate</related>
     <related>rectangular_coordinates</related>
@@ -1384,6 +1430,7 @@
     <description lang="el">Επιστρέφει το σημείο (2-Δ) με πολικές συντεταγμένες <i>r</i> και <i>t</i> (προσθήκης <i>r</i>&sdot;e<sup>i<i>t</i></sup>).</description>
     <description lang="zh"></description>
     <description lang="hr">Ravninska točka zadana polarnim koordinatama <i>r</i> i <i>t</i>, tj. točka s položajem <i>r</i>&sdot;e<sup>i<i>t</i></sup>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Polar_coordinates">Polar coordinates</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>abscissa</related>
     <related>ordinate</related>
     <related>polar_coordinates</related>
@@ -1406,6 +1453,7 @@
     <description lang="el">Ορισμός διανύσματος <i>AB</i> με δύο σημεία ή με ένα ζευγάρι συντεταγμένων ή δύο προσθήκες (για 2D) ή με ένα σημείο και ένα διάνυσμα ή με ένα σημείο (το άκρο του και την αρχική του θέση να είναι 0).</description>
     <description lang="zh">向量。</description>
     <description lang="hr">Vektor <i>AB</i>, odnosno usmjerena dužina kojoj je hvatište u <i>A</i> a vrh u <i>B</i>. Ako je dana jedna točka, dobiva se radijvektor te točke. Za zadavanje vektora u ℝ<sup><i>n</i></sup> argumenti trebaju biti liste koordinata početne i krajnje točke, redom.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Vector">Vector</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>coordinates</related>
     <related>segment</related>
     <example>vecteur(1+i)</example>
@@ -1433,6 +1481,7 @@
     <description lang="el">Επιστρέφει το ολοκληρωτικό υπόλοιπο ως προς <i>a</i> μιας παράστασης <i>f</i>(<i>z</i>).</description>
     <description lang="zh"></description>
     <description lang="hr">Reziduum Res<sub><i>a</i></sub>(<i>f</i>) funkcije <i>f</i> varijable <i>z</i> u singularitetu <i>a</i>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Residue_of_an_analytic_function">Residue of an analytic function</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>series</related>
     <example>residue(1/z,z,0)</example>
     <example>residue(5/z,z=0)</example>
@@ -1760,6 +1809,7 @@
     <description lang="el">Επιστρέφει ένα πάνω φράγμα στις τιμές των θετικών ριζών του <i>P</i>. Χρησιμοποιείται η μέθοδος Local Max Quadratic (LMQ) των Akritas-Strzebonski-Vigklas.</description>
     <description lang="zh"></description>
     <description lang="hr">Izračun gornje ograde za pozitivne nultočke polinoma <i>P</i> pomoću Akritas-Strzebonski-Vigklasove LMQ metode.</description>
+    <reference>Linear and Quadratic Complexity Bounds on the Values of the Positive Roots of Polynomials. <i>Journal of Universal Computer Science</i>, vol. 15/3 (2009), pp. 523–537.</reference>
     <related>poslbdLMQ</related>
     <related>VAS_positive</related>
     <related>realroot</related>
@@ -1776,6 +1826,7 @@
     <description lang="el">Επιστρέφει ένα κάτω φράγμα στις τιμές των θετικών ριζών του <i>P</i>. Χρησιμοποιείται η μέθοδος Local Max Quadratic (LMQ) των Akritas-Strzebonski-Vigklas.</description>
     <description lang="zh"></description>
     <description lang="hr">Izračun donje ograde za pozitivne nultočke polinoma <i>P</i> pomoću Akritas-Strzebonski-Vigklasove LMQ metode.</description>
+    <reference>Linear and Quadratic Complexity Bounds on the Values of the Positive Roots of Polynomials. <i>Journal of Universal Computer Science</i>, vol. 15/3 (2009), pp. 523–537.</reference>
     <related>posubLMQ</related>
     <related>VAS_positive</related>
     <related>realroot</related>
@@ -1792,6 +1843,7 @@
     <description lang="el">Επιστρέφει μια λίστα διαστημάτων που περιέχουν τις θετικές ρίζες του <i>P</i>. Χρησιμοποιείται η μέθοδος VAS των Vincent-Akritas-Strzebonski.</description>
     <description lang="zh"></description>
     <description lang="hr">Lista intervala koji sadrže pozitivne nultočke polinoma <i>P</i>, dobivenih Vincent-Akritas-Strzebonski VAS metodom.</description>
+    <reference>Linear and Quadratic Complexity Bounds on the Values of the Positive Roots of Polynomials. <i>Journal of Universal Computer Science</i>, vol. 15/3 (2009), pp. 523–537.</reference>
     <related>poslbdLMQ</related>
     <related>posubLMQ</related>
     <related>VAS</related>
@@ -1809,6 +1861,7 @@
     <description lang="el">Επιστρέφει μια λίστα διαστημάτων που περιέχουν τις πραγματικές ρίζες του <i>P</i>. Χρησιμοποιείται η μέθοδος VAS των Vincent-Akritas-Strzebonski.</description>
     <description lang="zh"></description>
     <description lang="hr">Lista intervala koji sadrže realne korijene polinoma <i>P</i>, dobivenih Vincent-Akritas-Strzebonski VAS metodom.</description>
+    <reference>Linear and Quadratic Complexity Bounds on the Values of the Positive Roots of Polynomials. <i>Journal of Universal Computer Science</i>, vol. 15/3 (2009), pp. 523–537.</reference>
     <related>VAS_positive</related>
     <related>sturmab</related>
     <related>realroot</related>
@@ -1831,6 +1884,8 @@
     <description lang="el">Επιστρέφει μια λίστα διαστημάτων μήκους όχι μεγαλύτερο από το <i>l</i> που περιέχουν τις πραγματικές ρίζες του <i>P</i> μέσα στο διάστημα <i>a</i>‥<i>b</i> μαζί με την πολλαπλότητά τους. Προεπιλεγμένη μέθοδος είναι η VAS των Vincent-Akritas-Strzebonski. <tt>realroot(sturm,P)</tt> χρησιμοποιεί την μέθοδο Sturm.</description>
     <description lang="zh"></description>
     <description lang="hr">Lista intervala koji sadrže realne korijene polinoma <i>P</i> između <i>a</i> i <i>b</i> s kratnostima, dobivenih Vincent-Akritas-Strzebonski VAS metodom. Naredba <tt>realroot(sturm,P)</tt> koristi Sturmovu metodu.</description>
+    <reference>Linear and Quadratic Complexity Bounds on the Values of the Positive Roots of Polynomials. <i>Journal of Universal Computer Science</i>, vol. 15/3 (2009), pp. 523–537.</reference>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Sturm_theorem">Sturm theorem</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>proot</related>
     <related>froot</related>
     <related>complexroot</related>
@@ -2030,12 +2085,12 @@
     <category>Plotting</category>
     <parameters ret="geo2">
       <expr/>
-      <lst optional="true">
+      <lst optional="true" explicit="true">
           <equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
           <equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
       </lst>
-      <equal optional="true"><tt>xstep</tt><i>d<sub>x</sub></i></equal>
-      <equal optional="true"><tt>ystep</tt><i>d<sub>y</sub></i></equal>
+      <equal optional="true"><option>xstep</option><real>d_x</real></equal>
+      <equal optional="true"><option>ystep</option><real>d_y</real></equal>
     </parameters>
     <description lang="en">Shows the graph of the solution of inequations with 2 variables (by default <i>x</i> and <i>y</i>) in the rectangle [<i>x</i><sub>min</sub>, <i>x</i><sub>max</sub>] &times; [<i>y</i><sub>min</sub>, <i>y</i><sub>max</sub>] (by default [&minus;10, 10] &times; [&minus;10, 10]). Parameters <i>d<sub>x</sub></i> and <i>d<sub>y</sub></i> control the mesh of the partition on the respective axes.</description>
     <description lang="fr">Affiche le graphe de la solution d'inéquations de 2 variables (par défaut <i>x</i> et <i>y</i>) dans le rectangle [<i>x</i><sub>min</sub>, <i>x</i><sub>max</sub>] &times; [<i>y</i><sub>min</sub>, <i>y</i><sub>max</sub>] (par défaut [&minus;10, 10] &times; [&minus;10, 10]).</description>
@@ -2058,12 +2113,12 @@
     <category>Plotting</category>
     <parameters ret="geo2">
       <expr>f(x, y)</expr>
-      <lst optional="true">
+      <lst optional="true" explicit="true">
           <equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
           <equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
       </lst>
-      <equal optional="true"><tt>xstep</tt><i>d<sub>x</sub></i></equal>
-      <equal optional="true"><tt>ystep</tt><i>d<sub>y</sub></i></equal>
+      <equal optional="true"><option>xstep</option><real>d_x</real></equal>
+      <equal optional="true"><option>ystep</option><real>d_y</real></equal>
     </parameters>
     <description lang="en">Shows the graph of an expression <i>z</i> = <i>f</i>(<i>x</i>, <i>y</i>) in the plane using colors.</description>
     <description lang="fr">Affiche en couleur le graphe d'une expression <i>z</i> = <i>f</i>(<i>x</i>, <i>y</i>) dans le plan.</description>
@@ -2118,7 +2173,7 @@
     <category>Plotting</category>
     <parameters ret="geo3">
       <expr>f(x, y, t)</expr>
-      <lst>
+      <lst explicit="true">
           <equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
           <equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
       </lst>
@@ -2214,7 +2269,7 @@
     <category>General</category>
     <parameters ret="expr">
       <strng>command</strng>
-      <seq optional="true"><tt>arguments</tt></seq>
+      <seq optional="true">args</seq>
     </parameters>
     <parameters ret="strng"><null/></parameters>
     <description lang="en">Execute a PARI/GP command or exports all PARI/GP commands.</description>
@@ -2224,6 +2279,7 @@
     <description lang="el">Εκτελεί την εντολή στο PARI/GP ή εξάγει όλες τις εντολές του PARI/GP.</description>
     <description lang="zh"></description>
     <description lang="hr">Pokretanje PARI/GP naredbe ili izvoz svih PARI/GP naredbi.</description>
+    <reference><a href="https://pari.math.u-bordeaux.fr/">PARI/GP</a>, a widely used computer algebra system designed for fast computations in number theory.</reference>
     <related>gcd</related>
     <related>lgcd</related>
     <related>is_prime</related>
@@ -2304,6 +2360,7 @@
     <description lang="el">Απόσταση Hamming των bit.</description>
     <description lang="zh"></description>
     <description lang="hr">Hammingova udaljenost binarnih reprezentacija danih cijelih brojeva.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Hamming_distance">Hamming distance</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <example>hamdist(0x12,0x38)</example>
   </entry>
   <entry type="command">
@@ -2322,6 +2379,7 @@
     <description lang="el">Αναγωγή σύμφωνα με τον αλγόριθμο simplex για την εύρεση του max<sub><b>x</b></sub>(<b>c</b>&sdot;<b>x</b>) με συνθήκες <b>A</b>&sdot;<b>x</b> &le; <b>b</b> και <b>x</b> &ge; 0, <b>b</b> &ge; 0. Επιστρέφει το μέγιστο, την επαυξημένη λύση <b>x</b> και τον ανηγμένο πίνακα. Δέχεται επίσης ως όρισμα το <b>M</b> = [[<b>A</b> ∣ <b>I</b> ∣ <b>b</b>], [&minus;<b>c</b> ∣ ∗ ∣ <b>0</b>]].</description>
     <description lang="zh"></description>
     <description lang="hr">Maksimalna vrijednost linearne funkcije <i>z</i>(<b>x</b>) = <b>c</b>&sdot;<b>x</b> uz uvjete <b>A</b>&sdot;<b>x</b> &le; <b>b</b> i <b>x</b> &ge; 0, <b>b</b> &ge; 0, dobivena pomoću simpleks metode. Kao rezultat, uz optimalnu vrijednost dobiva se i (prošireno) optimalno rješenje <b>x</b> te reducirana matrica. Može se koristiti i sintaksa sa samo jednim argumentom, matricom oblika <b>M</b> = [[<b>A</b> ∣ <b>I</b> ∣ <b>b</b>], [&minus;<b>c</b> ∣ ∗ ∣ <b>0</b>]].</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Simplex_method">Simplex method</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <example>simplex_reduce([[3,2,2],[1,1,1]],[3,4],[1,2,3])</example>
     <example>simplex_reduce([[3,2,2,1,0,3],[1,1,1,0,1,4],[-1,-2,-3,0,0,0]])</example>
     <example>simplex_reduce([[-3,2],[1,1]],[3,4],[1,2])</example>
@@ -2344,6 +2402,7 @@
     <description lang="el">Φυσικό spline <i>s</i>(<i>x</i>) τον βαθμό <i>n</i> μεταξύ των σημείων που δίνονται από τις λίστες <b>v</b><sub><i>x</i></sub>, <b>v</b><sub><i>y</i></sub>.</description>
     <description lang="zh"></description>
     <description lang="hr">Prirodni splajn <i>s</i>(<i>x</i>) kao lista polinoma stupnja <i>n</i> kroz točke zadane listama <b>v</b><sub><i>x</i></sub> i <b>v</b><sub><i>y</i></sub>.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Spline">Spline</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>lagrange</related>
     <example>spline([0,1,2],[1,3,0],x,3)</example>
   </entry>
@@ -2358,6 +2417,7 @@
     <description lang="el">Κυρτό περίβλημα ενός συνόλου 2-Δ σημείων.</description>
     <description lang="zh"></description>
     <description lang="hr">Konveksna ljuska dane liste (koordinata) ravninskih točaka odnosno kompleksnih brojeva.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Convex_hull">Convex hull</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>polygon</related>
     <example>convexhull(0,1,1+i,1+2i,-1-i,1-3i,-2+i)</example>
     <example>convexhull([0,1,1+i,1+2i,-1-i,1-3i,-2+i])</example>
@@ -2478,6 +2538,7 @@
     <description lang="el">Επιστρέφει τον <i>n</i>-στό πρώτο αριθμό &lt;2&sdot;10<sup>8</sup>.</description>
     <description lang="zh">第 i 个素数。第 <i>n</i> 个素数。  对于整数 <i>n</i>，返回小于 2&sdot;10<sup>8</sup> 。</description>
     <description lang="hr"><i>n</i>-ti prost broj (manji od 2&sdot;10<sup>8</sup>).</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Prime_number">Prime number</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>nextprime</related>
     <related>prevprime</related>
     <example>ithprime(1229)</example>
@@ -2557,7 +2618,7 @@
       <intg>p</intg>,
       <or><intg>n</intg><poly>m</poly></or>
       <var optional="true">x</var>
-      <or optional="true"><poly/><undef/></or>
+      <or optional="true"><poly/><option>undef</option></or>
     </parameters>
     <description lang="en">Create a Galois Field of characteristic <i>p</i> with <i>p<sup>n</sup></i> elements. The minimal polynomial <i>m</i>(<i>x</i>) is primitive except if given or if 0 is passed as last argument.</description>
     <description lang="fr">Crée un corps de Galois (Galois Field) de caractéristique <i>p</i> ayant <i>p<sup>n</sup></i> éléments. Le polynome minimal <i>m</i>(<i>x</i>) est primitif sauf s'il est donné ou si on passe 0 en dernier argument.</description>
@@ -2792,8 +2853,8 @@
     </parameters>
     <parameters ret="mtrx">
       <interval><el>start</el><el>end</el></interval>
-      <letter>L1</letter>
-      <letter>L2</letter>
+      <var>L1</var>
+      <var>L2</var>
     </parameters>
     <description lang="en">Content of the matrix editor or spreadsheet.</description>
     <description lang="fr">Contenu de l'éditeur de matrice/du tableur.</description>
@@ -3386,7 +3447,7 @@
     </parameters>
     <parameters ret="line"><equal/><equal optional="true"/></parameters>
     <parameters ret="line">
-      <lst elem="expr"><el>x(t)</el><el>y(t)</el><el>[z(t)]</el></lst>
+      <lst elem="expr" explicit="true"><el>x(t)</el><el>y(t)</el><el>[z(t)]</el></lst>
       <var>t</var>
     </parameters>
     <description lang="en">Draws the line <i>AB</i> or the line going through <i>A</i> with slope <i>m</i> or with direction vector <b>u</b> or the line defined by an equation or the intersection of two planes (given by equations) in 3D or the line with the given parametrization.</description>
@@ -4454,7 +4515,7 @@
     <name>coordinates</name>
     <category>Geometry</category>
     <parameters ret="lst"><or><pnt/><cplx/></or></parameters>
-    <parameters ret="mtrx"><lst elem="pnt||cplx"/></parameters>
+    <parameters ret="mtrx"><lst/></parameters>
     <description lang="en">Returns the list (resp. matrix) of the abscissa and of the ordinate of a point or a vector (resp. of points or vectors).</description>
     <description lang="fr">Renvoie la liste (resp. matrice) de l'abscisse et de l'ordonnée du point ou du vecteur (resp. des points ou des vecteurs).</description>
     <description lang="de"></description>
@@ -6872,7 +6933,7 @@
 		  <real>u_x</real>
 		  <real>t</real>
 		  <real>u_y</real>
-		  <lst optional="true">
+		  <lst optional="true" explicit="true">
 		  	<equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
 			  <equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
 		  </lst>
@@ -6897,7 +6958,7 @@
     <parameters ret="geo2">
 		  <real>u_x</real>
 		  <real>t</real>
-		  <lst optional="true">
+		  <lst optional="true" explicit="true">
 		  	<equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
 		  	<equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
 		  </lst>
@@ -6923,7 +6984,7 @@
   		<real>u_x</real>
   		<real>t</real>
 	  	<real>u_y</real>
-	  	<lst optional="true">
+	  	<lst optional="true" explicit="true">
 		  	<equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
 			  <equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
 	  	</lst>
@@ -6950,7 +7011,7 @@
   		<real>u_x</real>
   		<real>t</real>
   		<real>u_y</real>
-  		<lst optional="true">
+  		<lst optional="true" explicit="true">
 	  		<equal><var>x</var><interval><el>xmin</el><el>xmax</el></interval></equal>
 		  	<equal><var>y</var><interval><el>ymin</el><el>ymax</el></interval></equal>
 	  	</lst>
@@ -9687,7 +9748,7 @@
   <entry type="command">
     <name>LQ</name>
     <category>Algebra:Linear</category>
-    <parameters ret="lst"><mtrx/><b>A</b></parameters>
+    <parameters ret="lst"><mtrx>A</mtrx></parameters>
     <description lang="en">For a numerical matrix <b>A</b>, returns <b>L</b> a lower triangular matrix, <b>Q</b> an orthogonal matrix and <b>P</b> a permutation matrix such that <b>P</b>&sdot;<b>A</b>=<b>L</b>&sdot;<b>Q</b>.</description>
     <description lang="fr">Pour <b>A</b> une matrice numérique, renvoie <b>L</b> une matrice triangulaire inférieure, <b>Q</b> une matrice orthogonale et <b>P</b> une matrice de permutation vérifiant <b>P</b>&sdot;<b>A</b>=<b>L</b>&sdot;<b>Q</b>.</description>
     <description lang="de"></description>
@@ -10882,7 +10943,7 @@
   <entry type="command">
     <name>rowspace</name>
     <category>Algebra:Linear</category>
-    <parameters ret="mtrtx">
+    <parameters ret="mtrx">
 		  <mtrx>A</mtrx>
 		  <var optional="true">d</var>
 	  </parameters>
@@ -11192,7 +11253,7 @@
     <parameters ret="expr">
 		  <expr/>
 		  <option/>
-		  <quoted optional="true"><var>v</var></quoted>
+		  <quoted optional="true" elem="var">v</quoted>
     </parameters>
     <description lang="en">Rewrites the expression according to the second argument (and store the result in the variable <i>v</i>).</description>
     <description lang="fr">Réécrit l'expression selon le deuxième argument.</description>
@@ -12294,7 +12355,7 @@
     <category>Statistics</category>
     <parameters ret="geo2">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 		  <or optional="true">
 		  	<equal><var>x</var><interval><el>a</el><el>b</el></interval></equal>
 		  	<equal><var>y</var><interval><el>a</el><el>b</el></interval></equal>
@@ -12318,7 +12379,7 @@
     <category>Statistics</category>
     <parameters ret="real">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 	  </parameters>
 	  <parameters ret="lst"><mtrx>A</mtrx></parameters>
 	  <description lang="en">Mean of a list <b>v</b> (with the list <b>w</b> as pound) or of the columns of a matrix.</description>
@@ -12338,7 +12399,7 @@
     <category>Statistics</category>
     <parameters ret="real">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 	  </parameters>
 	  <parameters ret="real"><mtrx>A</mtrx></parameters>
 	  <description lang="en">Returns the median of a list <b>v</b> (with <b>w</b> as pound) or of the columns of a matrix <b>A</b>.</description>
@@ -12377,7 +12438,7 @@
     <category>Statistics</category>
     <parameters ret="real">
 	  	<lst>v</lst>
-	  	<lst optional="true"><b>w</b></lst>
+	  	<lst optional="true">w</lst>
   	</parameters>
   	<parameters ret="lst(real)"><mtrx>A</mtrx></parameters>
 	  <description lang="en">Returns the first quartile of a list <b>v</b> (with <b>w</b> as pound) or of the columns of a matrix <b>A</b>.</description>
@@ -12398,7 +12459,7 @@
     <category>Statistics</category>
     <parameters ret="real">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 	  </parameters>
 	  <parameters ret="lst(real)"><mtrx>A</mtrx></parameters>
 	  <description lang="en">Returns the third quartile of a list <b>v</b> (with <b>w</b> as pound) or of the columns of a matrix <b>A</b>.</description>
@@ -12419,7 +12480,7 @@
     <category>Statistics</category>
     <parameters ret="lst(real)">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 	  </parameters>
     <parameters ret="mtrx(real)"><mtrx>A</mtrx></parameters>
 	  <description lang="en">Minimal element, first quartile, the median, third quartile and maximal element of a list <b>v</b> (with <b>w</b> as pound) or of the columns of a matrix <b>A</b>.</description>
@@ -12441,7 +12502,7 @@
     <category>Statistics</category>
     <parameters ret="real">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 	  </parameters>
 	  <parameters ret="lst(real)"><mtrx>A</mtrx></parameters>
     <description lang="en">Returns the standard deviation of the elements of a list <b>v</b> (with <b>w</b> as pound) or the list of standard deviations of the columns of a matrix <b>A</b>.</description>
@@ -12463,7 +12524,7 @@
     <category>Statistics</category>
     <parameters ret="real">
 		  <lst>v</lst>
-		  <lst optional="true"><b>w</b></lst>
+		  <lst optional="true">w</lst>
 	  </parameters>
 	  <parameters ret="lst(real)"><mtrx>A</mtrx></parameters>
 	  <description lang="en">Returns an unbiased estimate of the population standard deviation of the sample <b>v</b> (with <b>w</b> as pound) or the list of estimates for the columns of a matrix <b>A</b>.</description>
@@ -15249,13 +15310,13 @@
 		  <option optional="true">method</option>
 	  </parameters>
     <parameters ret="lst(real)">
-		  <lst elem="expr||equal" explicit="true">
+		  <lst explicit="true">
 		  	<equal optionalrhs="true"><expr>f(xx)</expr><zero/></equal>
 		  	<equal optionalrhs="true"><expr>g(xx)</expr><zero/></equal>
 		  	<etc/>
 		  </lst>
 		  <lst elem="var">x</lst>
-		  <lst optional="true" elem="real"><b>x</b><sub>0</sub></lst>
+		  <lst optional="true" elem="real">x0</lst>
 		  <option optional="true">method</option>
 	  </parameters>
 	  <description lang="en">Numerical solution of an equation <i>f</i>(<i>x</i>) = 0 or a system of equations <i>f</i>(<b>x</b>) = 0, <i>g</i>(<b>x</b>) = 0, &hellip; (with an optional initial guess <i>x</i><sub>0</sub> resp. <b>x</b><sub>0</sub> and using the algorithm specified by <tt>method</tt>).</description>
@@ -15284,13 +15345,13 @@
 		  <option optional="true">method</option>
 	  </parameters>
     <parameters ret="lst(cplx)">
-		  <lst elem="expr||equal" explicit="true">
+		  <lst explicit="true">
 			  <equal optionalrhs="true"><expr>f(zz)</expr><zero/></equal>
 			  <equal optionalrhs="true"><expr>g(zz)</expr><zero/></equal>
 			  <etc/>
 		  </lst>
 		  <lst elem="var">z</lst>
-		  <lst optional="true" elem="cplx"><b>z</b><sub>0</sub></lst>
+		  <lst optional="true" elem="cplx">z0</lst>
 		  <option optional="true">method</option>
 	  </parameters>
 	  <description lang="en">Numerical solution of an equation <i>f</i>(<i>z</i>) = 0 or a system of equations <i>f</i><sub>1</sub>(<i>z</i><sub>1</sub>, <i>z</i><sub>2</sub>, &hellip;) = 0, <i>f</i><sub>2</sub>(<i>z</i><sub>1</sub>, <i>z</i><sub>2</sub>, &hellip;) = 0, &hellip; in ℂ (with an optional initial guess <i>z</i><sub>0</sub> resp. <b>z</b><sub>0</sub> and using the algorithm specified by <tt>method</tt>).</description>
@@ -16777,7 +16838,7 @@
     <name>linsolve resoudre_systeme_lineaire</name>
     <category>General:Equations</category>
     <parameters ret="lst">
-      <lst elem="equal||expr">
+      <lst explicit="true">
         <equal optionalrhs="true"><expr>f(xx)</expr><zero/></equal>
         <equal optionalrhs="true"><expr>g(xx)</expr><zero/></equal>
         <etc/>
@@ -18098,7 +18159,7 @@
   <entry type="command">
     <name>pcoeff pcoef</name>
     <category>Polynomials</category>
-    <parameters ret="poly"><lst elem="cplx"><el>r1</el><el>r2</el><etc/></lst></parameters>
+    <parameters ret="poly"><lst elem="cplx" explicit="true"><el>r1</el><el>r2</el><etc/></lst></parameters>
     <description lang="en">Returns the coefficients of the polynomial having the roots <i>r</i><sub>1</sub>, <i>r</i><sub>2</sub>, &hellip;.</description>
     <description lang="fr">Retourne les coefficients du polynôme dont les racines <i>r</i><sub>1</sub>, <i>r</i><sub>2</sub>, &hellip;.</description>
     <description lang="de"></description>
@@ -18134,7 +18195,7 @@
     <name>plot graphe</name>
     <category>Plotting</category>
     <parameters ret="geo">
-      <or><expr>f(x)</expr><lst elem="expr"><el>f(x)</el><el>g(x)</el><etc/></lst></or>
+      <or><expr>f(x)</expr><lst elem="expr" explicit="true"><el>f(x)</el><el>g(x)</el><etc/></lst></or>
       <equal optionalrhs="true"><var>x</var><interval><el>a</el><el>b</el></interval></equal>
       <equal optional="true"><option>color</option><or><intg/><lst elem="intg"/></or></equal>
       <equal optional="true"><option>legend</option><or><strng/><lst elem="strng"/></or></equal>
@@ -18283,14 +18344,14 @@
     <parameters ret="geo2">
       <expr>f(t, y)</expr>
       <lst explicit="true"><equal optionalrhs="true"><var>t</var><interval><el>tmin</el><el>tmax</el></interval></equal><var>y</var></lst>
-      <lst elem="real"><el>t0</el><el>y0</el></lst>
+      <lst elem="real" explicit="true"><el>t0</el><el>y0</el></lst>
       <equal optional="true"><option>tstep</option><real/></equal>
       <equal optional="true"><option>color</option><intg/></equal>
     </parameters>
     <parameters ret="geo">
-      <lst elem="expr"><el>g(t, x, y)</el><el>h(t, x, y)</el></lst>
+      <lst elem="expr" explicit="true"><el>g(t, x, y)</el><el>h(t, x, y)</el></lst>
       <lst explicit="true"><equal optionalrhs="true"><var>t</var><interval><el>tmin</el><el>tmax</el></interval></equal><var>x</var><var>y</var></lst>
-      <lst elem="real"><el>t0</el><el>x0</el><el>y0</el></lst>
+      <lst elem="real" explicit="true"><el>t0</el><el>x0</el><el>y0</el></lst>
       <equal optional="true"><option>tstep</option><real/></equal>
       <equal optional="true"><option>color</option><intg/></equal>
       <option optional="true">plane</option>
@@ -18398,7 +18459,7 @@
     <category>Calculus</category>
     <parameters ret="expr">
       <vect>v</vect>
-      <lst elem="var"><b>x</b></lst>
+      <lst elem="var">x</lst>
     </parameters>
     <description lang="en">Returns <i>u</i>(<b>x</b>) such that <b>v</b> = [<i>v</i><sub>1</sub>, <i>v</i><sub>2</sub>, &hellip;, <i>v<sub>n</sub></i>] = &nabla;<i>u</i>, i.e. <i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> for <i>k</i> = 1, 2, &hellip;, <i>n</i>.</description>
     <description lang="fr">Renvoie <i>u</i>(<b>x</b>) tel que <b>v</b> = [<i>v</i><sub>1</sub>, <i>v</i><sub>2</sub>, &hellip;, <i>v<sub>n</sub></i>] = &nabla;<i>u</i>, i.e. <i>v<sub>k</sub></i> = &part;<i>u</i>/&part;<i>x<sub>k</sub></i> pour <i>k</i> = 1, 2, &hellip;, <i>n</i>.</description>
@@ -18494,7 +18555,7 @@
   <entry type="command">
     <name>prepend</name>
     <category>General</category>
-    <parameters ret="lst||set||string">
+    <parameters ret="lst||set||strng">
       <or name="v"><lst/><set/><strng/></or>
       <expr>a</expr>
     </parameters>
@@ -19892,7 +19953,7 @@
       <var optional="true">x</var>
     </parameters>
     <parameters ret="mtrx">
-      <lst elem="expr">
+      <lst elem="expr" explicit="true">
         <equal optionalrhs="true"><expr>P(xx)</expr><zero/></equal>
         <equal optionalrhs="true"><expr>Q(xx)</expr><zero/></equal>
         <etc/>
@@ -20493,7 +20554,7 @@
   <entry type="command">
     <name>insert</name>
     <category>General</category>
-    <parameters ret="lst||str">
+    <parameters ret="lst||strng">
       <or name="v"><lst/><strng/></or>
       <intg>n</intg>
       <expr>a</expr>
@@ -20848,7 +20909,7 @@
       <lst elem="real">u0</lst>
     </parameters>
     <parameters ret="lst(expr)">
-      <lst elem="expr"><el>f(u, v, …)</el><el>g(u, v, …)</el><etc/></lst>
+      <lst elem="expr" explicit="true"><el>f(u, v, …)</el><el>g(u, v, …)</el><etc/></lst>
       <lst elem="var" explicit="true"><el>u</el><el>v</el><etc/><el>n</el></lst>
       <lst elem="real" explicit="true"><el>u0</el><el>v0</el><etc/></lst>
     </parameters>
@@ -20880,20 +20941,20 @@
     <parameters ret="expr">
       <equal><expr>u(n+k+1)</expr><expr>f(u(n), …, u(n+k), n)</expr></equal>
       <expr>u(n)</expr>
-      <lst elem="equal">
+      <lst elem="equal" explicit="true">
         <equal><expr>u(0)</expr><expr>u0</expr></equal>
         <etc/>
         <equal><expr>u(k)</expr><expr>u_k</expr></equal>
       </lst>
     </parameters>
     <parameters ret="lst(expr)">
-      <lst elem="equal">
+      <lst elem="equal" explicit="true">
          <equal><expr>u(n+1)</expr><expr>f(u(n), v(n), …, n)</expr></equal>
           <equal><expr>v(n+1)</expr><expr>g(u(n), v(n), …, n)</expr></equal>
           <etc/>
       </lst>
-      <lst elem="expr"><el>u(n)</el><el>v(n)</el><etc/></lst>
-      <lst elem="equal">
+      <lst elem="expr" explicit="true"><el>u(n)</el><el>v(n)</el><etc/></lst>
+      <lst elem="equal" explicit="true">
         <equal><expr>u(0)</expr><expr>u0</expr></equal>
         <equal><expr>v(0)</expr><expr>v0</expr></equal>
         <etc/>
@@ -22504,13 +22565,13 @@
       <expr>f(n, k)</expr>
       <lst elem="var" explicit="true"><el>n</el><el>k</el></lst>
     </parameters>
-    <description lang="en">Returns the value of lim<sub><i>n</i>&rarr;+&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) when the limit expression is a sum of Riemann.</description>
-    <description lang="fr">Renvoie la valeur de lim<sub><i>n</i>&rarr;+&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) lorsque la somme est une somme de Riemann.</description>
+    <description lang="en">Returns the value of lim<sub><i>n</i>&rarr;&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) when the limit expression is a sum of Riemann.</description>
+    <description lang="fr">Renvoie la valeur de lim<sub><i>n</i>&rarr;&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) lorsque la somme est une somme de Riemann.</description>
     <description lang="de"></description>
-    <description lang="es">Devuelve el valor de lim<sub><i>n</i>&rarr;+&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) cuando la suma es una suma de Riemann.</description>
-    <description lang="el">Επιστρέφει την τιμή του lim<sub><i>n</i>&rarr;+&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) όταν το άθροισμα είναι άθροισμα Riemann.</description>
+    <description lang="es">Devuelve el valor de lim<sub><i>n</i>&rarr;&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) cuando la suma es una suma de Riemann.</description>
+    <description lang="el">Επιστρέφει την τιμή του lim<sub><i>n</i>&rarr;&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) όταν το άθροισμα είναι άθροισμα Riemann.</description>
     <description lang="zh"></description>
-    <description lang="hr">Vrijednost lim<sub><i>n</i>&rarr;+&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) ako je izraz ispod limesa Riemannov zbroj.</description>
+    <description lang="hr">Vrijednost lim<sub><i>n</i>&rarr;&infin;</sub> <b>&sum;</b><sub><i>k</i>=1‥<i>n</i></sub> <i>f</i>(<i>n</i>, <i>k</i>) ako je izraz ispod limesa Riemannov zbroj.</description>
     <example>sum_riemann(1/(n+k),[n,k])</example>
     <example>sum_riemann(n/(n^2+k),[n,k])</example>
     <example>sum_riemann(n/(n^2+k^2),[n,k])</example>
@@ -23281,7 +23342,7 @@
   <entry type="command">
     <name>normalt</name>
     <category>Statistics</category>
-    <parameters ret="">
+    <parameters ret="intg">
       <lst elem="real">v</lst>
       <real>p</real>
       <real optional="true">q</real>
@@ -23304,7 +23365,7 @@
   <entry type="command">
     <name>studentt</name>
     <category>Statistics</category>
-    <parameters ret="">
+    <parameters ret="intg">
       <lst elem="real">v</lst>
       <real>p</real>
       <real optional="true">q</real>
@@ -23545,7 +23606,7 @@
   <entry type="command">
     <name>minimax</name>
     <category>Polynomials</category>
-    <parameters ret="">
+    <parameters ret="expr">
       <expr>f(x)</expr>
       <equal><var>x</var><interval><el>a</el><el>b</el></interval></equal>
       <intg>n</intg>
@@ -23586,6 +23647,7 @@
     <description lang="el"></description>
     <description lang="zh"></description>
     <description lang="hr">Rješenje danog transportnog problema s ishodištima <b>s</b>, odredištima <b>d</b> i matricom cijena <b>C</b>, dobiveno MODI metodom.</description>
+    <reference><a href="http://www.encyclopediaofmath.org/index.php?title=Transport_problem">Transport problem</a>. <i>Encyclopedia of Mathematics</i>.</reference>
     <related>lpsolve</related>
     <example>tpsolve([12,17,11],[10,10,10,10],[[500,750,300,450],[650,800,400,600],[400,700,500,550]])</example>
     <example>tpsolve([7,10,8,8,9,6],[9,6,12,8,10],[[36,40,32,43,29],[28,27,29,40,38],[34,35,41,29,31],[41,42,35,27,36],[25,28,40,34,38],[31,30,43,38,40]])</example>
@@ -23692,13 +23754,13 @@
       <equal><option>order_size</option><intg>k</intg></equal>
       <lst elem="expr" optional="true" explicit="true"><el>xx0</el><el>yy0</el></lst>
     </parameters>
-    <description lang="en">Returns the (partial) derivative of <i>f</i>(<b>x</b>, <b>y</b>) (or the function <i>y</i> or the functions <i>y</i><sub>1</sub>, <i>y</i><sub>2</sub>, &hellip;) with dependent variable(s) <b>y</b> and subject to constraint <i>g</i>(<b>x</b>, <b>y</b>) = 0 (or constraints <i>g</i><sub>1</sub>(<b>x</b>, <b>y</b>) = 0, <i>g</i><sub>2</sub>(<b>x</b>, <b>y</b>) = 0, &hellip;), according to the given variables <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip; in the given order, or all partial derivatives of order <i>k</i> optionally evaluated at the point [<b>x</b><sub>0</sub>, <b>y</b><sub>0</sub>].</description>
+    <description lang="en">Returns the (partial) derivative of <i>f</i>(<b>x</b>, <b>y</b>) (or the function <i>y</i> or the functions <i>y</i><sub>1</sub>, <i>y</i><sub>2</sub>, &hellip;) with dependent variable(s) <b>y</b> and subject to constraint <i>g</i>(<b>x</b>, <b>y</b>) = 0 (or constraints <i>g</i><sub>1</sub>(<b>x</b>, <b>y</b>) = 0, <i>g</i><sub>2</sub>(<b>x</b>, <b>y</b>) = 0, &hellip;), according to the given variables <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip; in the given order, or all partial derivatives of order <i>k</i> optionally evaluated at the point (<b>x</b><sub>0</sub>, <b>y</b><sub>0</sub>).</description>
     <description lang="fr">Derivee implicite.</description>
     <description lang="de"></description>
     <description lang="es"></description>
     <description lang="el"></description>
     <description lang="zh"></description>
-    <description lang="hr">(Parcijalna) derivacija izraza <i>f</i>(<b>x</b>, <b>y</b>) (ili funkcije <i>y</i> odnosno funkcija <i>y</i><sub>1</sub>, <i>y</i><sub>2</sub>, &hellip;) sa zavisnim varijablama <b>y</b> uz uvjet <i>g</i>(<b>x</b>, <b>y</b>) = 0 (ili uvjete <i>g</i><sub>1</sub>(<b>x</b>, <b>y</b>) = 0, <i>g</i><sub>2</sub>(<b>x</b>, <b>y</b>) = 0, &hellip;), s obzirom na varijable <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip; u danom poretku, ili sve parcijalne derivacije reda <i>k</i> izraza <i>f</i>(<b>x</b>, <b>y</b>) (evaluirane u točki [<b>x</b><sub>0</sub>, <b>y</b><sub>0</sub>]).</description>
+    <description lang="hr">(Parcijalna) derivacija izraza <i>f</i>(<b>x</b>, <b>y</b>) (ili funkcije <i>y</i> odnosno funkcija <i>y</i><sub>1</sub>, <i>y</i><sub>2</sub>, &hellip;) sa zavisnim varijablama <b>y</b> uz uvjet <i>g</i>(<b>x</b>, <b>y</b>) = 0 (ili uvjete <i>g</i><sub>1</sub>(<b>x</b>, <b>y</b>) = 0, <i>g</i><sub>2</sub>(<b>x</b>, <b>y</b>) = 0, &hellip;), s obzirom na varijable <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, &hellip; u danom poretku, ili sve parcijalne derivacije reda <i>k</i> izraza <i>f</i>(<b>x</b>, <b>y</b>) (u točki (<b>x</b><sub>0</sub>, <b>y</b><sub>0</sub>) ako je zadana).</description>
     <related>diff</related>
     <example>implicitdiff(x^2*y+y^2=1,y,x)</example>
     <example>implicitdiff(R=P*V/T,P,T)</example>

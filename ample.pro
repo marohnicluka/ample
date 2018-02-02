@@ -35,7 +35,8 @@ SOURCES += \
     mathglyphs.cpp \
     mathdisplaywidget.cpp \
     session.cpp \
-    commandindex.cpp
+    commandindex.cpp \
+    commandindexdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,10 +48,12 @@ HEADERS += \
     mathglyphs.h \
     mathdisplaywidget.h \
     session.h \
-    commandindex.h
+    commandindex.h \
+    commandindexdialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    commandindexdialog.ui
 
 RESOURCES += \
     resources.qrc

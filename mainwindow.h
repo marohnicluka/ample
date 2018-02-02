@@ -27,6 +27,8 @@
 #include "texteditor.h"
 #include "mathdisplaywidget.h"
 #include "session.h"
+#include "commandindex.h"
+#include "commandindexdialog.h"
 #include <sstream>
 
 namespace Ui {

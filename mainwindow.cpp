@@ -80,6 +80,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     loadFonts();
 
+    CommandIndex *commandIndex = new CommandIndex(this);
+
+    CommandIndexDialog *commandIndexDialog = new CommandIndexDialog(commandIndex, this);
+
+    commandIndexDialog->show();
+    commandIndexDialog->raise();
+    commandIndexDialog->activateWindow();
+
     session = new Session(this);
     connect(session, SIGNAL(processingStarted()), this, SLOT(giacProcessingStarted()));
     connect(session, SIGNAL(processingFinished(const gen &,const QStringList &)),
