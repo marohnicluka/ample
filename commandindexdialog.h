@@ -21,6 +21,8 @@ class CommandIndexDialog : public QDialog
     QTreeWidgetItem *findChapter(const QString &name);
     QTreeWidgetItem *findSection(QTreeWidgetItem *chapter, const QString &name);
     void appendSectionTitle(QString &text, const QString &title);
+    QString formatReference(const Reference &reference);
+    QString formatInputSyntax(const InputSyntax &inputSyntax);
 
 public:
     explicit CommandIndexDialog(CommandIndex *ci, QWidget *parent = 0);

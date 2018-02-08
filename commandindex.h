@@ -61,6 +61,14 @@ enum CommandParameterType
     ParamTypeZero
 };
 
+enum ParameterStyle
+{
+    ParamStyleNormal,
+    ParamStyleItalic,
+    ParamStyleBold,
+    ParamStyleMono
+};
+
 struct CommandParameter
 {
     CommandParameterType type;
@@ -75,11 +83,16 @@ struct CommandParameter
     QString text;
     QList<CommandParameter> children;
 
+    CommandParameter() { }
     CommandParameter(const QString &name, const QXmlStreamAttributes &attributes);
-    QString format();
+    QString format(ParameterStyle elementStyle = ParamStyleNormal);
     bool isComposite();
+    bool isFixed();
     bool isValid() { return type != ParamTypeNone; }
     static CommandParameterType parseParameterName(const QString &name);
+    static QString toMono(const QString &text) { return QString("<font face=\"freemono\">%1</font>").arg(text); }
+    static QString formatText(const QString &text, ParameterStyle parameterStyle);
+    ParameterStyle style(bool isElement = false);
 };
 
 struct ReturnType
@@ -94,16 +107,31 @@ struct InputSyntax
     QList<ReturnType> returnTypes;
 };
 
+struct Reference
+{
+    QString title;
+    QString source;
+    QString language;
+};
+
+struct Description
+{
+    QString text;
+    QString language;
+};
+
 struct Command
 {
     CommandType type;
     QStringList names;
     QStringList categories;
     QList<InputSyntax> syntaxes;
-    QMap<QString,QString> descriptions;
+    QList<Description> descriptions;
     QStringList related;
     QStringList examples;
-    QMap<QString,QString> references;
+    QList<Reference> references;
+
+    QString description(const QString &lang) const;
 };
 
 class CommandIndex : public QObject
@@ -124,6 +152,10 @@ public:
 
     static bool parseParameters(Command &cmd, QXmlStreamReader &reader);
     static CommandParameter parseParameter(QXmlStreamReader &reader);
+    static QString paramTypeToString(CommandParameterType paramType, int mode);
+    static QString optionalNotice() { return tr("optional"); }
+    static QString orSeparator() { return tr("or"); }
+    static QString inSeparator() { return tr("in"); }
 
 signals:
 

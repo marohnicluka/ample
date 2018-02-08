@@ -86,6 +86,58 @@ void CommandIndexDialog::appendSectionTitle(QString &text, const QString &title)
     text += QString("<h4 style=\"font-family:freesans\">%1</h4>").arg(title);
 }
 
+QString CommandIndexDialog::formatReference(const Reference &reference)
+{
+    QString source;
+    if (reference.source == "em")
+        source = "<i>Encyclopedia of Mathematics</i>";
+    else if (reference.source == "wiki")
+    {
+        if (reference.language == "" || reference.language == "en")
+            source = "<i>Wikipedia</i>, the free encyclopedia";
+        else if (reference.language == "fr")
+            source = "<i>Wikipédia</i>, l'encyclopédie libre";
+        else if (reference.language == "es")
+            source = "<i>Wikipedia</i>, la enciclopedia libre";
+        else if (reference.language == "de")
+            source = "<i>Wikipedia</i>, die freie Enzyklopädie";
+        else if (reference.language == "el")
+            source = "<i>Βικιπαίδεια</i>, την ελεύθερη εγκυκλοπαίδεια";
+        else if (reference.language == "zh")
+            source = "維基百科，自由的百科全書";
+        else if (reference.language == "hr")
+            source = "<i>Wikipedija</i>, slobodna enciklopedija";
+    }
+    return source.length() > 0 ?
+                (reference.language == "zh" ?
+                     QString("<p>%1。%2。</p>").arg(reference.title).arg(source) :
+                     QString("<p>%1. %2.</p>").arg(reference.title).arg(source)) :
+                QString("<p>%1</p>").arg(reference.title);
+}
+
+QString CommandIndexDialog::formatInputSyntax(const InputSyntax &inputSyntax)
+{
+    QStringList returnValueTypes;
+    ReturnType returnType;
+    foreach (returnType, inputSyntax.returnTypes) {
+        QString returnTypeString = CommandIndex::paramTypeToString(returnType.type, 0);
+        QString returnSubtypeString = CommandIndex::paramTypeToString(returnType.subtype, 1);
+        if (returnSubtypeString.length() > 0)
+            returnTypeString += QString(" %1").arg(returnSubtypeString);
+        returnValueTypes.append(returnTypeString);
+    }
+    QString formattedInputSyntax = QString("<p>%1 (%2 %3)").arg(
+                tr("Input arguments")).arg(tr("return type:")).arg(returnValueTypes.join(QString(" %1 ").arg(tr("or"))));
+    CommandParameter param;
+    formattedInputSyntax += "<ul>";
+    foreach (param, inputSyntax.parameters)
+        formattedInputSyntax += QString("<li>%1</li>").arg(param.format());
+    formattedInputSyntax += "</ul>";
+
+    formattedInputSyntax += "</p>";
+    return formattedInputSyntax;
+}
+
 void CommandIndexDialog::on_commandTreeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     Q_UNUSED(previous)
@@ -93,17 +145,59 @@ void CommandIndexDialog::on_commandTreeWidget_currentItemChanged(QTreeWidgetItem
         return;
     int index = current->data(0, Qt::UserRole).toInt();
     const Command &command = commandIndex->commandAt(index);
-    QString text("<html><style>radicand{text-decoration:overline;}</style><body>");
-    QString desc(command.descriptions["en"]), refs, example, relatedCommand;
+    QString text("<html><style>rd{text-decoration:overline;}</style><body>"), typeString;
+    switch (command.type)
+    {
+    case CmdTypeCommand:
+        typeString = tr("Command");
+        break;
+    case CmdTypeConstant:
+        typeString = tr("Constant");
+        break;
+    case CmdTypeKeyword:
+        typeString = tr("Keyword");
+        break;
+    case CmdTypeOperator:
+        typeString = tr("Operator");
+        break;
+    case CmdTypeOption:
+        typeString = tr("Option");
+        break;
+    case CmdTypeVariable:
+        typeString = tr("Variable");
+        break;
+    }
+    appendSectionTitle(text, typeString);
+    QStringList synonyms;
+    QString synonym, synonymsText;
+    foreach (synonym, command.names)
+    {
+        if (synonym != current->text(0))
+            synonyms.append(CommandParameter::toMono(synonym));
+    }
+    if (!synonyms.empty())
+        synonymsText = QString(" (%1 %2)").arg(
+                    synonyms.length() == 1 ? tr("synonym:") : tr("synonyms:")).arg(synonyms.join(", "));
+    text += QString("<p>%1%2</p>").arg(CommandParameter::toMono(current->text(0))).arg(synonymsText);
+    if (!command.syntaxes.empty())
+    {
+        appendSectionTitle(text, tr("Usage"));
+        InputSyntax syntax;
+        foreach (syntax, command.syntaxes)
+            text += formatInputSyntax(syntax);
+    }
+    QString desc(command.description("en")), example, relatedCommand;
     if (desc.length() > 0)
     {
         appendSectionTitle(text, tr("Description"));
         text += QString("<p>%2</p>").arg(desc);
     }
-    if ((refs = command.references["all"]).length() > 0)
+    if (command.references.length() > 0)
     {
         appendSectionTitle(text, tr("References"));
-        text += command.references["all"];
+        Reference reference;
+        foreach (reference, command.references)
+            text += formatReference(reference);
     }
     QStringList links;
     foreach (relatedCommand, command.related)
